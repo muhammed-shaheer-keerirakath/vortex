@@ -67,6 +67,9 @@ export function RemixUIStatusBar({ statusBarPlugin }: RemixUIStatusBarProps) {
     return aiActive
   }
 
+  // Remove this when we start displaying awareness messages
+  return null
+
   return (
     <>
       <StatusBarContextProvider>
