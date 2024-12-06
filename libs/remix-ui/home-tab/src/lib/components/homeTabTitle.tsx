@@ -14,7 +14,7 @@ function HomeTabTitle() {
   const [state, setState] = useState<{
     searchDisable: boolean
   }>({
-    searchDisable: true
+    searchDisable: true,
   })
 
   const searchInputRef = useRef(null)
@@ -34,7 +34,7 @@ function HomeTabTitle() {
       setState((prevState) => {
         return {
           ...prevState,
-          searchDisable: searchInputRef.current.value === ''
+          searchDisable: searchInputRef.current.value === '',
         }
       })
     }
@@ -55,9 +55,9 @@ function HomeTabTitle() {
           <span className="h-80 text-uppercase" style={{ fontSize: 'xx-large', fontFamily: 'Noah, sans-serif' }}>
             Vortex
           </span>
-          <div className="ml-2 d-flex">
+          <div className="ml-2 d-flex" style={{ cursor: 'pointer' }}>
             <div onClick={() => playRemi()}>
-              <img className="" src="assets/img/guitarRemiCroped.webp" style={{ height: '3rem' }} alt=""></img>
+              <img className="" src="assets/qrl/images/tree.svg" style={{ height: '3rem' }} alt=""></img>
             </div>
             <audio id="remiAudio" muted={false} src="assets/audio/remiGuitar-single-power-chord-A-minor.mp3" ref={remiAudioEl}></audio>
           </div>
@@ -70,24 +70,12 @@ function HomeTabTitle() {
         <a className="remixui_home_text" onClick={() => _paq.push(['trackEvent', 'hometab', 'header', 'webSite'])} target="__blank" href="https://remix-project.org">
           <FormattedMessage id="home.website" />
         </a>
-        <a
-          className="pl-2 remixui_home_text"
-          onClick={() => _paq.push(['trackEvent', 'hometab', 'header', 'remixDesktop'])}
-          target="__blank"
-          href="https://github.com/remix-project-org/remix-desktop-insiders"
-        >
+        <a className="pl-2 remixui_home_text" onClick={() => _paq.push(['trackEvent', 'hometab', 'header', 'remixDesktop'])} target="__blank" href="https://github.com/remix-project-org/remix-desktop-insiders">
           <FormattedMessage id="home.remixDesktop" />
         </a>
       </div>
       <div className="d-flex pb-1 align-items-center">
-        <input
-          ref={searchInputRef}
-          type="text"
-          className="border form-control border-right-0"
-          id="homeTabSearchInput"
-          placeholder={intl.formatMessage({ id: 'home.searchDocumentation' })}
-          data-id="terminalInputSearchHome"
-        />
+        <input ref={searchInputRef} type="text" className="border form-control border-right-0" id="homeTabSearchInput" placeholder={intl.formatMessage({ id: 'home.searchDocumentation' })} data-id="terminalInputSearchHome" />
         <button
           className="form-control border d-flex align-items-center p-2 justify-content-center fas fa-search bg-light"
           onClick={(e) => {
