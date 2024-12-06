@@ -103,9 +103,9 @@ const locales = {
   en: '',
   fr: 'fr',
   it: 'it',
-  es: 'es'
+  es: 'es',
 }
-loader.config({ "vs/nls": { availableLanguages: { "*": locales[queryLocale] || '' } } })
+loader.config({ 'vs/nls': { availableLanguages: { '*': locales[queryLocale] || '' } } })
 
 export type DecorationsReturn = {
   currentDecorations: Array<string>
@@ -154,11 +154,12 @@ export const EditorUI = (props: EditorUIProps) => {
   const [isDiff, setIsDiff] = useState(false)
   const [isSplit, setIsSplit] = useState(true)
   const defaultEditorValue = `
-  \t\t\t\t\t\t\t ____    _____   __  __   ___  __  __   ___   ____    _____
-  \t\t\t\t\t\t\t|  _ \\  | ____| |  \\/  | |_ _| \\ \\/ /  |_ _| |  _ \\  | ____|
-  \t\t\t\t\t\t\t| |_) | |  _|   | |\\/| |  | |   \\  /    | |  | | | | |  _|
-  \t\t\t\t\t\t\t|  _ <  | |___  | |  | |  | |   /  \\    | |  | |_| | | |___
-  \t\t\t\t\t\t\t|_| \\_\\ |_____| |_|  |_| |___| /_/\\_\\  |___| |____/  |_____|\n\n
+  \t\t\t\t\t\t\t░  ░░░░  ░░░      ░░░       ░░░        ░░        ░░  ░░░░  ░░░░░░░░        ░░       ░░░        ░
+  \t\t\t\t\t\t\t▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒  ▒▒  ▒▒▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒▒▒▒
+  \t\t\t\t\t\t\t▓▓  ▓▓  ▓▓▓  ▓▓▓▓  ▓▓       ▓▓▓▓▓▓  ▓▓▓▓▓      ▓▓▓▓▓▓    ▓▓▓▓▓▓▓▓▓▓▓▓▓  ▓▓▓▓▓  ▓▓▓▓  ▓▓      ▓▓▓
+  \t\t\t\t\t\t\t███    ████  ████  ██  ███  ██████  █████  █████████  ██  ████████████  █████  ████  ██  ███████
+  \t\t\t\t\t\t\t████  ██████      ███  ████  █████  █████        ██  ████  ████████        ██       ███        █
+  \n
   \t\t\t\t\t\t\t${intl.formatMessage({ id: 'editor.keyboardShortcuts' })}:\n
   \t\t\t\t\t\t\t\tCTRL + S: ${intl.formatMessage({ id: 'editor.keyboardShortcuts.text1' })}\n
   \t\t\t\t\t\t\t\tCTRL + Shift + F : ${intl.formatMessage({ id: 'editor.keyboardShortcuts.text2' })}\n
@@ -336,16 +337,19 @@ export const EditorUI = (props: EditorUIProps) => {
   })
 
   useEffect(() => {
-    if (!(editorRef.current || diffEditorRef.current ) || !props.currentFile) return
+    if (!(editorRef.current || diffEditorRef.current) || !props.currentFile) return
     currentFileRef.current = props.currentFile
     props.plugin.call('fileManager', 'getUrlFromPath', currentFileRef.current).then((url) => (currentUrlRef.current = url.file))
 
     const file = editorModelsState[props.currentFile]
 
-    props.isDiff && diffEditorRef && diffEditorRef.current && diffEditorRef.current.setModel({
-      original: editorModelsState[props.currentDiffFile].model,
-      modified: file.model
-    })
+    props.isDiff &&
+      diffEditorRef &&
+      diffEditorRef.current &&
+      diffEditorRef.current.setModel({
+        original: editorModelsState[props.currentDiffFile].model,
+        modified: file.model,
+      })
 
     props.isDiff && diffEditorRef.current.getModifiedEditor().updateOptions({ readOnly: editorModelsState[props.currentFile].readOnly })
 
@@ -388,21 +392,13 @@ export const EditorUI = (props: EditorUIProps) => {
     if (typeOfDecoration === 'markerPerFile') {
       decoration = decoration as sourceMarker
       let isWholeLine = false
-      if (
-        (decoration.position.start.line === decoration.position.end.line && decoration.position.end.column - decoration.position.start.column < 2) ||
-        decoration.position.start.line !== decoration.position.end.line
-      ) {
+      if ((decoration.position.start.line === decoration.position.end.line && decoration.position.end.column - decoration.position.start.column < 2) || decoration.position.start.line !== decoration.position.end.line) {
         // in this case we force highlighting the whole line (doesn't make sense to highlight 2 chars)
         isWholeLine = true
       }
       return {
         type: typeOfDecoration,
-        range: new monacoRef.current.Range(
-          decoration.position.start.line + 1,
-          decoration.position.start.column + 1,
-          decoration.position.end.line + 1,
-          decoration.position.end.column + 1
-        ),
+        range: new monacoRef.current.Range(decoration.position.start.line + 1, decoration.position.start.column + 1, decoration.position.end.line + 1, decoration.position.end.column + 1),
         options: {
           isWholeLine,
           inlineClassName: `${isWholeLine ? 'alert-info' : 'inline-class'}  border-0 highlightLine${decoration.position.start.line + 1}`,
@@ -413,12 +409,7 @@ export const EditorUI = (props: EditorUIProps) => {
       const lineTextDecoration = decoration as lineText
       return {
         type: typeOfDecoration,
-        range: new monacoRef.current.Range(
-          lineTextDecoration.position.start.line + 1,
-          lineTextDecoration.position.start.column + 1,
-          lineTextDecoration.position.start.line + 1,
-          1024
-        ),
+        range: new monacoRef.current.Range(lineTextDecoration.position.start.line + 1, lineTextDecoration.position.start.column + 1, lineTextDecoration.position.start.line + 1, 1024),
         options: {
           after: {
             content: ` ${lineTextDecoration.content}`,
@@ -433,12 +424,7 @@ export const EditorUI = (props: EditorUIProps) => {
       const lineTextDecoration = decoration as lineText
       return {
         type: typeOfDecoration,
-        range: new monacoRef.current.Range(
-          lineTextDecoration.position.start.line + 1,
-          lineTextDecoration.position.start.column + 1,
-          lineTextDecoration.position.start.line + 1,
-          1024
-        ),
+        range: new monacoRef.current.Range(lineTextDecoration.position.start.line + 1, lineTextDecoration.position.start.column + 1, lineTextDecoration.position.start.line + 1, 1024),
         options: {
           after: {
             content: ` ${lineTextDecoration.content}`,
@@ -495,7 +481,7 @@ export const EditorUI = (props: EditorUIProps) => {
 
   const addDecoration = (decoration: sourceAnnotation | sourceMarker, filePath: string, typeOfDecoration: string) => {
     const model = editorModelsState[filePath]?.model
-    if (!model) return { currentDecorations: []}
+    if (!model) return { currentDecorations: [] }
     const monacoDecoration = convertToMonacoDecoration(decoration, typeOfDecoration)
     return {
       currentDecorations: model.deltaDecorations([], [monacoDecoration]),
@@ -602,41 +588,41 @@ export const EditorUI = (props: EditorUIProps) => {
     if (!editorRef.current) return
     return editorRef.current.getOption(51)
   }
-  ;(window as any).addRemixBreakpoint = (position) => {
-    // make it available from e2e testing...
-    const model = editorRef.current.getModel()
-    if (model) {
-      setCurrentBreakpoints((prevState) => {
-        const currentFile = currentUrlRef.current
-        if (!prevState[currentFile]) prevState[currentFile] = {}
-        const decoration = Object.keys(prevState[currentFile]).filter((line) => parseInt(line) === position.lineNumber)
-        if (decoration.length) {
-          props.events.onBreakPointCleared(currentFile, position.lineNumber)
-          model.deltaDecorations([prevState[currentFile][position.lineNumber]], [])
-          delete prevState[currentFile][position.lineNumber]
-        } else {
-          props.events.onBreakPointAdded(currentFile, position.lineNumber)
-          const decorationIds = model.deltaDecorations(
-            [],
-            [
-              {
-                range: new monacoRef.current.Range(position.lineNumber, 1, position.lineNumber, 1),
-                options: {
-                  isWholeLine: false,
-                  glyphMarginClassName: 'fas fa-circle text-info',
+    ; (window as any).addRemixBreakpoint = (position) => {
+      // make it available from e2e testing...
+      const model = editorRef.current.getModel()
+      if (model) {
+        setCurrentBreakpoints((prevState) => {
+          const currentFile = currentUrlRef.current
+          if (!prevState[currentFile]) prevState[currentFile] = {}
+          const decoration = Object.keys(prevState[currentFile]).filter((line) => parseInt(line) === position.lineNumber)
+          if (decoration.length) {
+            props.events.onBreakPointCleared(currentFile, position.lineNumber)
+            model.deltaDecorations([prevState[currentFile][position.lineNumber]], [])
+            delete prevState[currentFile][position.lineNumber]
+          } else {
+            props.events.onBreakPointAdded(currentFile, position.lineNumber)
+            const decorationIds = model.deltaDecorations(
+              [],
+              [
+                {
+                  range: new monacoRef.current.Range(position.lineNumber, 1, position.lineNumber, 1),
+                  options: {
+                    isWholeLine: false,
+                    glyphMarginClassName: 'fas fa-circle text-info',
+                  },
                 },
-              },
-            ]
-          )
-          prevState[currentFile][position.lineNumber] = decorationIds[0]
-        }
-        return prevState
-      })
+              ]
+            )
+            prevState[currentFile][position.lineNumber] = decorationIds[0]
+          }
+          return prevState
+        })
+      }
     }
-  }
 
   function setReducerListener() {
-    if (diffEditorRef.current && diffEditorRef.current.getModifiedEditor() && editorRef.current){
+    if (diffEditorRef.current && diffEditorRef.current.getModifiedEditor() && editorRef.current) {
       reducerListener(props.plugin, dispatch, monacoRef.current, [diffEditorRef.current.getModifiedEditor(), editorRef.current], props.events)
     }
   }
@@ -656,7 +642,7 @@ export const EditorUI = (props: EditorUIProps) => {
       // 2 is GUTTER_GLYPH_MARGIN
       // 3 is GUTTER_LINE_NUMBERS
       if (e && e.target && (e.target.type === 2 || e.target.type === 3)) {
-        ;(window as any).addRemixBreakpoint(e.target.position)
+        ; (window as any).addRemixBreakpoint(e.target.position)
       }
     })
 
@@ -705,13 +691,13 @@ export const EditorUI = (props: EditorUIProps) => {
 
     editor.onDidChangeModelContent((e) => {
       if (inlineCompletionProvider.currentCompletion) {
-        const changes = e.changes;
+        const changes = e.changes
         // Check if the change matches the current completion
-        if (changes.some(change => change.text === inlineCompletionProvider.currentCompletion.item.insertText)) {
+        if (changes.some((change) => change.text === inlineCompletionProvider.currentCompletion.item.insertText)) {
           _paq.push(['trackEvent', 'ai', 'remixAI', inlineCompletionProvider.currentCompletion.task + '_accepted'])
         }
       }
-    });
+    })
 
     // add context menu items
     const zoominAction = {
@@ -724,8 +710,8 @@ export const EditorUI = (props: EditorUIProps) => {
         monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.Equal,
       ],
       run: () => {
-        editor.trigger('keyboard', 'editor.action.fontZoomIn', {});
-      }
+        editor.trigger('keyboard', 'editor.action.fontZoomIn', {})
+      },
     }
     const zoomOutAction = {
       id: 'zoomOut',
@@ -737,8 +723,8 @@ export const EditorUI = (props: EditorUIProps) => {
         monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.Minus,
       ],
       run: () => {
-        editor.trigger('keyboard', 'editor.action.fontZoomOut', {});
-      }
+        editor.trigger('keyboard', 'editor.action.fontZoomOut', {})
+      },
     }
     const formatAction = {
       id: 'autoFormat',
@@ -757,9 +743,9 @@ export const EditorUI = (props: EditorUIProps) => {
 
     let gptGenerateDocumentationAction
     const extractNatspecComments = (codeString: string): string => {
-      const natspecCommentRegex = /\/\*\*[\s\S]*?\*\//g;
-      const comments = codeString.match(natspecCommentRegex);
-      return comments ? comments[0] : "";
+      const natspecCommentRegex = /\/\*\*[\s\S]*?\*\//g
+      const comments = codeString.match(natspecCommentRegex)
+      return comments ? comments[0] : ''
     }
 
     const executeGptGenerateDocumentationAction = {
@@ -782,8 +768,8 @@ export const EditorUI = (props: EditorUIProps) => {
         // const cm = await await props.plugin.call('remixAI', 'code_explaining', message)
         const cm = await props.plugin.call('remixAI' as any, 'chatPipe', 'solidity_answer', message, '', pipeMessage)
 
-        const natSpecCom = "\n" + extractNatspecComments(cm)
-        const cln = await props.plugin.call('codeParser', "getLineColumnOfNode", currenFunctionNode)
+        const natSpecCom = '\n' + extractNatspecComments(cm)
+        const cln = await props.plugin.call('codeParser', 'getLineColumnOfNode', currenFunctionNode)
         const range = new monacoRef.current.Range(cln.start.line, cln.start.column, cln.start.line, cln.start.column)
         const lines = natSpecCom.split('\n')
         const newNatSpecCom = []
@@ -797,10 +783,15 @@ export const EditorUI = (props: EditorUIProps) => {
               break
             }
           }
-          if (cont) {continue}
+          if (cont) {
+            continue
+          }
 
-          if (i <= 1) { newNatSpecCom.push(' '.repeat(cln.start.column) + lines[i].trimStart()) }
-          else { newNatSpecCom.push(' '.repeat(cln.start.column + 1) + lines[i].trimStart()) }
+          if (i <= 1) {
+            newNatSpecCom.push(' '.repeat(cln.start.column) + lines[i].trimStart())
+          } else {
+            newNatSpecCom.push(' '.repeat(cln.start.column + 1) + lines[i].trimStart())
+          }
         }
 
         // TODO: activate the provider to let the user accept the documentation suggestion
@@ -813,7 +804,7 @@ export const EditorUI = (props: EditorUIProps) => {
             text: newNatSpecCom.join('\n'),
             forceMoveMarkers: true,
           },
-        ]);
+        ])
 
         _paq.push(['trackEvent', 'ai', 'remixAI', 'generateDocumentation'])
       },
@@ -828,7 +819,7 @@ export const EditorUI = (props: EditorUIProps) => {
       run: async () => {
         const file = await props.plugin.call('fileManager', 'getCurrentFile')
         const context = await props.plugin.call('fileManager', 'readFile', file)
-        const message = intl.formatMessage({ id: 'editor.explainFunctionByAI' }, { content:context, currentFunction: currentFunction.current })
+        const message = intl.formatMessage({ id: 'editor.explainFunctionByAI' }, { content: context, currentFunction: currentFunction.current })
         await props.plugin.call('popupPanel', 'showPopupPanel', true)
         setTimeout(async () => {
           await props.plugin.call('remixAI' as any, 'chatPipe', 'code_explaining', message, context)
@@ -845,13 +836,13 @@ export const EditorUI = (props: EditorUIProps) => {
       contextMenuGroupId: 'sol-gtp', // create a new grouping
       keybindings: [
         // Keybinding for Ctrl + E
-        monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.KeyE
+        monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.KeyE,
       ],
       run: async () => {
         const file = await props.plugin.call('fileManager', 'getCurrentFile')
         const content = await props.plugin.call('fileManager', 'readFile', file)
         const selectedCode = editor.getModel().getValueInRange(editor.getSelection())
-        const pipeMessage = intl.formatMessage({ id: 'editor.ExplainPipeMessage' }, { content:selectedCode })
+        const pipeMessage = intl.formatMessage({ id: 'editor.ExplainPipeMessage' }, { content: selectedCode })
 
         await props.plugin.call('popupPanel', 'showPopupPanel', true)
         setTimeout(async () => {
@@ -947,7 +938,9 @@ export const EditorUI = (props: EditorUIProps) => {
         solgptExplainFunctionAction = editor.addAction(executeSolgptExplainFunctionAction)
       } else {
         // do not allow single character explaining
-        if (editor.getModel().getValueInRange(editor.getSelection()).length <=1){ return}
+        if (editor.getModel().getValueInRange(editor.getSelection()).length <= 1) {
+          return
+        }
         executeSolgptExplainFunctionAction.label = intl.formatMessage({ id: 'editor.explainFunctionSol' })
         solgptExplainFunctionAction = editor.addAction(executeSolgptExplainFunctionAction)
       }
@@ -999,7 +992,7 @@ export const EditorUI = (props: EditorUIProps) => {
     monacoRef.current.languages.json.jsonDefaults.setDiagnosticsOptions({ enableSchemaRequest: true })
 
     // hide the module resolution error. We have to remove this when we know how to properly resolve imports.
-    monacoRef.current.languages.typescript.typescriptDefaults.setDiagnosticsOptions({ diagnosticCodesToIgnore: [2792]})
+    monacoRef.current.languages.typescript.typescriptDefaults.setDiagnosticsOptions({ diagnosticCodesToIgnore: [2792] })
 
     // Register a tokens provider for the language
     monacoRef.current.languages.setMonarchTokensProvider('remix-solidity', solidityTokensProvider as any)
@@ -1033,19 +1026,7 @@ export const EditorUI = (props: EditorUIProps) => {
 
   return (
     <div className="w-100 h-100 d-flex flex-column-reverse">
-
-      <DiffEditor
-        originalLanguage={'remix-solidity'}
-        modifiedLanguage={'remix-solidity'}
-        original={''}
-        modified={''}
-        onMount={handleDiffEditorDidMount}
-        options={{ readOnly: false, renderSideBySide: isSplit }}
-        width='100%'
-        height={props.isDiff ? '100%' : '0%'}
-        className={props.isDiff ? "d-block" : "d-none"}
-
-      />
+      <DiffEditor originalLanguage={'remix-solidity'} modifiedLanguage={'remix-solidity'} original={''} modified={''} onMount={handleDiffEditorDidMount} options={{ readOnly: false, renderSideBySide: isSplit }} width="100%" height={props.isDiff ? '100%' : '0%'} className={props.isDiff ? 'd-block' : 'd-none'} />
       <Editor
         width="100%"
         height={props.isDiff ? '0%' : '100%'}
@@ -1058,10 +1039,10 @@ export const EditorUI = (props: EditorUIProps) => {
           readOnly: (!editorRef.current || !props.currentFile) && editorModelsState[props.currentFile]?.readOnly,
           inlineSuggest: {
             enabled: true,
-          }
+          },
         }}
         defaultValue={defaultEditorValue}
-        className={props.isDiff ? "d-none" : "d-block"}
+        className={props.isDiff ? 'd-none' : 'd-block'}
       />
       {editorModelsState[props.currentFile]?.readOnly && (
         <span className="pl-4 h6 mb-0 w-100 alert-info position-absolute bottom-0 end-0">
