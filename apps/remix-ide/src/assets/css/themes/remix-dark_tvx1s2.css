@@ -1656,7 +1656,7 @@ pre code {
 }
 .form-control:disabled,
 .form-control[readonly] {
-  background-color: #282a3d;
+  background-color: #141d24;
   opacity: 1;
 }
 select.form-control:focus::-ms-value {
@@ -3378,7 +3378,7 @@ input[type="submit"].btn-block {
 }
 .custom-select:disabled {
   color: #bdbed1;
-  background-color: #282a3d;
+  background-color: #141d24;
 }
 .custom-select::-ms-expand {
   display: none;
@@ -3417,7 +3417,7 @@ input[type="submit"].btn-block {
   box-shadow: 0 0 0 0.075rem #fff, 0 0 0 0.2rem #FFA729;
 }
 .custom-file-input:disabled ~ .custom-file-label {
-  background-color: #282a3d;
+  background-color: #141d24;
 }
 .custom-file-input:lang(en) ~ .custom-file-label::after {
   content: "Browse";
