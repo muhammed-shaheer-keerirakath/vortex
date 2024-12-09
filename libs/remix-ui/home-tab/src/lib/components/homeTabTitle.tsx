@@ -66,14 +66,6 @@ function HomeTabTitle() {
       <b className="py-1 text-dark" style={{ fontStyle: 'italic' }}>
         <FormattedMessage id="home.nativeIDE" />
       </b>
-      <div className="pb-1" id="hTGeneralLinks">
-        <a className="remixui_home_text" onClick={() => _paq.push(['trackEvent', 'hometab', 'header', 'webSite'])} target="__blank" href="https://remix-project.org">
-          <FormattedMessage id="home.website" />
-        </a>
-        <a className="pl-2 remixui_home_text" onClick={() => _paq.push(['trackEvent', 'hometab', 'header', 'remixDesktop'])} target="__blank" href="https://github.com/remix-project-org/remix-desktop-insiders">
-          <FormattedMessage id="home.remixDesktop" />
-        </a>
-      </div>
       <div className="d-flex pb-1 align-items-center">
         <input ref={searchInputRef} type="text" className="border form-control border-right-0" id="homeTabSearchInput" placeholder={intl.formatMessage({ id: 'home.searchDocumentation' })} data-id="terminalInputSearchHome" />
         <button
