@@ -70,7 +70,7 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #A2A3BD;
+  color: #CBCBCB;
   text-align: left;
   background-color: var(--body-bg);
 }
@@ -160,7 +160,7 @@ sup {
   top: -0.5em;
 }
 a {
-  color: #a2a3bd;
+  color: #CBCBCB;
   text-decoration: underline;
   background-color: transparent;
 }
@@ -1761,7 +1761,7 @@ textarea.form-control {
   margin-bottom: 0;
   font-size: 13px;
   line-height: 18px;
-  color: #A2A3BD;
+  color: #CBCBCB;
   text-transform: initial;
   display: initial;
 }
@@ -2636,7 +2636,7 @@ fieldset:disabled a.btn {
 }
 .btn-link {
   font-weight: 400;
-  color: #a2a3bd;
+  color: #CBCBCB;
   text-decoration: underline;
 }
 .btn-link:hover {
@@ -8605,7 +8605,7 @@ a.text-dark:hover {
   color: #6f7087 !important;
 }
 .text-body {
-  color: #A2A3BD !important;
+  color: #CBCBCB !important;
 }
 .text-muted {
   color: #868e96 !important;
@@ -8772,11 +8772,11 @@ a.text-dark:hover {
   text-transform: uppercase;
 }
 .plugin-text {
-  color: #A2A3BD !important;
+  color: #CBCBCB !important;
 }
 .plugin-version {
-  color: #A2A3BD;
-  border: 1px solid #A2A3BD;
+  color: #CBCBCB;
+  border: 1px solid #CBCBCB;
 }
 .settings-button {
   height: 32px;
