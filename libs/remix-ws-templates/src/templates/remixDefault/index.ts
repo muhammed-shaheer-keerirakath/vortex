@@ -15,7 +15,7 @@ export default async () => {
     // @ts-ignore
     'scripts/web3-lib.ts': (await import('!!raw-loader!./scripts/web3-lib.ts')).default,
     // @ts-ignore
-    'tests/Ballot_test.sol': (await import('raw-loader!./tests/Ballot_test.sol')).default,
+    'tests/MyToken_test.sol': (await import('raw-loader!./tests/MyToken_test.sol')).default,
     // @ts-ignore
     'tests/storage.test.js': (await import('!!raw-loader!./tests/storage.test.js')).default,
     // @ts-ignore
