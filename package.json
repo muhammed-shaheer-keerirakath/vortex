@@ -124,6 +124,7 @@
     "@remixproject/plugin-webview": "0.3.42",
     "@remixproject/plugin-ws": "0.3.42",
     "@ricarso/react-image-magnifiers": "^1.9.0",
+    "@theqrl/web3": "^0.2.1",
     "@types/nightwatch": "^2.3.1",
     "@web3modal/ethers5": "^4.0.1",
     "ansi-gray": "^0.1.1",
