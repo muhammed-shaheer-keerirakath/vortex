@@ -1,4 +1,4 @@
-import { Web3 } from "@theqrl/web3/lib/esm";
+import { Web3 } from "@theqrl/web3";
 
 const config = {
   provider: "http://localhost:8545",
