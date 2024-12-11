@@ -9,7 +9,7 @@ export default async () => {
     // @ts-ignore
     'scripts/deploy_with_web3.ts': (await import('!!raw-loader!./scripts/deploy_with_web3.ts')).default,
     // @ts-ignore
-    'scripts/web3-lib.ts': (await import('!!raw-loader!./scripts/web3-lib.ts')).default,
+    'scripts/web3_lib.ts': (await import('!!raw-loader!./scripts/web3_lib.ts')).default,
     // @ts-ignore
     'tests/MyToken_test.sol': (await import('raw-loader!./tests/MyToken_test.sol')).default,
     // @ts-ignore
