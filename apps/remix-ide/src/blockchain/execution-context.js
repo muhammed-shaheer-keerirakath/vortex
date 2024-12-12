@@ -1,6 +1,6 @@
 /* global ethereum */
 'use strict'
-import { Web3 } from 'web3'
+import { Web3 } from '@theqrl/web3'
 import { execution } from '@remix-project/remix-lib'
 import EventManager from '../lib/events'
 import { bytesToHex } from '@ethereumjs/util'
@@ -15,7 +15,7 @@ if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
 } else {
   web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
 }
-web3.eth.setConfig(config)
+web3.zond.setConfig(config)
 
 /*
   trigger contextChanged, web3EndpointChanged
@@ -94,7 +94,7 @@ export class ExecutionContext {
           else name = 'Custom'
   
           if (id === 1) {
-            web3.eth.getBlock(0).then((block) => {
+            web3.zond.getBlock(0).then((block) => {
               if (block && block.hash !== this.mainNetGenesisHash) name = 'Custom'
               callback && callback(err, { id, name, lastBlock: this.lastBlock, currentFork: this.currentFork })
               return resolve({ id, name, lastBlock: this.lastBlock, currentFork: this.currentFork })
@@ -107,7 +107,7 @@ export class ExecutionContext {
             return resolve({ id, name, lastBlock: this.lastBlock, currentFork: this.currentFork })
           }
         }
-        web3.eth.net.getId().then(id=>cb(null,parseInt(id))).catch(err=>cb(err))
+        web3.zond.net.getId().then(id=>cb(null,parseInt(id))).catch(err=>cb(err))
       }
     })
   }
@@ -170,12 +170,12 @@ export class ExecutionContext {
   async _updateChainContext () {
     if (!this.isVM()) {
       try {
-        const block = await web3.eth.getBlock('latest')
+        const block = await web3.zond.getBlock('latest')
         // we can't use the blockGasLimit cause the next blocks could have a lower limit : https://github.com/ethereum/remix/issues/506
         this.blockGasLimit = (block && block.gasLimit) ? Math.floor(web3.utils.toNumber(block.gasLimit) - (5 * web3.utils.toNumber(block.gasLimit) / 1024)) : web3.utils.toNumber(this.blockGasLimitDefault)
         this.lastBlock = block
         try {
-          this.currentFork = execution.forkAt(await web3.eth.net.getId(), block.number)
+          this.currentFork = execution.forkAt(await web3.zond.net.getId(), block.number)
         } catch (e) {
           this.currentFork = 'cancun'
           console.log(`unable to detect fork, defaulting to ${this.currentFork}..`)

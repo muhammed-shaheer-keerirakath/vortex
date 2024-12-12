@@ -1,13 +1,13 @@
 import Web3, {
   FMT_NUMBER,
-  type EthExecutionAPI,
+  type ZondExecutionAPI,
   type SupportedProviders,
   FMT_BYTES,
   type Bytes,
-} from 'web3';
+} from '@theqrl/web3';
 import { addHexPrefix, toBytes } from '@ethereumjs/util';
 import { execution } from '@remix-project/remix-lib';
-import { toBigInt } from 'web3-utils';
+import { toBigInt } from '@theqrl/web3-utils';
 import { saveSettings } from '../actions';
 
 const web3 = new Web3();
@@ -31,7 +31,7 @@ async function pause() {
 
 async function tryTillReceiptAvailable(txhash: Bytes) {
   try {
-    const receipt = await web3.eth.getTransactionReceipt(txhash, {
+    const receipt = await web3.zond.getTransactionReceipt(txhash, {
       number: FMT_NUMBER.NUMBER,
       bytes: FMT_BYTES.HEX,
     });
@@ -54,7 +54,7 @@ async function tryTillReceiptAvailable(txhash: Bytes) {
 
 async function tryTillTxAvailable(txhash: Bytes) {
   try {
-    const tx = await web3.eth.getTransaction(txhash, {
+    const tx = await web3.zond.getTransaction(txhash, {
       number: FMT_NUMBER.NUMBER,
       bytes: FMT_BYTES.HEX,
     });
@@ -91,14 +91,14 @@ export class TxRunner {
   }
 
   setProvider(
-    provider: string | SupportedProviders<EthExecutionAPI> | undefined
+    provider: string | SupportedProviders<ZondExecutionAPI> | undefined
   ) {
     web3.setProvider(provider);
   }
 
   getAccounts() {
     saveSettings({ isRequesting: true });
-    void web3.eth
+    void web3.zond
       .getAccounts()
       .then(async (accounts) => {
         const loadedAccounts: any = {};
@@ -115,17 +115,17 @@ export class TxRunner {
   }
 
   async getBalanceInEther(address: string) {
-    const balance = await web3.eth.getBalance(address);
+    const balance = await web3.zond.getBalance(address);
     return Web3.utils.fromWei(balance.toString(10), 'ether');
   }
 
   async getGasPrice() {
-    return await web3.eth.getGasPrice();
+    return await web3.zond.getGasPrice();
   }
 
   async runTx(tx: any, gasLimit: any, useCall: boolean) {
     if (useCall) {
-      const returnValue = await web3.eth.call({ ...tx, gas: gasLimit });
+      const returnValue = await web3.zond.call({ ...tx, gas: gasLimit });
 
       return toBytes(addHexPrefix(returnValue));
     }
@@ -159,7 +159,7 @@ export class TxRunner {
     }
 
     try {
-      const gasEstimation = await web3.eth.estimateGas(txCopy);
+      const gasEstimation = await web3.zond.estimateGas(txCopy);
       tx.gas = !gasEstimation ? gasLimit : gasEstimation;
       return await this._executeTx(tx, network);
     } catch (error) {
@@ -169,7 +169,7 @@ export class TxRunner {
   }
 
   async detectNetwork() {
-    const id = Number(await web3.eth.net.getId());
+    const id = Number(await web3.zond.net.getId());
     let name = '';
     if (id === 1) name = 'Main';
     else if (id === 3) name = 'Ropsten';
@@ -180,7 +180,7 @@ export class TxRunner {
     else name = 'Custom';
 
     if (id === 1) {
-      const block = await web3.eth.getBlock(0);
+      const block = await web3.zond.getBlock(0);
       if (block && block.hash !== this.mainNetGenesisHash) name = 'Custom';
       return {
         id,
@@ -205,7 +205,7 @@ export class TxRunner {
 
   async _updateChainContext() {
     try {
-      const block = await web3.eth.getBlock('latest');
+      const block = await web3.zond.getBlock('latest');
       // we can't use the blockGasLimit cause the next blocks could have a lower limit : https://github.com/ethereum/remix/issues/506
       this.blockGasLimit = block?.gasLimit
         ? Math.floor(
@@ -216,7 +216,7 @@ export class TxRunner {
       this.lastBlock = block;
       try {
         this.currentFork = execution.forkAt(
-          await web3.eth.net.getId(),
+          await web3.zond.net.getId(),
           block.number
         );
       } catch (e) {
@@ -249,7 +249,7 @@ export class TxRunner {
     const start = currentDateTime.getTime() / 1000;
 
     try {
-      const { transactionHash } = await web3.eth.sendTransaction(
+      const { transactionHash } = await web3.zond.sendTransaction(
         tx,
         undefined,
         { checkRevertBeforeSending: false, ignoreGasPricing: true }

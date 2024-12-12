@@ -1,5 +1,5 @@
-import { Web3, FMT_BYTES, FMT_NUMBER, LegacySendAsyncProvider, LegacyRequestProvider } from 'web3'
-import { fromWei, toBigInt } from 'web3-utils'
+import { Web3, FMT_BYTES, FMT_NUMBER, LegacySendAsyncProvider, LegacyRequestProvider } from '@theqrl/web3'
+import { fromWei, toBigInt } from '@theqrl/web3-utils'
 import { privateToAddress, hashPersonalMessage, isHexString, bytesToHex } from '@ethereumjs/util'
 import { extend, JSONRPCRequestPayload, JSONRPCResponseCallback } from '@remix-project/remix-simulator'
 import { ExecutionContext } from '../execution-context'
@@ -21,7 +21,7 @@ export class VMProvider {
   }
 
   getAccounts (cb) {
-    this.web3.eth.getAccounts()
+    this.web3.zond.getAccounts()
       .then(accounts => cb(null, accounts))
       .catch(err => {
         cb('No accounts?')
@@ -133,19 +133,19 @@ export class VMProvider {
   }
 
   async getBalanceInEther (address) {
-    const balance = await this.web3.eth.getBalance(address, undefined, { number: FMT_NUMBER.HEX, bytes: FMT_BYTES.HEX })
+    const balance = await this.web3.zond.getBalance(address, undefined, { number: FMT_NUMBER.HEX, bytes: FMT_BYTES.HEX })
     const balInString = toBigInt(balance).toString(10)
     return balInString === '0' ? balInString : fromWei(balInString, 'ether')
   }
 
   getGasPrice (cb) {
-    this.web3.eth.getGasPrice().then((result => cb(null, result))).catch((error) => cb(error))
+    this.web3.zond.getGasPrice().then((result => cb(null, result))).catch((error) => cb(error))
   }
 
   signMessage (message, account, _passphrase, cb) {
     const messageHash = hashPersonalMessage(Buffer.from(message))
     message = isHexString(message) ? message : Web3.utils.utf8ToHex(message)
-    this.web3.eth.sign(message, account)
+    this.web3.zond.sign(message, account)
       .then(signedData => cb(null, bytesToHex(messageHash), signedData))
       .catch(error => cb(error))
   }

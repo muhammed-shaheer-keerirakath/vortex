@@ -10,7 +10,7 @@ import {
   listenOnNetworkAction,
   initListeningOnNetwork,
 } from './actions/terminalAction'
-import { isBigInt } from 'web3-validator'
+import { isBigInt } from '@theqrl/web3-validator'
 import { initialState, registerCommandReducer, addCommandHistoryReducer, registerScriptRunnerReducer } from './reducers/terminalReducer'
 import { getKeyOf, getValueOf, Objectfilter, matched } from './utils/utils'
 import { allCommands, allPrograms } from './commands' // eslint-disable-line

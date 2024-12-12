@@ -3,7 +3,7 @@ import fs from './fileSystem'
 import { runTest } from './testRunner'
 import { TestResultInterface, ResultsInterface, CompilerConfiguration, compilationInterface, ASTInterface, Options, AstNode } from './types'
 import colors from 'colors'
-import { Web3 } from 'web3'
+import { Web3 } from '@theqrl/web3'
 import { format } from 'util'
 import { compileFileOrFiles } from './compiler'
 import { deployAll } from './deployer'
@@ -62,7 +62,7 @@ export function runTestFiles (filepath: string, isDirectory: boolean, web3: Web3
   async.waterfall([
     function getAccountList (next) {
       if (accounts) return next(null)
-      web3.eth.getAccounts()
+      web3.zond.getAccounts()
         .then(_accounts => {
           accounts = _accounts
           next(null)

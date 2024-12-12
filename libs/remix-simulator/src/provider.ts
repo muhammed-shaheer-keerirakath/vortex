@@ -10,7 +10,7 @@ import { methods as netMethods } from './methods/net'
 import { Transactions } from './methods/transactions'
 import { Debug } from './methods/debug'
 import { VMContext } from './vm-context'
-import { Web3PluginBase } from 'web3'
+import { Web3PluginBase } from '@theqrl/web3'
 
 export interface JSONRPCRequestPayload {
   params: any[];

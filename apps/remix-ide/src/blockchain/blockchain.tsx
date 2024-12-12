@@ -1,5 +1,5 @@
 import React from 'react' // eslint-disable-line
-import { fromWei, toBigInt, toWei } from 'web3-utils'
+import { fromWei, toBigInt, toWei } from '@theqrl/web3-utils'
 import { Plugin } from '@remixproject/engine'
 import { toBytes, addHexPrefix } from '@ethereumjs/util'
 import { EventEmitter } from 'events'

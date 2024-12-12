@@ -1,4 +1,4 @@
-import { toHex, toNumber, toBigInt } from 'web3-utils'
+import { toHex, toNumber, toBigInt } from '@theqrl/web3-utils'
 import { toChecksumAddress, Address, bigIntToHex, bytesToHex } from '@ethereumjs/util'
 import { processTx } from './txProcess'
 import { execution } from '@remix-project/remix-lib'

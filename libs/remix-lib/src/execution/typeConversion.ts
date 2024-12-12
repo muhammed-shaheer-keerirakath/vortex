@@ -1,7 +1,7 @@
 'use strict'
 import { BN } from 'bn.js'
 import { bytesToHex } from '@ethereumjs/util'
-import { isBigInt } from 'web3-validator'
+import { isBigInt } from '@theqrl/web3-validator'
 
 export function toInt (h) {
   if (h.indexOf && h.indexOf('0x') === 0) {

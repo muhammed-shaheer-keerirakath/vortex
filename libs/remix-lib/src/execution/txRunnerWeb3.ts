@@ -1,8 +1,8 @@
 'use strict'
 import { EventManager } from '../eventManager'
 import type { Transaction as InternalTransaction } from './txRunner'
-import { Web3 } from 'web3'
-import { toBigInt, toHex } from 'web3-utils'
+import { Web3 } from '@theqrl/web3'
+import { toBigInt, toHex } from '@theqrl/web3-utils'
 
 export class TxRunnerWeb3 {
   event
@@ -79,7 +79,7 @@ export class TxRunnerWeb3 {
       )
     } else {
       try {
-        const res = await this.getWeb3().eth.sendTransaction(tx, null, { checkRevertBeforeSending: false, ignoreGasPricing: true })
+        const res = await this.getWeb3().zond.sendTransaction(tx, null, { checkRevertBeforeSending: false, ignoreGasPricing: true })
         cb(null, res.transactionHash)
       } catch (e) {
         if (!e.message) e.message = ''
@@ -111,7 +111,7 @@ export class TxRunnerWeb3 {
       if (this._api && this._api.isVM()) {
         (this.getWeb3() as any).remix.registerCallId(timestamp)
       }
-      this.getWeb3().eth.call(tx)
+      this.getWeb3().zond.call(tx)
         .then((result: any) => callback(null, {
           result: result
         }))
@@ -135,7 +135,7 @@ export class TxRunnerWeb3 {
           txCopy.gasPrice = undefined
         }
       }
-      this.getWeb3().eth.estimateGas(txCopy)
+      this.getWeb3().zond.estimateGas(txCopy)
         .then(gasEstimation => {
           gasEstimationForceSend(null, () => {
             /*
@@ -191,7 +191,7 @@ export class TxRunnerWeb3 {
 
 async function tryTillReceiptAvailable (txhash: string, web3: Web3) {
   try {
-    const receipt = await web3.eth.getTransactionReceipt(txhash)
+    const receipt = await web3.zond.getTransactionReceipt(txhash)
     if (receipt) {
       if (!receipt.to && !receipt.contractAddress) {
         // this is a contract creation and the receipt doesn't contain a contract address. we have to keep polling...
@@ -206,7 +206,7 @@ async function tryTillReceiptAvailable (txhash: string, web3: Web3) {
 
 async function tryTillTxAvailable (txhash: string, web3: Web3) {
   try {
-    const tx = await web3.eth.getTransaction(txhash)
+    const tx = await web3.zond.getTransaction(txhash)
     if (tx && tx.blockHash) return tx
   } catch (e) {}
   return await tryTillTxAvailable(txhash, web3)

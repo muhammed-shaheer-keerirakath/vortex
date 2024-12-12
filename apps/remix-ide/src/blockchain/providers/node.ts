@@ -1,6 +1,6 @@
-import { Web3 } from 'web3'
+import { Web3 } from '@theqrl/web3'
 import { hashPersonalMessage, isHexString, bytesToHex } from '@ethereumjs/util'
-import { Personal } from 'web3-eth-personal'
+import { Personal } from '@theqrl/web3-zond-personal'
 import { ExecutionContext } from '../execution-context'
 import Config from '../../config'
 

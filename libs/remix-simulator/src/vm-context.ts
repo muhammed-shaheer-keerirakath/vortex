@@ -19,7 +19,7 @@ import { Blockchain } from '@ethereumjs/blockchain'
 import { Block } from '@ethereumjs/block'
 import { TypedTransaction } from '@ethereumjs/tx'
 import { State } from './provider'
-import { hexToBytes } from 'web3-utils'
+import { hexToBytes } from '@theqrl/web3-utils'
 
 /**
  * Options for constructing a {@link StateManager}.

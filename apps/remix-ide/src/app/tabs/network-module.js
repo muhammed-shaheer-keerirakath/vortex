@@ -1,7 +1,7 @@
 import { Plugin } from '@remixproject/engine'
 import * as packageJson from '../../../../../package.json'
-import { Web3 } from 'web3'
-import IpcProvider from 'web3-providers-ipc'
+import { Web3 } from '@theqrl/web3'
+import IpcProvider from '@theqrl/web3-providers-ipc'
 
 export const profile = {
   name: 'network',

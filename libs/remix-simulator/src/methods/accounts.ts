@@ -1,7 +1,7 @@
 import { signTypedData, SignTypedDataVersion, TypedMessage, MessageTypes } from '@metamask/eth-sig-util'
 import { privateToAddress, toChecksumAddress, isValidPrivate, Address, toBytes, bytesToHex, Account } from '@ethereumjs/util'
-import { privateKeyToAccount } from 'web3-eth-accounts'
-import { toBigInt } from 'web3-utils'
+import { seedToAccount } from '@theqrl/web3-zond-accounts'
+import { toBigInt } from '@theqrl/web3-utils'
 import * as crypto from 'crypto'
 
 type AccountType = {
@@ -111,7 +111,7 @@ export class Web3Accounts {
     if (!privateKey) {
       return cb(new Error('unknown account'))
     }
-    const account = privateKeyToAccount(privateKey as string)
+    const account = seedToAccount(privateKey as string)
 
     const data = account.sign(message)
 

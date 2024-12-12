@@ -1,4 +1,4 @@
-import { toHex } from 'web3-utils'
+import { toHex } from '@theqrl/web3-utils'
 import { VMContext } from '../vm-context'
 import { bigIntToHex, bytesToHex } from '@ethereumjs/util'
 

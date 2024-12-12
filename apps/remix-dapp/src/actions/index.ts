@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Web3 from 'web3';
+import { Web3 } from '@theqrl/web3';
 import { ethers } from 'ethers';
 import BN from 'bn.js';
 import { execution } from '@remix-project/remix-lib';

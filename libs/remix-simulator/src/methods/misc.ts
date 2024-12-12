@@ -1,4 +1,4 @@
-import { sha3 } from 'web3-utils'
+import { sha3 } from '@theqrl/web3-utils'
 const version = require('../../package.json').version
 
 export function methods () {

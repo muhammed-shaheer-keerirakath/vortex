@@ -1,7 +1,7 @@
 import { Plugin } from '@remixproject/engine'
 import * as packageJson from '../../../../../package.json'
-import {isBigInt} from 'web3-validator'
-import { addressToString } from "@remix-ui/helper"
+import { isBigInt } from '@theqrl/web3-validator'
+import { addressToString } from '@remix-ui/helper'
 
 export const profile = {
   name: 'web3Provider',
@@ -9,7 +9,7 @@ export const profile = {
   description: 'Represent the current web3 provider used by the app at global scope',
   methods: ['sendAsync'],
   version: packageJson.version,
-  kind: 'provider'
+  kind: 'provider',
 }
 
 const replacer = (key, value) => {
@@ -28,22 +28,21 @@ export class Web3ProviderModule extends Plugin {
     Should be taken carefully and probably not be release as it is now.
   */
   sendAsync(payload) {
-
     return new Promise((resolve, reject) => {
-      this.askUserPermission('sendAsync', `Calling ${payload.method} with parameters ${JSON.stringify(payload.params, replacer, '\t')}`).then(
-        async (result) => {
+      this.askUserPermission('sendAsync', `Calling ${payload.method} with parameters ${JSON.stringify(payload.params, replacer, '\t')}`)
+        .then(async (result) => {
           if (result) {
             const provider = this.blockchain.web3().currentProvider
             const resultFn = async (error, message) => {
               if (error) {
                 // Handle 'The method "debug_traceTransaction" does not exist / is not available.' error
-                if(error.message && error.code && error.code === -32601) {
-                  this.call('terminal', 'log', { value: error.message, type: 'error' } )
+                if (error.message && error.code && error.code === -32601) {
+                  this.call('terminal', 'log', { value: error.message, type: 'error' })
                   return reject(error.message)
                 } else {
                   const errorData = error.data || error.message || error
                   // See: https://github.com/ethers-io/ethers.js/issues/901
-                  if (!(typeof errorData === 'string' && errorData.includes("unknown method eth_chainId"))) this.call('terminal', 'log', { value: error.data || error.message, type: 'error' } )
+                  if (!(typeof errorData === 'string' && errorData.includes('unknown method eth_chainId'))) this.call('terminal', 'log', { value: error.data || error.message, type: 'error' })
                   return reject(errorData)
                 }
               }
@@ -64,16 +63,16 @@ export class Web3ProviderModule extends Plugin {
                         abi: contractData.contract.abi,
                         compiler: data,
                         contract: {
-                          file : contractData.file,
-                          object: contractData.contract
-                        }
+                          file: contractData.file,
+                          object: contractData.contract,
+                        },
                       }
                       this.call('udapp', 'addInstance', contractAddressStr, contractData.contract.abi, contractData.name, contractObject)
                       await this.call('compilerArtefacts', 'addResolvedContract', contractAddressStr, data)
                     }
                   }, 50)
                   const isVM = this.blockchain.executionContext.isVM()
-    
+
                   if (isVM && this.blockchain.config.get('settings/save-evm-state')) {
                     await this.blockchain.executionContext.getStateDetails().then((state) => {
                       this.call('fileManager', 'writeFile', `.states/${this.blockchain.executionContext.getProvider()}/state.json`, state)
@@ -91,9 +90,10 @@ export class Web3ProviderModule extends Plugin {
           } else {
             reject(new Error('User denied permission'))
           }
-        }).catch((e) => {
-        reject(e)
-      })
+        })
+        .catch((e) => {
+          reject(e)
+        })
     })
   }
 
