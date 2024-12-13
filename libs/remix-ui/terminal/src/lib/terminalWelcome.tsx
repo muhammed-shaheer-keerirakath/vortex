@@ -45,14 +45,9 @@ const TerminalWelcomeMessage = ({ packageJson, storage }) => {
       </div>
       <ul className="ml-0 mr-4">
         <li key="web3-152">
-          <a target="_blank" href="https://web3js.readthedocs.io/en/1.0/">
+          <a target="_blank" href="https://github.com/theQRL/web3.js">
             web3.js
           </a>
-        </li>
-        <li key="ethers-console">
-          <a target="_blank" href="https://docs.ethers.io">
-            ethers.js
-          </a>{' '}
         </li>
         <li key="sol-gpt">
           sol-gpt <i>&lt;your Solidity question here&gt;</i>{' '}
