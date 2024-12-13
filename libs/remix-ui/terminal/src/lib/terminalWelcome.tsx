@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react' // eslint-disable-line
+import React, { useEffect } from 'react' // eslint-disable-line
 import { FormattedMessage } from 'react-intl'
 
 const TerminalWelcomeMessage = ({ packageJson, storage }) => {
@@ -6,7 +6,7 @@ const TerminalWelcomeMessage = ({ packageJson, storage }) => {
     <div className="remix_ui_terminal_block px-4 " data-id="block_null">
       <div className="remix_ui_terminal_welcome">
         {' '}
-        <FormattedMessage id="terminal.welcomeText1" /> Remix {packageJson}{' '}
+        <FormattedMessage id="terminal.welcomeText1" /> Vortex IDE {packageJson}{' '}
       </div>
       <br />
       <div className="">
@@ -55,7 +55,7 @@ const TerminalWelcomeMessage = ({ packageJson, storage }) => {
           </a>{' '}
         </li>
         <li key="sol-gpt">
-          sol-gpt <i>&lt;your Solidity question here&gt;</i> {' '}
+          sol-gpt <i>&lt;your Solidity question here&gt;</i>{' '}
         </li>
       </ul>
       <div>
