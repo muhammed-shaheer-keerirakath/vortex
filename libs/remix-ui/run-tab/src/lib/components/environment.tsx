@@ -63,7 +63,7 @@ export function EnvironmentUI(props: EnvironmentProps) {
                 No provider pinned
               </span>
             </Dropdown.Item>}
-            { (props.providers.providerList.filter((provider) => { return provider.isInjected })).map(({ name, displayName }) => (
+            {(props.providers.providerList.filter((provider) => { return provider.isInjected })).map(({ name, displayName }) => (
               <Dropdown.Item
                 key={name}
                 onClick={async () => {
@@ -76,8 +76,8 @@ export function EnvironmentUI(props: EnvironmentProps) {
                 </span>
               </Dropdown.Item>
             ))}
-            { props.providers.providerList.filter((provider) => { return provider.isInjected }).length !== 0 && <Dropdown.Divider className='border-secondary'></Dropdown.Divider> }
-            { (props.providers.providerList.filter((provider) => { return provider.isVM })).map(({ displayName, name }) => (
+            {props.providers.providerList.filter((provider) => { return provider.isInjected }).length !== 0 && <Dropdown.Divider className='border-secondary'></Dropdown.Divider>}
+            {(props.providers.providerList.filter((provider) => { return provider.isVM })).map(({ displayName, name }) => (
               <Dropdown.Item
                 key={name}
                 onClick={() => {
@@ -90,8 +90,8 @@ export function EnvironmentUI(props: EnvironmentProps) {
                 </span>
               </Dropdown.Item>
             ))}
-            { props.providers.providerList.filter((provider) => { return provider.isVM }).length !== 0 && <Dropdown.Divider className='border-secondary'></Dropdown.Divider> }
-            { (props.providers.providerList.filter((provider) => { return !(provider.isVM || provider.isInjected) })).map(({ displayName, name }) => (
+            {props.providers.providerList.filter((provider) => { return provider.isVM }).length !== 0 && <Dropdown.Divider className='border-secondary'></Dropdown.Divider>}
+            {(props.providers.providerList.filter((provider) => { return !(provider.isVM || provider.isInjected) })).map(({ displayName, name }) => (
               <Dropdown.Item
                 key={name}
                 onClick={() => {
@@ -105,8 +105,8 @@ export function EnvironmentUI(props: EnvironmentProps) {
                 </span>
               </Dropdown.Item>
             ))}
-            <Dropdown.Divider className='border-secondary'></Dropdown.Divider>
-            <Dropdown.Item
+            {/* <Dropdown.Divider className='border-secondary'></Dropdown.Divider> */}
+            {/* <Dropdown.Item
               key={10000}
               onClick={() => {
                 props.setExecutionContext({ context: 'item-another-chain' })
@@ -116,7 +116,7 @@ export function EnvironmentUI(props: EnvironmentProps) {
               <span className="">
                 Customize this list...
               </span>
-            </Dropdown.Item>
+            </Dropdown.Item> */}
           </Dropdown.Menu>
         </Dropdown>
       </div>
