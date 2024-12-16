@@ -5,7 +5,7 @@ export const setAccount = (dispatch: React.Dispatch<any>, account: string) => {
   dispatch(setSelectedAccount(account))
 }
 
-export const setUnit = (dispatch: React.Dispatch<any>, unit: 'ether' | 'finney' | 'gwei' | 'wei') => {
+export const setUnit = (dispatch: React.Dispatch<any>, unit: 'znd' | 'finney' | 'gwei' | 'wei') => {
   dispatch(setSendUnit(unit))
 }
 

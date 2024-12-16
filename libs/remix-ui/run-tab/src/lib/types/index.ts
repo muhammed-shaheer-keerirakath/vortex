@@ -135,7 +135,7 @@ export interface SettingsProps {
     error: string
   },
   setAccount: (account: string) => void,
-  setUnit: (unit: 'ether' | 'finney' | 'gwei' | 'wei') => void,
+  setUnit: (unit: 'znd' | 'finney' | 'gwei' | 'wei') => void,
   sendValue: string,
   sendUnit: string,
   gasLimit: number,
@@ -204,7 +204,7 @@ export interface GasPriceProps {
 }
 
 export interface ValueProps {
-  setUnit: (unit: 'ether' | 'finney' | 'gwei' | 'wei') => void,
+  setUnit: (unit: 'znd' | 'finney' | 'gwei' | 'wei') => void,
   setSendValue: (value: string) => void,
   sendValue: string,
   sendUnit: string

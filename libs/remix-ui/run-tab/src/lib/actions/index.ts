@@ -34,7 +34,7 @@ export const initRunTab = (udapp: RunTab, resetEventsAndAccounts: boolean) => as
 
 export const addFile = (path: string, content: string) => addFileInternal(plugin, path, content)
 export const setAccountAddress = (account: string) => setAccount(dispatch, account)
-export const setUnitValue = (unit: 'ether' | 'finney' | 'gwei' | 'wei') => setUnit(dispatch, unit)
+export const setUnitValue = (unit: 'znd' | 'finney' | 'gwei' | 'wei') => setUnit(dispatch, unit)
 export const setGasFeeAmount = (value: number) => setGasFee(dispatch, value)
 export const setExecutionEnvironment = (executionContext: { context: string, fork: string }) => setExecutionContext(plugin, dispatch, executionContext)
 export const hideToaster = () => clearPopUp(dispatch)

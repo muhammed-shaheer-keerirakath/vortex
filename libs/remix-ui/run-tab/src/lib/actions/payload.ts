@@ -37,7 +37,7 @@ export const setSelectedAccount = (account: string) => {
   }
 }
 
-export const setSendUnit = (unit: 'ether' | 'finney' | 'gwei' | 'wei') => {
+export const setSendUnit = (unit: 'znd' | 'finney' | 'gwei' | 'wei') => {
   return {
     type: SET_SEND_UNIT,
     payload: unit
