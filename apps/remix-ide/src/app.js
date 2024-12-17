@@ -26,21 +26,21 @@ import { WalkthroughService } from './walkthroughService'
 
 import { OffsetToLineColumnConverter, CompilerMetadata, CompilerArtefacts, FetchAndCompile, CompilerImports, GistHandler } from '@remix-project/core-plugin'
 
-import {Registry} from '@remix-project/remix-lib'
-import {ConfigPlugin} from './app/plugins/config'
-import {StoragePlugin} from './app/plugins/storage'
-import {Layout} from './app/panels/layout'
-import {NotificationPlugin} from './app/plugins/notification'
-import {Blockchain} from './blockchain/blockchain'
-import {MergeVMProvider, LondonVMProvider, BerlinVMProvider, ShanghaiVMProvider, CancunVMProvider} from './app/providers/vm-provider'
-import {MainnetForkVMProvider} from './app/providers/mainnet-vm-fork-provider'
-import {SepoliaForkVMProvider} from './app/providers/sepolia-vm-fork-provider'
-import {GoerliForkVMProvider} from './app/providers/goerli-vm-fork-provider'
-import {CustomForkVMProvider} from './app/providers/custom-vm-fork-provider'
-import {HardhatProvider} from './app/providers/hardhat-provider'
-import {GanacheProvider} from './app/providers/ganache-provider'
-import {FoundryProvider} from './app/providers/foundry-provider'
-import {ExternalHttpProvider} from './app/providers/external-http-provider'
+import { Registry } from '@remix-project/remix-lib'
+import { ConfigPlugin } from './app/plugins/config'
+import { StoragePlugin } from './app/plugins/storage'
+import { Layout } from './app/panels/layout'
+import { NotificationPlugin } from './app/plugins/notification'
+import { Blockchain } from './blockchain/blockchain'
+import { MergeVMProvider, LondonVMProvider, BerlinVMProvider, ShanghaiVMProvider, CancunVMProvider } from './app/providers/vm-provider'
+import { MainnetForkVMProvider } from './app/providers/mainnet-vm-fork-provider'
+import { SepoliaForkVMProvider } from './app/providers/sepolia-vm-fork-provider'
+import { GoerliForkVMProvider } from './app/providers/goerli-vm-fork-provider'
+import { CustomForkVMProvider } from './app/providers/custom-vm-fork-provider'
+import { HardhatProvider } from './app/providers/hardhat-provider'
+import { GanacheProvider } from './app/providers/ganache-provider'
+import { FoundryProvider } from './app/providers/foundry-provider'
+import { ExternalHttpProvider } from './app/providers/external-http-provider'
 import { EnvironmentExplorer } from './app/providers/environment-explorer'
 import { FileDecorator } from './app/plugins/file-decorator'
 import { CodeFormat } from './app/plugins/code-format'
@@ -58,7 +58,7 @@ import { xtermPlugin } from './app/plugins/electron/xtermPlugin'
 import { ripgrepPlugin } from './app/plugins/electron/ripgrepPlugin'
 import { compilerLoaderPlugin, compilerLoaderPluginDesktop } from './app/plugins/electron/compilerLoaderPlugin'
 import { appUpdaterPlugin } from './app/plugins/electron/appUpdaterPlugin'
-import { remixAIDesktopPlugin } from './app/plugins/electron/remixAIDesktopPlugin' 
+import { remixAIDesktopPlugin } from './app/plugins/electron/remixAIDesktopPlugin'
 import { RemixAIPlugin } from './app/plugins/remixAIPlugin'
 import { SlitherHandleDesktop } from './app/plugins/electron/slitherPlugin'
 import { SlitherHandle } from './app/files/slither-handle'
@@ -193,11 +193,11 @@ class AppComponent {
     const e2eforceMatomoToShow = window.localStorage.getItem('showMatomo') && window.localStorage.getItem('showMatomo') === 'true'
     const contextShouldShowMatomo = matomoDomains[window.location.hostname] || e2eforceMatomoToShow || electronTracking
     const shouldRenewConsent = this.matomoCurrentSetting === false && (!lastMatomoCheck || new Date(Number(lastMatomoCheck)) < sixMonthsAgo) // it is set to false for more than 6 months.
-    this.showMatomo = contextShouldShowMatomo && (!this.matomoConfAlreadySet || shouldRenewConsent)        
+    this.showMatomo = contextShouldShowMatomo && (!this.matomoConfAlreadySet || shouldRenewConsent)
 
     if (this.showMatomo && shouldRenewConsent) {
       _paq.push(['trackEvent', 'Matomo', 'refreshMatomoPermissions']);
-    }    
+    }
 
     this.walkthroughService = new WalkthroughService(appManager)
 
@@ -387,7 +387,7 @@ class AppComponent {
       ganacheProvider,
       foundryProvider,
       externalHttpProvider,
-      environmentExplorer,  
+      environmentExplorer,
       this.walkthroughService,
       search,
       solidityumlgen,

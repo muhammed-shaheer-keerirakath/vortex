@@ -31,7 +31,7 @@ export class EnvironmentExplorer extends ViewPlugin {
   providers: { [key in ProvidersSection]: Provider[] }
   providersFlat: { [key: string]: Provider }
   pinnedProviders: string[]
-  dispatch: React.Dispatch<any> = () => {}
+  dispatch: React.Dispatch<any> = () => { }
 
   constructor() {
     super(profile)
@@ -50,7 +50,7 @@ export class EnvironmentExplorer extends ViewPlugin {
     this.renderComponent()
   }
 
-  addProvider (provider: Provider) {
+  addProvider(provider: Provider) {
     if (provider.isInjected) {
       this.providers['Injected'].push(provider)
     } else if (provider.isForkedVM) {

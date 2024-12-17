@@ -58,7 +58,7 @@ export type Provider = {
   isForkedVM: boolean
   title: string
   init: () => Promise<void>
-  provider:{
+  provider: {
     sendAsync: (payload: any) => Promise<void>
   }
 }
@@ -78,7 +78,7 @@ export class Blockchain extends Plugin {
     }
     error?: string
   }
-  providers: {[key: string]: VMProvider | InjectedProvider | NodeProvider}
+  providers: { [key: string]: VMProvider | InjectedProvider | NodeProvider }
   transactionContextAPI: TransactionContextAPI
   registeredPluginEvents: string[]
   defaultPinnedProviders: string[]

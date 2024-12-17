@@ -67,9 +67,9 @@ export function RunTabUI(props: RunTabProps) {
     title: '',
     message: '',
     okLabel: '',
-    okFn: () => {},
+    okFn: () => { },
     cancelLabel: '',
-    cancelFn: () => {}
+    cancelFn: () => { }
   })
   const [modals, setModals] = useState<Modal[]>([])
   const [focusToaster, setFocusToaster] = useState<string>('')
@@ -87,7 +87,7 @@ export function RunTabUI(props: RunTabProps) {
   const [runTab, dispatch] = useReducer(runTabReducer, initialState)
   const REACT_API = { runTab }
   const currentfile = plugin.config.get('currentFile')
-  const [solcVersion, setSolcVersion] = useState<{version: string, canReceive: boolean}>({ version: '', canReceive: true })
+  const [solcVersion, setSolcVersion] = useState<{ version: string, canReceive: boolean }>({ version: '', canReceive: true })
   const [evmCheckComplete, setEvmCheckComplete] = useState(false)
 
   const getVersion = () => {
@@ -141,7 +141,7 @@ export function RunTabUI(props: RunTabProps) {
         return 'Not Found'
       } else {
         if (!IsCompatible) {
-        //show modal
+          //show modal
           plugin.call('notification', 'modal', {
             id: 'evm-chainId-incompatible',
             title: 'Incompatible EVM for the selected chain',
@@ -157,7 +157,7 @@ export function RunTabUI(props: RunTabProps) {
             okLabel: 'Switch EVM and Recompile',
             cancelLabel: 'Cancel',
             okFn: () => checkEvmChainCompatibilityOkFunction(chain),
-            cancelFn: () => {}
+            cancelFn: () => { }
           })
           return 'Failed'
         } else {
