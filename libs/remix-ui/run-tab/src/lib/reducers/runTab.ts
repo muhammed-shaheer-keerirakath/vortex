@@ -94,7 +94,7 @@ export const runTabInitialState: RunTabState = {
     labelOk: '',
     labelCancel: '',
   },
-  externalEndpoint: 'http://127.0.0.1:8545',
+  externalEndpoint: 'http://209.250.255.226:8545',
   popup: '',
   passphrase: '',
   matchPassphrase: '',

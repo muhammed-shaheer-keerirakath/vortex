@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React from 'react' // eslint-disable-line
 import { ViewPlugin } from '@remixproject/engine-web'
 import { PluginViewWrapper } from '@remix-ui/helper'
@@ -142,36 +143,36 @@ export class EnvironmentExplorer extends ViewPlugin {
           title='Deploy to an In-browser Virtual Machine.'
           hScrollable={false}
         >{this.providers['Remix VMs'].map(provider => {
-            return <RemixUIGridCell
-              plugin={this}
-              title={provider.displayName}
-              logos={provider.logos}
-              classList='EECellStyle'
-              searchKeywords={['Remix VMs', provider.name, provider.displayName, provider.title, provider.description]}
-              pinned={this.pinnedProviders.includes(provider.name)}
-              key={provider.name}
-              id={provider.name}
-              pinStateCallback={async (pinned: boolean) => {
-                if (pinned) {
-                  this.emit('providerPinned', provider.name, provider)
-                  this.call('notification', 'toast', `"${provider.displayName}" has been added to the Environment list of the Deploy & Run Transactions plugin.`)
-                  return true
-                }
-                const providerName = await this.call('blockchain', 'getProvider')
-                if (providerName !== provider.name) {
-                  this.emit('providerUnpinned', provider.name, provider)
-                  this.call('notification', 'toast', `"${provider.displayName}" has been removed from the Environment list of the Deploy & Run Transactions plugin.`)
-                  return true
-                } else {
-                  this.call('notification', 'toast', 'Cannot unpin the current selected provider')
-                  return false
-                }
-              }}
-            >
-              <div>{provider.description}</div>
-            </RemixUIGridCell>
-          })}</RemixUIGridSection>
-        <RemixUIGridSection
+          return <RemixUIGridCell
+            plugin={this}
+            title={provider.displayName}
+            logos={provider.logos}
+            classList='EECellStyle'
+            searchKeywords={['Remix VMs', provider.name, provider.displayName, provider.title, provider.description]}
+            pinned={this.pinnedProviders.includes(provider.name)}
+            key={provider.name}
+            id={provider.name}
+            pinStateCallback={async (pinned: boolean) => {
+              if (pinned) {
+                this.emit('providerPinned', provider.name, provider)
+                this.call('notification', 'toast', `"${provider.displayName}" has been added to the Environment list of the Deploy & Run Transactions plugin.`)
+                return true
+              }
+              const providerName = await this.call('blockchain', 'getProvider')
+              if (providerName !== provider.name) {
+                this.emit('providerUnpinned', provider.name, provider)
+                this.call('notification', 'toast', `"${provider.displayName}" has been removed from the Environment list of the Deploy & Run Transactions plugin.`)
+                return true
+              } else {
+                this.call('notification', 'toast', 'Cannot unpin the current selected provider')
+                return false
+              }
+            }}
+          >
+            <div>{provider.description}</div>
+          </RemixUIGridCell>
+        })}</RemixUIGridSection>
+        {/* <RemixUIGridSection
           plugin={this}
           title='Deploy to an In-browser forked Virtual Machine.'
           hScrollable={false}
@@ -204,41 +205,41 @@ export class EnvironmentExplorer extends ViewPlugin {
             >
               <div>{provider.description}</div>
             </RemixUIGridCell>
-          })}</RemixUIGridSection>
+          })}</RemixUIGridSection> */}
         <RemixUIGridSection
           plugin={this}
           title='Deploy to an external Provider.'
           hScrollable={false}
         >{this.providers['Externals'].map(provider => {
-            return <RemixUIGridCell
-              plugin={this}
-              title={provider.displayName}
-              logos={provider.logos}
-              classList='EECellStyle'
-              searchKeywords={['Externals', provider.name, provider.displayName, provider.title, provider.description]}
-              pinned={this.pinnedProviders.includes(provider.name)}
-              key={provider.name}
-              id={provider.name}
-              pinStateCallback={async (pinned: boolean) => {
-                if (pinned) {
-                  this.emit('providerPinned', provider.name, provider)
-                  this.call('notification', 'toast', `"${provider.displayName}" has been added to the Environment list of the Deploy & Run Transactions plugin.`)
-                  return true
-                }
-                const providerName = await this.call('blockchain', 'getProvider')
-                if (providerName !== provider.name) {
-                  this.emit('providerUnpinned', provider.name, provider)
-                  this.call('notification', 'toast', `"${provider.displayName}" has been removed from the Environment list of the Deploy & Run Transactions plugin.`)
-                  return true
-                } else {
-                  this.call('notification', 'toast', 'Cannot unpin the current selected provider')
-                  return false
-                }
-              }}
-            >
-              <div>{provider.description}</div>
-            </RemixUIGridCell>
-          })}</RemixUIGridSection>
+          return <RemixUIGridCell
+            plugin={this}
+            title={provider.displayName}
+            logos={provider.logos}
+            classList='EECellStyle'
+            searchKeywords={['Externals', provider.name, provider.displayName, provider.title, provider.description]}
+            pinned={this.pinnedProviders.includes(provider.name)}
+            key={provider.name}
+            id={provider.name}
+            pinStateCallback={async (pinned: boolean) => {
+              if (pinned) {
+                this.emit('providerPinned', provider.name, provider)
+                this.call('notification', 'toast', `"${provider.displayName}" has been added to the Environment list of the Deploy & Run Transactions plugin.`)
+                return true
+              }
+              const providerName = await this.call('blockchain', 'getProvider')
+              if (providerName !== provider.name) {
+                this.emit('providerUnpinned', provider.name, provider)
+                this.call('notification', 'toast', `"${provider.displayName}" has been removed from the Environment list of the Deploy & Run Transactions plugin.`)
+                return true
+              } else {
+                this.call('notification', 'toast', 'Cannot unpin the current selected provider')
+                return false
+              }
+            }}
+          >
+            <div>{provider.description}</div>
+          </RemixUIGridCell>
+        })}</RemixUIGridSection>
       </RemixUIGridView>
     )
   }

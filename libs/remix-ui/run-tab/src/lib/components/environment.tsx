@@ -105,8 +105,8 @@ export function EnvironmentUI(props: EnvironmentProps) {
                 </span>
               </Dropdown.Item>
             ))}
-            {/* <Dropdown.Divider className='border-secondary'></Dropdown.Divider> */}
-            {/* <Dropdown.Item
+            <Dropdown.Divider className='border-secondary'></Dropdown.Divider>
+            <Dropdown.Item
               key={10000}
               onClick={() => {
                 props.setExecutionContext({ context: 'item-another-chain' })
@@ -116,7 +116,7 @@ export function EnvironmentUI(props: EnvironmentProps) {
               <span className="">
                 Customize this list...
               </span>
-            </Dropdown.Item> */}
+            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </div>

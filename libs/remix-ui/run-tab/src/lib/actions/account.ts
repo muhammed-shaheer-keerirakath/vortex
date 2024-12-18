@@ -1,7 +1,7 @@
-import { shortenAddress } from "@remix-ui/helper"
-import { RunTab } from "../types/run-tab"
-import { clearInstances, setAccount, setExecEnv } from "./actions"
-import { displayNotification, fetchAccountsListFailed, fetchAccountsListRequest, fetchAccountsListSuccess, setMatchPassphrase, setPassphrase } from "./payload"
+import { shortenAddress } from '@remix-ui/helper'
+import { RunTab } from '../types/run-tab'
+import { clearInstances, setAccount, setExecEnv } from './actions'
+import { displayNotification, fetchAccountsListFailed, fetchAccountsListRequest, fetchAccountsListSuccess, setMatchPassphrase, setPassphrase } from './payload'
 import { toChecksumAddress } from '@ethereumjs/util'
 
 export const updateAccountBalances = async (plugin: RunTab, dispatch: React.Dispatch<any>) => {
@@ -32,7 +32,7 @@ export const fillAccountsList = async (plugin: RunTab, dispatch: React.Dispatch<
 
       if (provider && provider.startsWith('injected')) {
         const selectedAddress = plugin.blockchain.getInjectedWeb3Address()
-        if (!(Object.keys(loadedAccounts).includes(toChecksumAddress(selectedAddress)))) setAccount(dispatch, null)
+        if (!Object.keys(loadedAccounts).includes(toChecksumAddress(selectedAddress))) setAccount(dispatch, null)
       }
       dispatch(fetchAccountsListSuccess(loadedAccounts))
     } catch (e) {
@@ -56,25 +56,41 @@ const _getProviderDropdownValue = (plugin: RunTab): string => {
   return plugin.blockchain.getProvider()
 }
 
-export const setExecutionContext = (plugin: RunTab, dispatch: React.Dispatch<any>, executionContext: { context: string, fork: string }) => {
-  plugin.blockchain.changeExecutionContext(executionContext, null, (alertMsg) => {
-    plugin.call('notification', 'toast', alertMsg)
-  }, () => { setFinalContext(plugin, dispatch) })
+export const setExecutionContext = (plugin: RunTab, dispatch: React.Dispatch<any>, executionContext: { context: string; fork: string }) => {
+  plugin.blockchain.changeExecutionContext(
+    executionContext,
+    null,
+    (alertMsg) => {
+      plugin.call('notification', 'toast', alertMsg)
+    },
+    () => {
+      setFinalContext(plugin, dispatch)
+    }
+  )
 }
 
 export const createNewBlockchainAccount = async (plugin: RunTab, dispatch: React.Dispatch<any>, cbMessage: JSX.Element) => {
   plugin.blockchain.newAccount(
     '',
     (cb) => {
-      dispatch(displayNotification('Enter Passphrase', cbMessage, 'OK', 'Cancel', async () => {
-        if (plugin.REACT_API.passphrase === plugin.REACT_API.matchPassphrase) {
-          cb(plugin.REACT_API.passphrase)
-        } else {
-          dispatch(displayNotification('Error', 'Passphase does not match', 'OK', null))
-        }
-        setPassphrase('')
-        setMatchPassphrase('')
-      }, () => {}))
+      dispatch(
+        displayNotification(
+          'Enter Passphrase',
+          cbMessage,
+          'OK',
+          'Cancel',
+          async () => {
+            if (plugin.REACT_API.passphrase === plugin.REACT_API.matchPassphrase) {
+              cb(plugin.REACT_API.passphrase)
+            } else {
+              dispatch(displayNotification('Error', 'Passphase does not match', 'OK', null))
+            }
+            setPassphrase('')
+            setMatchPassphrase('')
+          },
+          () => {}
+        )
+      )
     },
     async (error, address) => {
       if (error) {
