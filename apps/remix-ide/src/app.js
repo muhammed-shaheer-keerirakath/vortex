@@ -32,14 +32,15 @@ import { StoragePlugin } from './app/plugins/storage'
 import { Layout } from './app/panels/layout'
 import { NotificationPlugin } from './app/plugins/notification'
 import { Blockchain } from './blockchain/blockchain'
-import { MergeVMProvider, LondonVMProvider, BerlinVMProvider, ShanghaiVMProvider, CancunVMProvider } from './app/providers/vm-provider'
-import { MainnetForkVMProvider } from './app/providers/mainnet-vm-fork-provider'
-import { SepoliaForkVMProvider } from './app/providers/sepolia-vm-fork-provider'
-import { GoerliForkVMProvider } from './app/providers/goerli-vm-fork-provider'
-import { CustomForkVMProvider } from './app/providers/custom-vm-fork-provider'
-import { HardhatProvider } from './app/providers/hardhat-provider'
-import { GanacheProvider } from './app/providers/ganache-provider'
-import { FoundryProvider } from './app/providers/foundry-provider'
+import { ZondTestnetVMProvider } from './app/providers/vm-provider'
+// import { MergeVMProvider, LondonVMProvider, BerlinVMProvider, ShanghaiVMProvider, CancunVMProvider } from './app/providers/vm-provider'
+// import { MainnetForkVMProvider } from './app/providers/mainnet-vm-fork-provider'
+// import { SepoliaForkVMProvider } from './app/providers/sepolia-vm-fork-provider'
+// import { GoerliForkVMProvider } from './app/providers/goerli-vm-fork-provider'
+// import { CustomForkVMProvider } from './app/providers/custom-vm-fork-provider'
+// import { HardhatProvider } from './app/providers/hardhat-provider'
+// import { GanacheProvider } from './app/providers/ganache-provider'
+// import { FoundryProvider } from './app/providers/foundry-provider'
 import { ExternalHttpProvider } from './app/providers/external-http-provider'
 import { EnvironmentExplorer } from './app/providers/environment-explorer'
 import { FileDecorator } from './app/plugins/file-decorator'
@@ -280,7 +281,7 @@ class AppComponent {
     const contentImport = new CompilerImports()
 
     const blockchain = new Blockchain(Registry.getInstance().get('config').api)
-
+    
     // ----------------- compilation metadata generation service ---------
     const compilerMetadataGenerator = new CompilerMetadata()
     // ----------------- compilation result service (can keep track of compilation results) ----------------------------
@@ -296,18 +297,19 @@ class AppComponent {
     const networkModule = new NetworkModule(blockchain)
     // ----------------- represent the current selected web3 provider ----
     const web3Provider = new Web3ProviderModule(blockchain)
-    const vmProviderCustomFork = new CustomForkVMProvider(blockchain)
-    const vmProviderMainnetFork = new MainnetForkVMProvider(blockchain)
-    const vmProviderSepoliaFork = new SepoliaForkVMProvider(blockchain)
-    const vmProviderGoerliFork = new GoerliForkVMProvider(blockchain)
-    const vmProviderShanghai = new ShanghaiVMProvider(blockchain)
-    const vmProviderCancun = new CancunVMProvider(blockchain)
-    const vmProviderMerge = new MergeVMProvider(blockchain)
-    const vmProviderBerlin = new BerlinVMProvider(blockchain)
-    const vmProviderLondon = new LondonVMProvider(blockchain)
-    const hardhatProvider = new HardhatProvider(blockchain)
-    const ganacheProvider = new GanacheProvider(blockchain)
-    const foundryProvider = new FoundryProvider(blockchain)
+    const vmProviderZondTestnet = new ZondTestnetVMProvider(blockchain);
+    // const vmProviderCustomFork = new CustomForkVMProvider(blockchain)
+    // const vmProviderMainnetFork = new MainnetForkVMProvider(blockchain)
+    // const vmProviderSepoliaFork = new SepoliaForkVMProvider(blockchain)
+    // const vmProviderGoerliFork = new GoerliForkVMProvider(blockchain)
+    // const vmProviderShanghai = new ShanghaiVMProvider(blockchain)
+    // const vmProviderCancun = new CancunVMProvider(blockchain)
+    // const vmProviderMerge = new MergeVMProvider(blockchain)
+    // const vmProviderBerlin = new BerlinVMProvider(blockchain)
+    // const vmProviderLondon = new LondonVMProvider(blockchain)
+    // const hardhatProvider = new HardhatProvider(blockchain)
+    // const ganacheProvider = new GanacheProvider(blockchain)
+    // const foundryProvider = new FoundryProvider(blockchain)
     const externalHttpProvider = new ExternalHttpProvider(blockchain)
 
     const environmentExplorer = new EnvironmentExplorer()
@@ -374,18 +376,19 @@ class AppComponent {
       fetchAndCompile,
       dGitProvider,
       storagePlugin,
-      vmProviderShanghai,
-      vmProviderCancun,
-      vmProviderMerge,
-      vmProviderBerlin,
-      vmProviderLondon,
-      vmProviderSepoliaFork,
-      vmProviderGoerliFork,
-      vmProviderMainnetFork,
-      vmProviderCustomFork,
-      hardhatProvider,
-      ganacheProvider,
-      foundryProvider,
+      vmProviderZondTestnet,
+      // vmProviderShanghai,
+      // vmProviderCancun,
+      // vmProviderMerge,
+      // vmProviderBerlin,
+      // vmProviderLondon,
+      // vmProviderSepoliaFork,
+      // vmProviderGoerliFork,
+      // vmProviderMainnetFork,
+      // vmProviderCustomFork,
+      // hardhatProvider,
+      // ganacheProvider,
+      // foundryProvider,
       externalHttpProvider,
       environmentExplorer,
       this.walkthroughService,

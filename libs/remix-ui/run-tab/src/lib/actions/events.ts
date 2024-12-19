@@ -1,17 +1,17 @@
-import { envChangeNotification } from "@remix-ui/helper"
-import { RunTab } from "../types/run-tab"
-import { setExecutionContext, setFinalContext, updateAccountBalances, fillAccountsList } from "./account"
-import { addExternalProvider, addInstance, addNewProxyDeployment, removeExternalProvider, setNetworkNameFromProvider, setPinnedChainId } from "./actions"
-import { addDeployOption, clearAllInstances, clearRecorderCount, fetchContractListSuccess, resetProxyDeployments, resetUdapp, setCurrentContract, setCurrentFile, setLoadType, setRecorderCount, setRemixDActivated, setSendValue, fetchAccountsListSuccess } from "./payload"
+import { envChangeNotification } from '@remix-ui/helper'
+import { RunTab } from '../types/run-tab'
+import { setExecutionContext, setFinalContext, updateAccountBalances, fillAccountsList } from './account'
+import { addExternalProvider, addInstance, addNewProxyDeployment, removeExternalProvider, setNetworkNameFromProvider, setPinnedChainId } from './actions'
+import { addDeployOption, clearAllInstances, clearRecorderCount, fetchContractListSuccess, resetProxyDeployments, resetUdapp, setCurrentContract, setCurrentFile, setLoadType, setRecorderCount, setRemixDActivated, setSendValue, fetchAccountsListSuccess } from './payload'
 import { updateInstanceBalance } from './deploy'
 import { CompilerAbstract } from '@remix-project/remix-solidity'
 import BN from 'bn.js'
 import { Web3 } from '@theqrl/web3'
-import { Plugin } from "@remixproject/engine"
-import { getNetworkProxyAddresses } from "./deploy"
-import { shortenAddress } from "@remix-ui/helper"
+import { Plugin } from '@remixproject/engine'
+import { getNetworkProxyAddresses } from './deploy'
+import { shortenAddress } from '@remix-ui/helper'
 
-const _paq = window._paq = window._paq || []
+const _paq = (window._paq = window._paq || [])
 let dispatch: React.Dispatch<any> = () => {}
 
 export const setEventsDispatch = (reducerDispatch: React.Dispatch<any>) => {
@@ -24,7 +24,7 @@ export const setupEvents = (plugin: RunTab) => {
   // as 'networkStatus' is triggered in each 10 seconds
   const currentNetwork = {
     provider: null,
-    chainId: null
+    chainId: null,
   }
   plugin.blockchain.events.on('newTransaction', (tx, receipt) => {
     plugin.emit('newTransaction', tx, receipt)
@@ -41,7 +41,7 @@ export const setupEvents = (plugin: RunTab) => {
     dispatch(resetProxyDeployments())
     if (!context.startsWith('vm')) getNetworkProxyAddresses(plugin, dispatch)
     if (context !== 'walletconnect') {
-      (await plugin.call('manager', 'isActive', 'walletconnect')) && plugin.call('manager', 'deactivatePlugin', 'walletconnect')
+      ;(await plugin.call('manager', 'isActive', 'walletconnect')) && plugin.call('manager', 'deactivatePlugin', 'walletconnect')
     }
     setFinalContext(plugin, dispatch)
     fillAccountsList(plugin, dispatch)
@@ -54,9 +54,8 @@ export const setupEvents = (plugin: RunTab) => {
 
   plugin.blockchain.event.register('networkStatus', async ({ error, network }) => {
     if (error) {
-      const netUI = 'can\'t detect network'
+      const netUI = "can't detect network"
       setNetworkNameFromProvider(dispatch, netUI)
-
       return
     }
     const networkProvider = plugin.networkModule.getNetworkProvider.bind(plugin.networkModule)
@@ -98,7 +97,7 @@ export const setupEvents = (plugin: RunTab) => {
 
   plugin.on('truffle', 'compilationFinished', (file, source, languageVersion, data) => broadcastCompilationResult('truffle', plugin, dispatch, file, source, languageVersion, data))
 
-  plugin.on('udapp', 'setEnvironmentModeReducer', (env: { context: string, fork: string }, from: string) => {
+  plugin.on('udapp', 'setEnvironmentModeReducer', (env: { context: string; fork: string }, from: string) => {
     plugin.call('notification', 'toast', envChangeNotification(env, from))
     setExecutionContext(plugin, dispatch, env)
   })
@@ -127,19 +126,23 @@ export const setupEvents = (plugin: RunTab) => {
       if (activatedPlugin && activatedPlugin.name.startsWith('injected')) {
         plugin.on(activatedPlugin.name, 'accountsChanged', (accounts: Array<string>) => {
           const accountsMap = {}
-          accounts.map(account => { accountsMap[account] = shortenAddress(account, '0')})
+          accounts.map((account) => {
+            accountsMap[account] = shortenAddress(account, '0')
+          })
           dispatch(fetchAccountsListSuccess(accountsMap))
         })
       } else if (activatedPlugin && activatedPlugin.name === 'walletconnect') {
         plugin.on('walletconnect', 'accountsChanged', async (accounts: Array<string>) => {
           const accountsMap = {}
 
-          await Promise.all(accounts.map(async (account) => {
-            const balance = await plugin.blockchain.getBalanceInEther(account)
-            const updated = shortenAddress(account, balance)
+          await Promise.all(
+            accounts.map(async (account) => {
+              const balance = await plugin.blockchain.getBalanceInEther(account)
+              const updated = shortenAddress(account, balance)
 
-            accountsMap[account] = updated
-          }))
+              accountsMap[account] = updated
+            })
+          )
           dispatch(fetchAccountsListSuccess(accountsMap))
         })
       }
@@ -208,7 +211,7 @@ const migrateSavedContracts = async (plugin) => {
             address: contractDetails.address,
             abi: contractDetails.abi || contractDetails.contractData.abi,
             filePath: contractDetails.filePath,
-            pinnedAt: contractDetails.savedOn
+            pinnedAt: contractDetails.savedOn,
           }
           await plugin.call('fileManager', 'writeFile', `.deploys/pinned-contracts/${networkId}/${contractDetails.address}.json`, JSON.stringify(objToSave, null, 2))
         }
@@ -228,8 +231,8 @@ const broadcastCompilationResult = async (compilerName: string, plugin: RunTab, 
   const contracts = getCompiledContracts(compiler).map((contract) => {
     return { name: languageVersion, alias: contract.name, file: contract.file, compiler, compilerName }
   })
-  if ((contracts.length > 0)) {
-    const contractsInCompiledFile = contracts.filter(obj => obj.file === file)
+  if (contracts.length > 0) {
+    const contractsInCompiledFile = contracts.filter((obj) => obj.file === file)
     let currentContract
     if (contractsInCompiledFile.length) currentContract = contractsInCompiledFile[0].alias
     else currentContract = contracts[0].alias
@@ -281,6 +284,6 @@ export const resetAndInit = (plugin: RunTab) => {
       } catch (e) {
         cb(e.message)
       }
-    }
+    },
   })
 }
