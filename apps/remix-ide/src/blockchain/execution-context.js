@@ -22,11 +22,11 @@ web3.zond.setConfig(config)
 export class ExecutionContext {
   constructor() {
     this.event = new EventManager()
-    this.executionContext = 'vm-cancun'
+    this.executionContext = ''
     this.lastBlock = null
     this.blockGasLimitDefault = 4300000
     this.blockGasLimit = this.blockGasLimitDefault
-    this.currentFork = 'cancun'
+    this.currentFork = ''
     this.mainNetGenesisHash = '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3'
     this.customNetWorks = {}
     this.blocks = {}
@@ -36,7 +36,7 @@ export class ExecutionContext {
   }
 
   init(config) {
-    this.executionContext = 'vm-cancun'
+    this.executionContext = 'vm-zond-testnet'
     this.event.trigger('contextChanged', [this.executionContext])
   }
 

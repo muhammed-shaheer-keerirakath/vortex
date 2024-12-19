@@ -76,7 +76,7 @@ export const runTabInitialState: RunTabState = {
   sendValue: '0',
   sendUnit: 'wei',
   gasLimit: 0,
-  selectExEnv: 'vm-cancun',
+  selectExEnv: 'vm-zond-testnet',
   personalMode: false,
   networkName: 'VM',
   chainId: '-',

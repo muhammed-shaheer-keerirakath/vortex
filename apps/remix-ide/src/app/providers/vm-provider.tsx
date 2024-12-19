@@ -136,7 +136,7 @@ export class ZondTestnetVMProvider extends BasicVMProvider {
   constructor(blockchain) {
     super(
       {
-        name: 'zond-testnet',
+        name: 'vm-zond-testnet',
         displayName: 'Zond Testnet',
         kind: 'provider',
         description: 'Zond Testnet Provider',
@@ -146,6 +146,6 @@ export class ZondTestnetVMProvider extends BasicVMProvider {
       blockchain
     )
     this.blockchain = blockchain
-    this.fork = 'zond-testnet-fork'
+    this.fork = 'vm-zond-testnet-fork'
   }
 }

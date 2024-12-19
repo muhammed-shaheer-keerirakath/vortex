@@ -248,7 +248,7 @@ export class RunTab extends ViewPlugin {
 
     // VM
     const titleVM = 'Execution environment is local to Remix.  Data is only saved to browser memory and will vanish upon reload.'
-    await addProvider(1, 'zond-testnet', 'Zond Testnet', false, true, 'cancun', 'settingsVMCancunMode', titleVM)
+    await addProvider(1, 'vm-zond-testnet', 'Zond Testnet', false, true)
     await addProvider(2, 'vm-cancun', 'Remix VM (Temp)', false, true, 'cancun', 'settingsVMCancunMode', titleVM)
     // await addProvider(50, 'vm-shanghai', 'Remix VM (Shanghai)', false, true, 'shanghai', 'settingsVMShanghaiMode', titleVM)
     // await addProvider(51, 'vm-paris', 'Remix VM (Paris)', false, true, 'paris', 'settingsVMParisMode', titleVM)
@@ -262,6 +262,7 @@ export class RunTab extends ViewPlugin {
     await addProvider(6, 'walletconnect', 'WalletConnect', false, false)
 
     // external provider
+    // await addProvider(1, 'zond-testnet', 'Zond Testnet', false, false)
     // await addProvider(10, 'basic-http-provider', 'Custom - External Http Provider', false, false)
     // await addProvider(20, 'hardhat-provider', 'Dev - Hardhat Provider', false, false)
     // await addProvider(21, 'ganache-provider', 'Dev - Ganache Provider', false, false)

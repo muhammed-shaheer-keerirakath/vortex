@@ -13,16 +13,16 @@ import { VMContext } from './vm-context'
 import { Web3PluginBase } from '@theqrl/web3'
 
 export interface JSONRPCRequestPayload {
-  params: any[];
-  method: string;
-  id: number;
-  jsonrpc: string;
+  params: any[]
+  method: string
+  id: number
+  jsonrpc: string
 }
 
 export interface JSONRPCResponsePayload {
-  result: any;
-  id: number;
-  jsonrpc: string;
+  result: any
+  id: number
+  jsonrpc: string
 }
 
 export type JSONRPCResponseCallback = (err: Error, result?: JSONRPCResponsePayload) => void
@@ -30,12 +30,12 @@ export type JSONRPCResponseCallback = (err: Error, result?: JSONRPCResponsePaylo
 export type State = Record<string, string>
 
 export type ProviderOptions = {
-  fork?: string,
-  nodeUrl?: string,
-  blockNumber?: number | 'latest',
-  stateDb?: State,
+  fork?: string
+  nodeUrl?: string
+  blockNumber?: number | 'latest'
+  stateDb?: State
   details?: boolean
-  blocks?: string[],
+  blocks?: string[]
   coinbase?: string
 }
 
@@ -49,7 +49,7 @@ export class Provider {
   initialized: boolean
   pendingRequests: Array<any>
 
-  constructor (options: ProviderOptions = {} as ProviderOptions) {
+  constructor(options: ProviderOptions = {} as ProviderOptions) {
     this.options = options
     this.connected = true
     this.vmContext = new VMContext(options['fork'], options['nodeUrl'], options['blockNumber'], options['stateDb'], options['blocks'])
@@ -59,15 +59,15 @@ export class Provider {
 
     this.methods = {}
     this.methods = merge(this.methods, this.Accounts.methods())
-    this.methods = merge(this.methods, (new Blocks(this.vmContext, options)).methods())
+    this.methods = merge(this.methods, new Blocks(this.vmContext, options).methods())
     this.methods = merge(this.methods, miscMethods())
-    this.methods = merge(this.methods, (new Filters(this.vmContext)).methods())
+    this.methods = merge(this.methods, new Filters(this.vmContext).methods())
     this.methods = merge(this.methods, netMethods())
     this.methods = merge(this.methods, this.Transactions.methods())
-    this.methods = merge(this.methods, (new Debug(this.vmContext)).methods())
+    this.methods = merge(this.methods, new Debug(this.vmContext).methods())
   }
 
-  async init () {
+  async init() {
     this.initialized = false
     this.pendingRequests = []
     await this.vmContext.init()
@@ -108,13 +108,13 @@ export class Provider {
     callback(new Error('unknown method ' + payload.method))
   }
 
-  async sendAsync (payload: JSONRPCRequestPayload, callback?: (err: Error, result?: JSONRPCResponsePayload) => void) : Promise<JSONRPCResponsePayload> {
-    return new Promise((resolve,reject)=>{
+  async sendAsync(payload: JSONRPCRequestPayload, callback?: (err: Error, result?: JSONRPCResponsePayload) => void): Promise<JSONRPCResponsePayload> {
+    return new Promise((resolve, reject) => {
       const cb = (err, result) => {
-        if (typeof callback==='function'){
+        if (typeof callback === 'function') {
           return callback(err, result)
         }
-        if (err){
+        if (err) {
           return reject(err)
         }
         return resolve(result)
@@ -123,34 +123,34 @@ export class Provider {
     })
   }
 
-  send (payload, callback) {
+  send(payload, callback) {
     this.sendAsync(payload, callback)
   }
 
-  async request (payload: JSONRPCRequestPayload) : Promise<any> {
+  async request(payload: JSONRPCRequestPayload): Promise<any> {
     const ret = await this.sendAsync(payload)
     return ret.result
   }
 
-  isConnected () {
+  isConnected() {
     return true
   }
 
-  disconnect () {
+  disconnect() {
     return false
   }
 
-  supportsSubscriptions () {
+  supportsSubscriptions() {
     return true
   }
 
-  on (type, cb) {
+  on(type, cb) {
     this.vmContext.logsManager.addListener(type, cb)
   }
 }
 
-export function extend (web3) {
-  if (!web3.remix){
+export function extend(web3) {
+  if (!web3.remix) {
     web3.registerPlugin(new Web3TestPlugin())
   }
 }
@@ -161,42 +161,42 @@ class Web3TestPlugin extends Web3PluginBase {
   public getExecutionResultFromSimulator(transactionHash) {
     return this.requestManager.send({
       method: 'eth_getExecutionResultFromSimulator',
-      params: [transactionHash]
+      params: [transactionHash],
     })
   }
 
   public getHHLogsForTx(transactionHash) {
     return this.requestManager.send({
       method: 'eth_getHHLogsForTx',
-      params: [transactionHash]
+      params: [transactionHash],
     })
   }
 
   public getHashFromTagBySimulator(timestamp) {
     return this.requestManager.send({
       method: 'eth_getHashFromTagBySimulator',
-      params: [timestamp]
+      params: [timestamp],
     })
   }
 
   public registerCallId(id) {
     return this.requestManager.send({
       method: 'eth_registerCallId',
-      params: [id]
+      params: [id],
     })
   }
 
   public getStateDb() {
     return this.requestManager.send({
       method: 'eth_getStateDb',
-      params: []
+      params: [],
     })
   }
 
   public getBlocksData() {
     return this.requestManager.send({
       method: 'eth_getBlocksData',
-      params: []
+      params: [],
     })
   }
 }
