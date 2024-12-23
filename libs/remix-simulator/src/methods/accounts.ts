@@ -80,8 +80,8 @@ export class Web3Accounts {
       zond_getBalance: this.zond_getBalance.bind(this),
       zond_sign: this.zond_sign.bind(this),
       zond_chainId: this.zond_chainId.bind(this),
-      eth_signTypedData: this.eth_signTypedData_v4.bind(this), // default call is using V4
-      eth_signTypedData_v4: this.eth_signTypedData_v4.bind(this),
+      zond_signTypedData: this.zond_signTypedData_v4.bind(this), // default call is using V4
+      zond_signTypedData_v4: this.zond_signTypedData_v4.bind(this),
     }
   }
 
@@ -125,7 +125,7 @@ export class Web3Accounts {
     return cb(null, '0x539') // 0x539 is hex of 1337
   }
 
-  eth_signTypedData_v4(payload, cb) {
+  zond_signTypedData_v4(payload, cb) {
     const address: string = payload.params[0]
     const typedData: TypedMessage<MessageTypes> = payload.params[1]
 

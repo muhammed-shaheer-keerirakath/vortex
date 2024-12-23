@@ -42,11 +42,11 @@ export class Web3ProviderModule extends Plugin {
                 } else {
                   const errorData = error.data || error.message || error
                   // See: https://github.com/ethers-io/ethers.js/issues/901
-                  if (!(typeof errorData === 'string' && errorData.includes('unknown method eth_chainId'))) this.call('terminal', 'log', { value: error.data || error.message, type: 'error' })
+                  if (!(typeof errorData === 'string' && errorData.includes('unknown method zond_chainId'))) this.call('terminal', 'log', { value: error.data || error.message, type: 'error' })
                   return reject(errorData)
                 }
               }
-              if (payload.method === 'eth_sendTransaction') {
+              if (payload.method === 'zond_sendTransaction') {
                 if (payload.params.length && !payload.params[0].to && message.result) {
                   setTimeout(async () => {
                     const receipt = await this.tryTillReceiptAvailable(message.result)

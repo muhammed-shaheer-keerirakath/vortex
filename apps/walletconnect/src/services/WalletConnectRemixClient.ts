@@ -37,7 +37,7 @@ export class WalletConnectRemixClient extends PluginClient {
     try {
       const ethersConfig = defaultConfig({
         metadata,
-        rpcUrl: 'https://cloudflare-eth.com'
+        rpcUrl: 'https://cloudflare-eth.com',
       })
 
       this.web3modal = createWeb3Modal({ projectId, chains: constants.chains, metadata, ethersConfig })
@@ -49,8 +49,8 @@ export class WalletConnectRemixClient extends PluginClient {
   }
 
   subscribeToEvents() {
-    this.web3modal.subscribeProvider(({ address, isConnected, chainId })=>{
-      if (isConnected){
+    this.web3modal.subscribeProvider(({ address, isConnected, chainId }) => {
+      if (isConnected) {
         if (address !== this.currentAccount) {
           this.currentAccount = address
           this.emit('accountsChanged', [address])
@@ -65,7 +65,7 @@ export class WalletConnectRemixClient extends PluginClient {
         this.emit('chainChanged', 0)
         this.currentChain = 0
       }
-    },)
+    })
     this.on('theme', 'themeChanged', (theme: any) => {
       this.web3modal.setThemeMode(theme.quality)
     })
@@ -75,11 +75,11 @@ export class WalletConnectRemixClient extends PluginClient {
     const address = this.web3modal.getAddress()
     const provider = this.web3modal.getWalletProvider()
     if (address && provider) {
-      if (data.method === 'eth_accounts') {
+      if (data.method === 'zond_accounts') {
         return {
           jsonrpc: '2.0',
           result: [address],
-          id: data.id
+          id: data.id,
         }
       } else {
         //@ts-expect-error this flag does not correspond to EIP-1193 but was introduced by MetaMask
@@ -92,19 +92,19 @@ export class WalletConnectRemixClient extends PluginClient {
                   resolve({
                     jsonrpc: '2.0',
                     error: error.data.originalError,
-                    id: data.id
+                    id: data.id,
                   })
                 } else if (error.data && error.data.message) {
                   resolve({
                     jsonrpc: '2.0',
                     error: error.data && error.data,
-                    id: data.id
+                    id: data.id,
                   })
                 } else {
                   resolve({
                     jsonrpc: '2.0',
                     error,
-                    id: data.id
+                    id: data.id,
                   })
                 }
               }

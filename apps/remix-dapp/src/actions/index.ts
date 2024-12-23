@@ -1,170 +1,164 @@
-import axios from 'axios';
-import { Web3 } from '@theqrl/web3';
-import { ethers } from 'ethers';
-import BN from 'bn.js';
-import { execution } from '@remix-project/remix-lib';
-import { toBytes, addHexPrefix } from '@ethereumjs/util';
-import { toast } from 'react-toastify';
-import txRunner from '../utils/txRunner';
-import metamask from '../utils/metamask';
-import walletConnect from '../utils/walletConnect';
-import buildData from '../utils/buildData';
+import axios from 'axios'
+import { Web3 } from '@theqrl/web3'
+import { ethers } from 'ethers'
+import BN from 'bn.js'
+import { execution } from '@remix-project/remix-lib'
+import { toBytes, addHexPrefix } from '@ethereumjs/util'
+import { toast } from 'react-toastify'
+import txRunner from '../utils/txRunner'
+import metamask from '../utils/metamask'
+import walletConnect from '../utils/walletConnect'
+import buildData from '../utils/buildData'
 
-const { txFormat, txHelper: { makeFullTypeDefinition } } = execution;
+const {
+  txFormat,
+  txHelper: { makeFullTypeDefinition },
+} = execution
 
 const decodeInputParams = (data: any, abi: any) => {
-  data = toBytes(addHexPrefix(data));
-  if (!data.length) data = new Uint8Array(32 * abi.inputs.length);
+  data = toBytes(addHexPrefix(data))
+  if (!data.length) data = new Uint8Array(32 * abi.inputs.length)
 
-  const inputTypes = [];
+  const inputTypes = []
   for (let i = 0; i < abi.inputs.length; i++) {
-    const type = abi.inputs[i].type;
-    inputTypes.push(
-      type.indexOf('tuple') === 0
-        ? makeFullTypeDefinition(abi.inputs[i])
-        : type
-    );
+    const type = abi.inputs[i].type
+    inputTypes.push(type.indexOf('tuple') === 0 ? makeFullTypeDefinition(abi.inputs[i]) : type)
   }
-  const abiCoder = new ethers.utils.AbiCoder();
-  const decoded = abiCoder.decode(inputTypes, data);
-  const ret: any = {};
+  const abiCoder = new ethers.utils.AbiCoder()
+  const decoded = abiCoder.decode(inputTypes, data)
+  const ret: any = {}
   for (const k in abi.inputs) {
-    ret[abi.inputs[k].type + ' ' + abi.inputs[k].name] = decoded[k];
+    ret[abi.inputs[k].type + ' ' + abi.inputs[k].name] = decoded[k]
   }
-  return ret;
+  return ret
 }
 
-let dispatch: any, state: any;
+let dispatch: any, state: any
 
 export const initDispatch = (_dispatch: any) => {
-  dispatch = _dispatch;
-};
+  dispatch = _dispatch
+}
 
 export const updateState = (_state: any) => {
-  state = _state;
-};
+  state = _state
+}
 
 export const setProvider = async (payload: any) => {
   await dispatch({
     type: 'SET_SETTINGS',
     payload: { loadedAccounts: {} },
-  });
-  const { provider, networkName } = payload;
-  const chainId =
-    '0x' + Number(networkName.match(/\(([^)]+)\)/)[1]).toString(16);
+  })
+  const { provider, networkName } = payload
+  const chainId = '0x' + Number(networkName.match(/\(([^)]+)\)/)[1]).toString(16)
   if (provider === 'metamask') {
-    const web3Provider: any = window.ethereum;
-    await metamask.addCustomNetwork(chainId);
-    await web3Provider.request({ method: 'eth_requestAccounts' });
-    txRunner.setProvider(web3Provider);
-    txRunner.getAccounts();
+    const web3Provider: any = window.ethereum
+    await metamask.addCustomNetwork(chainId)
+    await web3Provider.request({ method: 'zond_requestAccounts' })
+    txRunner.setProvider(web3Provider)
+    txRunner.getAccounts()
   }
 
   if (provider === 'walletconnect') {
-    txRunner.setProvider(walletConnect as any);
-    walletConnect.subscribeToEvents();
+    txRunner.setProvider(walletConnect as any)
+    walletConnect.subscribeToEvents()
   }
-};
+}
 
 export const initInstance = async () => {
-  const resp = await axios.get('/assets/instance.json');
-  await dispatch({ type: 'SET_INSTANCE', payload: resp.data });
+  const resp = await axios.get('/assets/instance.json')
+  await dispatch({ type: 'SET_INSTANCE', payload: resp.data })
   await dispatch({
     type: 'SET_SETTINGS',
     payload: { networkName: resp.data.network },
-  });
+  })
   await setProvider({
     networkName: resp.data.network,
     provider: window.ethereum ? 'metamask' : 'walletconnect',
-  });
-  updateInstanceBalance(resp.data.address);
+  })
+  updateInstanceBalance(resp.data.address)
   setInterval(() => {
-    updateInstanceBalance(resp.data.address);
-  }, 30000);
-};
+    updateInstanceBalance(resp.data.address)
+  }, 30000)
+}
 
 export const updateInstanceBalance = async (address: string) => {
-  const balance = await txRunner.getBalanceInEther(address);
-  await dispatch({ type: 'SET_INSTANCE', payload: { balance } });
-};
+  const balance = await txRunner.getBalanceInEther(address)
+  await dispatch({ type: 'SET_INSTANCE', payload: { balance } })
+}
 
 export const saveSettings = async (payload: any) => {
-  await dispatch({ type: 'SET_SETTINGS', payload });
-};
+  await dispatch({ type: 'SET_SETTINGS', payload })
+}
 
 export const log = async (payload: any) => {
-  const journalBlocks = state.terminal.journalBlocks;
-  const { message, style } = payload;
+  const journalBlocks = state.terminal.journalBlocks
+  const { message, style } = payload
   if (style === 'text-log') {
-    toast.info(message[0]);
+    toast.info(message[0])
   } else if (style === 'text-danger') {
-    toast.error(message[0]);
+    toast.error(message[0])
   } else {
-    toast.success('success');
+    toast.success('success')
   }
   await dispatch({
     type: 'SET_TERMINAL',
     payload: {
       journalBlocks: [...journalBlocks, payload],
     },
-  });
-};
+  })
+}
 
 export const runTransactions = async (payload: any) => {
-  console.log(payload);
-  const { sendValue, sendUnit, gasLimit, selectedAccount } = state.settings;
-  const { address, decodedResponse, name } = state.instance;
-  const value = Web3.utils.toWei(sendValue, sendUnit);
+  console.log(payload)
+  const { sendValue, sendUnit, gasLimit, selectedAccount } = state.settings
+  const { address, decodedResponse, name } = state.instance
+  const value = Web3.utils.toWei(sendValue, sendUnit)
 
   const tx = {
     to: address,
     data: '',
     from: selectedAccount,
     value,
-  };
+  }
 
-  const isFunction = payload.funcABI.type === 'function';
+  const isFunction = payload.funcABI.type === 'function'
 
   if (isFunction) {
-    const { dataHex, error } = buildData(payload.funcABI, payload.inputsValues);
+    const { dataHex, error } = buildData(payload.funcABI, payload.inputsValues)
 
     if (error) {
       await log({
         message: [`${payload.logMsg} errored: ${error}`],
         style: 'text-danger',
-      });
-      return;
+      })
+      return
     }
 
-    tx.data = dataHex as string;
+    tx.data = dataHex as string
   } else {
-    tx.data = payload.inputsValues;
+    tx.data = payload.inputsValues
   }
 
   if (payload.lookupOnly) {
     await log({
       message: [`${payload.logMsg}`],
       style: 'text-log',
-    });
+    })
   } else {
     await log({
       message: [`${payload.logMsg} pending ... `],
       style: 'text-log',
-    });
+    })
   }
 
-  const resp: any = await txRunner.runTx(
-    tx,
-    '0x' + new BN(gasLimit, 10).toString(16),
-    payload.lookupOnly
-  );
+  const resp: any = await txRunner.runTx(tx, '0x' + new BN(gasLimit, 10).toString(16), payload.lookupOnly)
 
   if (resp.error) {
     await log({
       message: [`${payload.logMsg} errored: ${resp.error}`],
       style: 'text-danger',
-    });
-    return;
+    })
+    return
   }
 
   if (payload.lookupOnly) {
@@ -176,7 +170,7 @@ export const runTransactions = async (payload: any) => {
           [payload.funcIndex]: txFormat.decodeResponse(resp, payload.funcABI),
         },
       },
-    });
+    })
 
     await log({
       message: [
@@ -193,12 +187,7 @@ export const runTransactions = async (payload: any) => {
             contractName: name,
             to: address,
             fn: payload.funcABI.name,
-            params: isFunction
-              ? decodeInputParams(
-                tx.data?.replace('0x', '').substring(8),
-                payload.funcABI
-              )
-              : tx.data,
+            params: isFunction ? decodeInputParams(tx.data?.replace('0x', '').substring(8), payload.funcABI) : tx.data,
             decodedReturnValue: txFormat.decodeResponse(resp, payload.funcABI),
           },
         },
@@ -206,7 +195,7 @@ export const runTransactions = async (payload: any) => {
       style: '',
       name: 'knownTransaction',
       provider: 'injected',
-    });
+    })
   } else {
     await log({
       message: [
@@ -217,18 +206,13 @@ export const runTransactions = async (payload: any) => {
             contractName: name,
             to: address,
             fn: payload.funcABI.name,
-            params: isFunction
-              ? decodeInputParams(
-                tx.data?.replace('0x', '').substring(8),
-                payload.funcABI
-              )
-              : tx.data,
+            params: isFunction ? decodeInputParams(tx.data?.replace('0x', '').substring(8), payload.funcABI) : tx.data,
           },
         },
       ],
       style: '',
       name: 'knownTransaction',
       provider: 'injected',
-    });
+    })
   }
-};
+}

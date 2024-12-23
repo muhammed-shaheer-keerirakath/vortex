@@ -4,7 +4,7 @@ import { Provider, ProviderOptions } from './provider'
 import { log, error } from './utils/logs'
 
 export type CliOptions = {
-  rpc?: boolean,
+  rpc?: boolean
   port: number
   ip: string
 }
@@ -12,18 +12,21 @@ export type CliOptions = {
 export class Server {
   provider
 
-  constructor (options?: ProviderOptions) {
+  constructor(options?: ProviderOptions) {
     this.provider = new Provider(options)
-    this.provider.init().then(() => {
-      log('Provider initiated')
-      log('Test accounts:')
-      log(Object.keys(this.provider.Accounts.accounts))
-    }).catch((error) => {
-      log(error)
-    })
+    this.provider
+      .init()
+      .then(() => {
+        log('Provider initiated')
+        log('Test accounts:')
+        log(Object.keys(this.provider.Accounts.accounts))
+      })
+      .catch((error) => {
+        log(error)
+      })
   }
 
-  async start (cliOptions: CliOptions) {
+  async start(cliOptions: CliOptions) {
     const expressWs = (await import('express-ws')).default
     const express = (await import('express')).default
     const app = express()
@@ -39,7 +42,7 @@ export class Server {
 
     if (cliOptions.rpc) {
       app.use((req, res) => {
-        if (req && req.body && (req.body.method === 'eth_sendTransaction' || req.body.method === 'eth_call')) {
+        if (req && req.body && (req.body.method === 'zond_sendTransaction' || req.body.method === 'zond_call')) {
           log('Receiving call/transaction:')
           log(req.body.params)
         }
@@ -48,7 +51,7 @@ export class Server {
             error(err)
             return res.send(JSON.stringify({ error: err }))
           }
-          if (req && req.body && (req.body.method === 'eth_sendTransaction' || req.body.method === 'eth_call')) {
+          if (req && req.body && (req.body.method === 'zond_sendTransaction' || req.body.method === 'zond_call')) {
             log(jsonResponse)
           }
           res.send(jsonResponse)
@@ -58,7 +61,7 @@ export class Server {
       wsApp.app.ws('/', (ws, req) => {
         ws.on('message', (msg) => {
           const body = JSON.parse(msg.toString())
-          if (body && (body.method === 'eth_sendTransaction' || body.method === 'eth_call')) {
+          if (body && (body.method === 'zond_sendTransaction' || body.method === 'zond_call')) {
             log('Receiving call/transaction:')
             log(body.params)
           }
@@ -67,7 +70,7 @@ export class Server {
               error(err)
               return ws.send(JSON.stringify({ error: err }))
             }
-            if (body && (body.method === 'eth_sendTransaction' || body.method === 'eth_call')) {
+            if (body && (body.method === 'zond_sendTransaction' || body.method === 'zond_call')) {
               log(jsonResponse)
             }
             ws.send(JSON.stringify(jsonResponse))
@@ -90,4 +93,3 @@ export class Server {
     })
   }
 }
-

@@ -43,17 +43,17 @@ export interface DefaultStateManagerOpts {
 */
 class StateManagerCommonStorageDump extends DefaultStateManager {
   keyHashes: { [key: string]: string }
-  constructor (opts: DefaultStateManagerOpts = {}) {
+  constructor(opts: DefaultStateManagerOpts = {}) {
     super(opts)
     this.keyHashes = {}
   }
 
-  getDb () {
+  getDb() {
     // @ts-ignore
     return this._trie.database().db
   }
 
-  putContractStorage (address, key, value) {
+  putContractStorage(address, key, value) {
     this.keyHashes[bytesToHex(hash.keccak(key))] = bytesToHex(key)
     return super.putContractStorage(address, key, value)
   }
@@ -66,7 +66,7 @@ class StateManagerCommonStorageDump extends DefaultStateManager {
     return copyState
   }
 
-  async dumpStorage (address): Promise<StorageDump> {
+  async dumpStorage(address): Promise<StorageDump> {
     await this.flush()
     const account = await this.getAccount(address)
     if (!account) {
@@ -82,7 +82,7 @@ class StateManagerCommonStorageDump extends DefaultStateManager {
           const value: any = decode(val.value)
           storage[bytesToHex(val.key)] = {
             key: this.keyHashes[bytesToHex(val.key)],
-            value: bytesToHex(value)
+            value: bytesToHex(value),
           }
         })
         stream.on('end', () => {
@@ -100,7 +100,7 @@ class StateManagerCommonStorageDump extends DefaultStateManager {
 
 export interface CustomEthersStateManagerOpts {
   provider: string | ethers.providers.StaticJsonRpcProvider | ethers.providers.JsonRpcProvider
-  blockTag: string,
+  blockTag: string
   /**
    * A {@link Trie} instance
    */
@@ -171,11 +171,7 @@ class CustomEthersStateManager extends StateManagerCommonStorageDump {
     let storage = await super.getContractStorage(address, key)
     if (storage && storage.length > 0) return storage
     else {
-      storage = toBytes(await this.provider.getStorageAt(
-        address.toString(),
-        bytesToBigInt(key),
-        this.blockTag)
-      )
+      storage = toBytes(await this.provider.getStorageAt(address.toString(), bytesToBigInt(key), this.blockTag))
       await super.putContractStorage(address, key, storage)
       return storage
     }
@@ -190,22 +186,18 @@ class CustomEthersStateManager extends StateManagerCommonStorageDump {
     if (!account.isEmpty()) return true
 
     // Get merkle proof for `address` from provider
-    const proof = await this.provider.send('eth_getProof', [address.toString(), [], this.blockTag])
+    const proof = await this.provider.send('zond_getProof', [address.toString(), [], this.blockTag])
 
     const proofBuf = proof.accountProof.map((proofNode: string) => toBytes(proofNode))
 
     const trie = new Trie({ useKeyHashing: true })
-    const verified = await trie.verifyProof(
-      Buffer.from(keccak256(proofBuf[0])),
-      address.bytes,
-      proofBuf
-    )
+    const verified = await trie.verifyProof(Buffer.from(keccak256(proofBuf[0])), address.bytes, proofBuf)
     if (verified) {
       const codeHash = proof.codeHash === '0x0000000000000000000000000000000000000000000000000000000000000000' ? '0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470' : proof.codeHash
       const account = Account.fromAccountData({
         balance: BigInt(proof.balance),
         nonce: BigInt(proof.nonce),
-        codeHash: hexToBytes(codeHash)
+        codeHash: hexToBytes(codeHash),
         // storageRoot: toBuffer([]), // we have to remove this in order to force the creation of the Trie in the local state.
       })
       super.putAccount(address, account)
@@ -222,11 +214,7 @@ class CustomEthersStateManager extends StateManagerCommonStorageDump {
   async getAccountFromProvider(address: Address): Promise<Account> {
     let accountData
     try {
-      accountData = await this.provider.send('eth_getProof', [
-        address.toString(),
-        [],
-        this.blockTag,
-      ])
+      accountData = await this.provider.send('zond_getProof', [address.toString(), [], this.blockTag])
     } catch (e) {
       console.log(e)
     }
@@ -235,14 +223,14 @@ class CustomEthersStateManager extends StateManagerCommonStorageDump {
       account = Account.fromAccountData({
         balance: BigInt(0),
         nonce: BigInt(0),
-        codeHash: hexToBytes('0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470')
+        codeHash: hexToBytes('0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470'),
       })
     } else {
       const codeHash = accountData.codeHash === '0x0000000000000000000000000000000000000000000000000000000000000000' ? '0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470' : accountData.codeHash
       account = Account.fromAccountData({
         balance: BigInt(accountData.balance),
         nonce: BigInt(accountData.nonce),
-        codeHash: hexToBytes(codeHash)
+        codeHash: hexToBytes(codeHash),
         // storageRoot: toBuffer([]), // we have to remove this in order to force the creation of the Trie in the local state.
       })
     }
@@ -251,19 +239,18 @@ class CustomEthersStateManager extends StateManagerCommonStorageDump {
 }
 
 export type CurrentVm = {
-  vm: VM,
-  web3vm: VmProxy,
-  stateManager: EVMStateManagerInterface,
+  vm: VM
+  web3vm: VmProxy
+  stateManager: EVMStateManagerInterface
   common: Common
 }
 
 export class VMCommon extends Common {
-
   /**
-    * Always return the fork set at initialization
-    */
+   * Always return the fork set at initialization
+   */
   setHardforkBy() {
-    return this._hardfork;
+    return this._hardfork
   }
 }
 
@@ -288,7 +275,7 @@ export class VMContext {
   rawBlocks: string[]
   serializedBlocks: Uint8Array[]
 
-  constructor (fork?: string, nodeUrl?: string, blockNumber?: number | 'latest', stateDb?: State, blocksData?: string[]) {
+  constructor(fork?: string, nodeUrl?: string, blockNumber?: number | 'latest', stateDb?: State, blocksData?: string[]) {
     this.blockGasLimitDefault = 4300000
     this.blockGasLimit = this.blockGasLimitDefault
     this.currentFork = fork || 'cancun'
@@ -296,7 +283,7 @@ export class VMContext {
     this.stateDb = stateDb
     this.blockNumber = blockNumber
     this.blocks = {}
-    this.latestBlockNumber = "0x0"
+    this.latestBlockNumber = '0x0'
     this.blockByTxHash = {}
     this.txByHash = {}
     this.exeResults = {}
@@ -305,11 +292,11 @@ export class VMContext {
     this.serializedBlocks = []
   }
 
-  async init () {
+  async init() {
     this.currentVm = await this.createVm(this.currentFork)
   }
 
-  async createVm (hardfork) {
+  async createVm(hardfork) {
     let stateManager: EVMStateManagerInterface
     if (this.nodeUrl) {
       let block = this.blockNumber
@@ -318,13 +305,13 @@ export class VMContext {
         block = await provider.getBlockNumber()
         stateManager = new CustomEthersStateManager({
           provider: this.nodeUrl,
-          blockTag: '0x' + block.toString(16)
+          blockTag: '0x' + block.toString(16),
         })
         this.blockNumber = block
       } else {
         stateManager = new CustomEthersStateManager({
           provider: this.nodeUrl,
-          blockTag: '0x' + block.toString(16)
+          blockTag: '0x' + block.toString(16),
         })
       }
     } else {
@@ -339,20 +326,26 @@ export class VMContext {
     const difficulty = consensusType === ConsensusType.ProofOfStake ? 0 : 69762765929000
 
     const common = new VMCommon({ chain: 'mainnet', hardfork })
-    const blocks = (this.rawBlocks || []).map(block => {
+    const blocks = (this.rawBlocks || []).map((block) => {
       const serializedBlock = hexToBytes(block)
       this.serializedBlocks.push(serializedBlock)
       return Block.fromRLPSerializedBlock(serializedBlock, { common })
     })
-    const genesisBlock: Block = blocks.length > 0 && (blocks[0] || {}).isGenesis ? blocks[0] : Block.fromBlockData({
-      header: {
-        timestamp: (new Date().getTime() / 1000 | 0),
-        number: BIGINT_0,
-        coinbase: '0x0e9281e9c6a0808672eaba6bd1220e144c9bb07a',
-        difficulty,
-        gasLimit: 8000000
-      }
-    }, { common })
+    const genesisBlock: Block =
+      blocks.length > 0 && (blocks[0] || {}).isGenesis
+        ? blocks[0]
+        : Block.fromBlockData(
+            {
+              header: {
+                timestamp: (new Date().getTime() / 1000) | 0,
+                number: BIGINT_0,
+                coinbase: '0x0e9281e9c6a0808672eaba6bd1220e144c9bb07a',
+                difficulty,
+                gasLimit: 8000000,
+              },
+            },
+            { common }
+          )
 
     const blockchain = await Blockchain.create({ common, validateBlocks: false, validateConsensus: false, genesisBlock })
     const evm = await EVM.create({ common, allowUnlimitedContractSize: true, stateManager, blockchain })
@@ -362,7 +355,7 @@ export class VMContext {
       activatePrecompiles: true,
       stateManager,
       blockchain,
-      evm
+      evm,
     })
     // VmProxy and VMContext are very intricated.
     // VmProxy is used to track the EVM execution (to listen on opcode execution, in order for instance to generate the VM trace)
@@ -377,23 +370,23 @@ export class VMContext {
     return { vm, web3vm, stateManager, common, blocks }
   }
 
-  getCurrentFork () {
+  getCurrentFork() {
     return this.currentFork
   }
 
-  web3 () {
+  web3() {
     return this.currentVm.web3vm
   }
 
-  vm () {
+  vm() {
     return this.currentVm.vm
   }
 
-  vmObject () {
+  vmObject() {
     return this.currentVm
   }
 
-  addBlock (block: Block, genesis?: boolean, isCall?: boolean, web3vm?: VmProxy) {
+  addBlock(block: Block, genesis?: boolean, isCall?: boolean, web3vm?: VmProxy) {
     let blockNumber = bigIntToHex(block.header.number)
     if (blockNumber === '0x') {
       blockNumber = '0x0'
@@ -407,12 +400,12 @@ export class VMContext {
     if (!isCall && !genesis && !web3vm) this.logsManager.checkBlock(blockNumber, block, this.web3())
   }
 
-  trackTx (txHash, block, tx) {
+  trackTx(txHash, block, tx) {
     this.blockByTxHash[txHash] = block
     this.txByHash[txHash] = tx
   }
 
-  trackExecResult (tx, execReult) {
+  trackExecResult(tx, execReult) {
     this.exeResults[tx] = execReult
   }
 }

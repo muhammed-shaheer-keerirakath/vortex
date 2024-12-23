@@ -5,7 +5,7 @@ import { JsonDataRequest, RejectRequest, SuccessRequest } from '../providers/abs
 import { IProvider } from './abstract-provider'
 
 export abstract class InjectedProvider extends Plugin implements IProvider {
-  options: {[id: string]: any} = {}
+  options: { [id: string]: any } = {}
   listenerAccountsChanged: (accounts: Array<string>) => void
   listenerChainChanged: (chainId: number) => void
 
@@ -46,7 +46,7 @@ export abstract class InjectedProvider extends Plugin implements IProvider {
     const web3Provider = this.getInjectedProvider()
     if (typeof web3Provider !== 'undefined' && typeof web3Provider.request === 'function') {
       try {
-        await web3Provider.request({ method: 'eth_requestAccounts' })
+        await web3Provider.request({ method: 'zond_requestAccounts' })
       } catch (error) {
         throw new Error(this.notFound())
       }
