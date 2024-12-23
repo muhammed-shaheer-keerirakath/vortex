@@ -6,7 +6,7 @@ import { compareByteCode, getinputParameters } from '../util'
 import { decodeResponse } from './txFormat'
 import { getFunction, getReceiveInterface, getConstructorInterface, visitContracts, makeFullTypeDefinition } from './txHelper'
 
-function addExecutionCosts (txResult, tx, execResult) {
+function addExecutionCosts(txResult, tx, execResult) {
   if (txResult) {
     if (execResult) {
       tx.returnValue = execResult.returnValue
@@ -17,12 +17,12 @@ function addExecutionCosts (txResult, tx, execResult) {
 }
 
 /**
-  * poll web3 each 2s if web3
-  * listen on transaction executed event if VM
-  * attention: blocks returned by the event `newBlock` have slightly different json properties whether web3 or the VM is used
-  * trigger 'newBlock'
-  *
-  */
+ * poll web3 each 2s if web3
+ * listen on transaction executed event if VM
+ * attention: blocks returned by the event `newBlock` have slightly different json properties whether web3 or the VM is used
+ * trigger 'newBlock'
+ *
+ */
 export class TxListener {
   event
   executionContext
@@ -30,11 +30,11 @@ export class TxListener {
   _api
   _resolvedContracts
   _isListening: boolean
-  _listenOnNetwork:boolean
+  _listenOnNetwork: boolean
   _loopId
   blocks
 
-  constructor (opt, executionContext) {
+  constructor(opt, executionContext) {
     this.event = new EventManager()
     // has a default for now for backwards compatibility
     this.executionContext = executionContext
@@ -75,7 +75,7 @@ export class TxListener {
         hash: txResult.transactionHash ? txResult.transactionHash : 'call' + (from || '') + to + data,
         isCall: true,
         returnValue,
-        envMode: this.executionContext.getProvider()
+        envMode: this.executionContext.getProvider(),
       }
 
       addExecutionCosts(txResult, call, execResult)
@@ -94,26 +94,30 @@ export class TxListener {
       // in web3 mode && listen remix txs only
       if (!this._isListening) return // we don't listen
       if (this._loopId) return // we seems to already listen on a "web3" network
-      this.executionContext.web3().eth.getTransaction(txResult.transactionHash).then(async tx=>{
-        let execResult
-        if (this.executionContext.isVM()) {
-          execResult = await this.executionContext.web3().remix.getExecutionResultFromSimulator(txResult.transactionHash)
-        }
+      this.executionContext
+        .web3()
+        .zond.getTransaction(txResult.transactionHash)
+        .then(async (tx) => {
+          let execResult
+          if (this.executionContext.isVM()) {
+            execResult = await this.executionContext.web3().remix.getExecutionResultFromSimulator(txResult.transactionHash)
+          }
 
-        addExecutionCosts(txResult, tx, execResult)
-        tx.envMode = this.executionContext.getProvider()
-        tx.status = txResult.receipt.status
-        this._resolve([tx])
-      }).catch(error=>console.log(error))
+          addExecutionCosts(txResult, tx, execResult)
+          tx.envMode = this.executionContext.getProvider()
+          tx.status = txResult.receipt.status
+          this._resolve([tx])
+        })
+        .catch((error) => console.log(error))
     })
   }
 
   /**
-    * define if txlistener should listen on the network or if only tx created from remix are managed
-    *
-    * @param {Bool} type - true if listen on the network
-    */
-  setListenOnNetwork (listenOnNetwork) {
+   * define if txlistener should listen on the network or if only tx created from remix are managed
+   *
+   * @param {Bool} type - true if listen on the network
+   */
+  setListenOnNetwork(listenOnNetwork) {
     this._listenOnNetwork = listenOnNetwork
     if (this._loopId) {
       clearInterval(this._loopId)
@@ -122,19 +126,19 @@ export class TxListener {
   }
 
   /**
-    * reset recorded transactions
-    */
-  init () {
+   * reset recorded transactions
+   */
+  init() {
     this.blocks = []
   }
 
   /**
-    * start listening for incoming transactions
-    *
-    * @param {String} type - type/name of the provider to add
-    * @param {Object} obj  - provider
-    */
-  startListening () {
+   * start listening for incoming transactions
+   *
+   * @param {String} type - type/name of the provider to add
+   * @param {Object} obj  - provider
+   */
+  startListening() {
     this.init()
     this._isListening = true
     if (this._listenOnNetwork && !this.executionContext.isVM()) {
@@ -143,12 +147,12 @@ export class TxListener {
   }
 
   /**
-    * stop listening for incoming transactions. do not reset the recorded pool.
-    *
-    * @param {String} type - type/name of the provider to add
-    * @param {Object} obj  - provider
-    */
-  stopListening () {
+   * stop listening for incoming transactions. do not reset the recorded pool.
+   *
+   * @param {String} type - type/name of the provider to add
+   * @param {Object} obj  - provider
+   */
+  stopListening() {
     if (this._loopId) {
       clearInterval(this._loopId)
     }
@@ -156,7 +160,7 @@ export class TxListener {
     this._isListening = false
   }
 
-  async _startListenOnNetwork () {
+  async _startListenOnNetwork() {
     let lastSeenBlock = this.executionContext.lastBlock?.number - BigInt(1)
     let processingBlock = false
 
@@ -199,41 +203,41 @@ export class TxListener {
     processBlocks()
   }
 
-  async _manageBlock (blockNumber) {
+  async _manageBlock(blockNumber) {
     try {
-      const result = await this.executionContext.web3().eth.getBlock(blockNumber, true)
+      const result = await this.executionContext.web3().zond.getBlock(blockNumber, true)
       return await this._newBlock(Object.assign({ type: 'web3' }, result))
     } catch (e) {}
   }
 
   /**
-    * try to resolve the contract name from the given @arg address
-    *
-    * @param {String} address - contract address to resolve
-    * @return {String} - contract name
-    */
-  resolvedContract (address) {
+   * try to resolve the contract name from the given @arg address
+   *
+   * @param {String} address - contract address to resolve
+   * @return {String} - contract name
+   */
+  resolvedContract(address) {
     if (this._resolvedContracts[address]) return this._resolvedContracts[address].name
     return null
   }
 
   /**
-    * try to resolve the transaction from the given @arg txHash
-    *
-    * @param {String} txHash - contract address to resolve
-    * @return {String} - contract name
-    */
-  resolvedTransaction (txHash) {
+   * try to resolve the transaction from the given @arg txHash
+   *
+   * @param {String} txHash - contract address to resolve
+   * @return {String} - contract name
+   */
+  resolvedTransaction(txHash) {
     return this._resolvedTransactions[txHash]
   }
 
-  async _newBlock (block) {
+  async _newBlock(block) {
     this.blocks.push(block)
     await this._resolve(block.transactions)
     this.event.trigger('newBlock', [block])
   }
 
-  _resolveAsync (tx) {
+  _resolveAsync(tx) {
     return new Promise((resolve, reject) => {
       this._api.resolveReceipt(tx, (error, receipt) => {
         if (error) return reject(error)
@@ -249,7 +253,7 @@ export class TxListener {
     })
   }
 
-  async _resolve (transactions) {
+  async _resolve(transactions) {
     for (const tx of transactions) {
       try {
         if (!this._isListening) break
@@ -258,12 +262,13 @@ export class TxListener {
     }
   }
 
-  _resolveTx (tx, receipt, cb) {
+  _resolveTx(tx, receipt, cb) {
     const contracts = this._api.contracts()
     if (!contracts) return cb()
     let fun
     let contract
-    if (!tx.to || tx.to === '0x0') { // testrpc returns 0x0 in that case
+    if (!tx.to || tx.to === '0x0') {
+      // testrpc returns 0x0 in that case
       // contract creation / resolve using the creation bytes code
       // if web3: we have to call getTransactionReceipt to get the created address
       // if VM: created address already included
@@ -283,17 +288,21 @@ export class TxListener {
       // first check known contract, resolve against the `runtimeBytecode` if not known
       contract = this._resolvedContracts[tx.to]
       if (!contract) {
-        this.executionContext.web3().eth.getCode(tx.to).then(code=>{
-          if (code) {
-            const contract = this._tryResolveContract(code, contracts, false)
-            if (contract) {
-              this._resolvedContracts[tx.to] = contract
-              const fun = this._resolveFunction(contract, tx, false)
-              return cb(null, { to: tx.to, contractName: contract.name, function: fun })
+        this.executionContext
+          .web3()
+          .zond.getCode(tx.to)
+          .then((code) => {
+            if (code) {
+              const contract = this._tryResolveContract(code, contracts, false)
+              if (contract) {
+                this._resolvedContracts[tx.to] = contract
+                const fun = this._resolveFunction(contract, tx, false)
+                return cb(null, { to: tx.to, contractName: contract.name, function: fun })
+              }
             }
-          }
-          return cb()
-        }).catch(error=>cb(error))
+            return cb()
+          })
+          .catch((error) => cb(error))
         return
       }
       if (contract) {
@@ -304,7 +313,7 @@ export class TxListener {
     }
   }
 
-  _resolveFunction (contract, tx, isCtor) {
+  _resolveFunction(contract, tx, isCtor) {
     if (!contract) {
       console.log('txListener: cannot resolve contract - contract is null')
       return
@@ -320,7 +329,7 @@ export class TxListener {
             contractName: contract.name,
             to: tx.to,
             fn: fn,
-            params: this._decodeInputParams(inputData.substring(8), fnabi)
+            params: this._decodeInputParams(inputData.substring(8), fnabi),
           }
           if (tx.returnValue) {
             this._resolvedTransactions[tx.hash].decodedReturnValue = decodeResponse(tx.returnValue, fnabi)
@@ -334,7 +343,7 @@ export class TxListener {
           contractName: contract.name,
           to: tx.to,
           fn: '(receive)',
-          params: null
+          params: null,
         }
       } else {
         // fallback function
@@ -342,7 +351,7 @@ export class TxListener {
           contractName: contract.name,
           to: tx.to,
           fn: '(fallback)',
-          params: null
+          params: null,
         }
       }
     } else {
@@ -355,13 +364,13 @@ export class TxListener {
         contractName: contract.name,
         to: null,
         fn: '(constructor)',
-        params: params
+        params: params,
       }
     }
     return this._resolvedTransactions[tx.hash]
   }
 
-  _tryResolveContract (codeToResolve, compiledContracts, isCreation) {
+  _tryResolveContract(codeToResolve, compiledContracts, isCreation) {
     let found = null
     visitContracts(compiledContracts, (contract) => {
       const bytes = isCreation ? contract.object.evm.bytecode.object : contract.object.evm.deployedBytecode.object
@@ -373,7 +382,7 @@ export class TxListener {
     return found
   }
 
-  _decodeInputParams (data, abi) {
+  _decodeInputParams(data, abi) {
     data = toBytes(addHexPrefix(data))
     if (!data.length) data = new Uint8Array(32 * abi.inputs.length) // ensuring the data is at least filled by 0 cause `AbiCoder` throws if there's not enough data
 
