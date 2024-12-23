@@ -36,7 +36,7 @@ export class ExecutionContext {
   }
 
   init(config) {
-    this.executionContext = 'vm-zond-testnet'
+    this.executionContext = 'vm-zond'
     this.event.trigger('contextChanged', [this.executionContext])
   }
 

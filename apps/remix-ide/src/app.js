@@ -32,7 +32,7 @@ import { StoragePlugin } from './app/plugins/storage'
 import { Layout } from './app/panels/layout'
 import { NotificationPlugin } from './app/plugins/notification'
 import { Blockchain } from './blockchain/blockchain'
-import { ZondTestnetVMProvider } from './app/providers/vm-provider'
+import { CancunVMProvider, ZondVMProvider } from './app/providers/vm-provider'
 // import { MergeVMProvider, LondonVMProvider, BerlinVMProvider, ShanghaiVMProvider, CancunVMProvider } from './app/providers/vm-provider'
 // import { MainnetForkVMProvider } from './app/providers/mainnet-vm-fork-provider'
 // import { SepoliaForkVMProvider } from './app/providers/sepolia-vm-fork-provider'
@@ -297,13 +297,13 @@ class AppComponent {
     const networkModule = new NetworkModule(blockchain)
     // ----------------- represent the current selected web3 provider ----
     const web3Provider = new Web3ProviderModule(blockchain)
-    const vmProviderZondTestnet = new ZondTestnetVMProvider(blockchain);
+    const vmProviderZond = new ZondVMProvider(blockchain);
     // const vmProviderCustomFork = new CustomForkVMProvider(blockchain)
     // const vmProviderMainnetFork = new MainnetForkVMProvider(blockchain)
     // const vmProviderSepoliaFork = new SepoliaForkVMProvider(blockchain)
     // const vmProviderGoerliFork = new GoerliForkVMProvider(blockchain)
     // const vmProviderShanghai = new ShanghaiVMProvider(blockchain)
-    // const vmProviderCancun = new CancunVMProvider(blockchain)
+    const vmProviderCancun = new CancunVMProvider(blockchain)
     // const vmProviderMerge = new MergeVMProvider(blockchain)
     // const vmProviderBerlin = new BerlinVMProvider(blockchain)
     // const vmProviderLondon = new LondonVMProvider(blockchain)
@@ -376,9 +376,9 @@ class AppComponent {
       fetchAndCompile,
       dGitProvider,
       storagePlugin,
-      vmProviderZondTestnet,
+      vmProviderZond,
       // vmProviderShanghai,
-      // vmProviderCancun,
+      vmProviderCancun,
       // vmProviderMerge,
       // vmProviderBerlin,
       // vmProviderLondon,

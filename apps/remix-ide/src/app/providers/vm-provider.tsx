@@ -132,20 +132,20 @@ export class CancunVMProvider extends BasicVMProvider {
   }
 }
 
-export class ZondTestnetVMProvider extends BasicVMProvider {
+export class ZondVMProvider extends BasicVMProvider {
   constructor(blockchain) {
     super(
       {
-        name: 'vm-zond-testnet',
-        displayName: 'Zond Testnet',
+        name: 'vm-zond',
+        displayName: 'Zond VM',
         kind: 'provider',
-        description: 'Zond Testnet Provider',
+        description: 'Zond VM Provider',
         methods: ['sendAsync', 'init'],
         version: packageJson.version
       },
       blockchain
     )
     this.blockchain = blockchain
-    this.fork = 'vm-zond-testnet-fork'
+    this.fork = ''
   }
 }
