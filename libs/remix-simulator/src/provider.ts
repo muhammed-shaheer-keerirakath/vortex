@@ -160,42 +160,42 @@ class Web3TestPlugin extends Web3PluginBase {
 
   public getExecutionResultFromSimulator(transactionHash) {
     return this.requestManager.send({
-      method: 'eth_getExecutionResultFromSimulator',
+      method: 'zond_getExecutionResultFromSimulator',
       params: [transactionHash],
     })
   }
 
   public getHHLogsForTx(transactionHash) {
     return this.requestManager.send({
-      method: 'eth_getHHLogsForTx',
+      method: 'zond_getHHLogsForTx',
       params: [transactionHash],
     })
   }
 
   public getHashFromTagBySimulator(timestamp) {
     return this.requestManager.send({
-      method: 'eth_getHashFromTagBySimulator',
+      method: 'zond_getHashFromTagBySimulator',
       params: [timestamp],
     })
   }
 
   public registerCallId(id) {
     return this.requestManager.send({
-      method: 'eth_registerCallId',
+      method: 'zond_registerCallId',
       params: [id],
     })
   }
 
   public getStateDb() {
     return this.requestManager.send({
-      method: 'eth_getStateDb',
+      method: 'zond_getStateDb',
       params: [],
     })
   }
 
   public getBlocksData() {
     return this.requestManager.send({
-      method: 'eth_getBlocksData',
+      method: 'zond_getBlocksData',
       params: [],
     })
   }
