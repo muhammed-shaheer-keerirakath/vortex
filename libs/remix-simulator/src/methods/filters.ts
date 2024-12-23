@@ -7,54 +7,54 @@ export class Filters {
 
   methods() {
     return {
-      eth_getLogs: this.eth_getLogs.bind(this),
-      eth_subscribe: this.eth_subscribe.bind(this),
-      eth_unsubscribe: this.eth_unsubscribe.bind(this),
+      zond_getLogs: this.zond_getLogs.bind(this),
+      zond_subscribe: this.zond_subscribe.bind(this),
+      zond_unsubscribe: this.zond_unsubscribe.bind(this),
     }
   }
 
-  eth_getLogs(payload, cb) {
+  zond_getLogs(payload, cb) {
     const results = this.vmContext.logsManager.getLogsFor(payload.params[0])
     cb(null, results)
   }
 
-  eth_subscribe(payload, cb) {
+  zond_subscribe(payload, cb) {
     const subscriptionId = this.vmContext.logsManager.subscribe(payload.params)
     cb(null, subscriptionId)
   }
 
-  eth_unsubscribe(payload, cb) {
+  zond_unsubscribe(payload, cb) {
     this.vmContext.logsManager.unsubscribe(payload.params[0])
     cb(null, true)
   }
 
-  eth_newFilter(payload, cb) {
+  zond_newFilter(payload, cb) {
     const filterId = this.vmContext.logsManager.newFilter('filter', payload.params[0])
     cb(null, filterId)
   }
 
-  eth_newBlockFilter(payload, cb) {
+  zond_newBlockFilter(payload, cb) {
     const filterId = this.vmContext.logsManager.newFilter('block')
     cb(null, filterId)
   }
 
-  eth_newPendingTransactionFilter(payload, cb) {
+  zond_newPendingTransactionFilter(payload, cb) {
     const filterId = this.vmContext.logsManager.newFilter('pendingTransactions')
     cb(null, filterId)
   }
 
-  eth_uninstallfilter(payload, cb) {
+  zond_uninstallfilter(payload, cb) {
     const result = this.vmContext.logsManager.uninstallFilter(payload.params[0])
     cb(null, result)
   }
 
-  eth_getFilterChanges(payload, cb) {
+  zond_getFilterChanges(payload, cb) {
     const filterId = payload.params[0]
     const results = this.vmContext.logsManager.getLogsForFilter(filterId)
     cb(null, results)
   }
 
-  eth_getFilterLogs(payload, cb) {
+  zond_getFilterLogs(payload, cb) {
     const filterId = payload.params[0]
     const results = this.vmContext.logsManager.getLogsForFilter(filterId, true)
     cb(null, results)

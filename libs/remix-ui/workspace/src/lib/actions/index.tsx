@@ -527,7 +527,7 @@ export const signTypedData = async (path: string) => {
 
   try {
     const result = await web3.currentProvider.request({
-      method: 'eth_signTypedData_v4',
+      method: 'zond_signTypedData_v4',
       params: [settings.selectedAccount, parsed]
     })
 

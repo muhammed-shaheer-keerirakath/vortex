@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* global ethereum */
 'use strict'
 import { hash } from '@remix-project/remix-lib'

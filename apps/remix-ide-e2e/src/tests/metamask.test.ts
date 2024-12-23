@@ -13,24 +13,27 @@ const checkBrowserIsChrome = function (browser: NightwatchBrowser) {
 }
 
 const checkAlerts = function (browser: NightwatchBrowser) {
-  browser.isVisible({
-    selector: '//*[contains(.,"not have enough")]',
-    locateStrategy: 'xpath',
-    suppressNotFoundErrors: true,
-    timeout: 3000
-  }, (okVisible) => {
-    if (okVisible.value) {
-      browser.assert.fail('Not enough ETH in test account!!')
-      browser.end()
+  browser.isVisible(
+    {
+      selector: '//*[contains(.,"not have enough")]',
+      locateStrategy: 'xpath',
+      suppressNotFoundErrors: true,
+      timeout: 3000,
+    },
+    (okVisible) => {
+      if (okVisible.value) {
+        browser.assert.fail('Not enough ETH in test account!!')
+        browser.end()
+      }
     }
-  })
+  )
 }
 
 const localsCheck = {
   to: {
     value: '0x4B0897B0513FDC7C541B6D9D7E929C4E5364D2DB',
-    type: 'address'
-  }
+    type: 'address',
+  },
 }
 
 const tests = {
@@ -44,7 +47,8 @@ const tests = {
   },
 
   'Should connect to Sepolia Test Network using MetaMask #group1': function (browser: NightwatchBrowser) {
-    browser.waitForElementPresent('*[data-id="remixIdeSidePanel"]')
+    browser
+      .waitForElementPresent('*[data-id="remixIdeSidePanel"]')
       .setupMetamask(passphrase, password)
       .useCss()
       .switchBrowserTab(0)
@@ -69,15 +73,13 @@ const tests = {
   },
 
   'Should add a contract file #group1': function (browser: NightwatchBrowser) {
-    browser.waitForElementVisible('*[data-id="remixIdeSidePanel"]')
-      .clickLaunchIcon('filePanel')
-      .addFile('Greet.sol', sources[0]['Greet.sol'])
-      .clickLaunchIcon('udapp')
-      .waitForElementVisible('*[data-id="Deploy - transact (not payable)"]', 45000) // wait for the contract to compile
+    browser.waitForElementVisible('*[data-id="remixIdeSidePanel"]').clickLaunchIcon('filePanel').addFile('Greet.sol', sources[0]['Greet.sol']).clickLaunchIcon('udapp').waitForElementVisible('*[data-id="Deploy - transact (not payable)"]', 45000) // wait for the contract to compile
   },
 
   'Should deploy contract on Sepolia Test Network using MetaMask #group1': function (browser: NightwatchBrowser) {
-    browser.clearConsole().waitForElementPresent('*[data-id="runTabSelectAccount"] option', 45000)
+    browser
+      .clearConsole()
+      .waitForElementPresent('*[data-id="runTabSelectAccount"] option', 45000)
       .clickLaunchIcon('filePanel')
       .openFile('Greet.sol')
       .clickLaunchIcon('udapp')
@@ -101,7 +103,9 @@ const tests = {
       })
   },
   'Should run low level interaction (fallback function) on Sepolia Test Network using MetaMask #group1': function (browser: NightwatchBrowser) {
-    browser.clearConsole().waitForElementPresent('*[data-id="remixIdeSidePanel"]')
+    browser
+      .clearConsole()
+      .waitForElementPresent('*[data-id="remixIdeSidePanel"]')
       .clickInstance(0)
       .clearConsole()
       .waitForElementPresent('*[data-id="pluginManagerSettingsDeployAndRunLLTxSendTransaction"]')
@@ -117,7 +121,7 @@ const tests = {
             .switchBrowserTab(0) // back to remix
             .waitForElementVisible({
               locateStrategy: 'xpath',
-              selector: "//span[@class='text-log' and contains(., 'transact to HelloWorld.(fallback) pending')]"
+              selector: "//span[@class='text-log' and contains(., 'transact to HelloWorld.(fallback) pending')]",
             })
             .waitForElementContainsText('*[data-id="terminalJournal"]', 'view on etherscan', 60000)
             .waitForElementContainsText('*[data-id="terminalJournal"]', 'from: 0x76a...2708f', 60000)
@@ -126,7 +130,9 @@ const tests = {
       })
   },
   'Should run transaction (greet function) on Sepolia Test Network using MetaMask #group1': function (browser: NightwatchBrowser) {
-    browser.clearConsole().waitForElementPresent('*[data-id="remixIdeSidePanel"]')
+    browser
+      .clearConsole()
+      .waitForElementPresent('*[data-id="remixIdeSidePanel"]')
       .clearConsole()
       .waitForElementPresent('*[data-title="string _message"]')
       .setValue('*[data-title="string _message"]', 'test')
@@ -143,7 +149,7 @@ const tests = {
             .switchBrowserTab(0) // back to remix
             .waitForElementVisible({
               locateStrategy: 'xpath',
-              selector: "//span[@class='text-log' and contains(., 'transact to HelloWorld.greet pending')]"
+              selector: "//span[@class='text-log' and contains(., 'transact to HelloWorld.greet pending')]",
             })
             .waitForElementContainsText('*[data-id="terminalJournal"]', 'view on etherscan', 60000)
             .waitForElementContainsText('*[data-id="terminalJournal"]', 'from: 0x76a...2708f', 60000)
@@ -153,23 +159,15 @@ const tests = {
   },
 
   'Should deploy faulty contract on Sepolia Test Network using MetaMask and show error in terminal #group1': function (browser: NightwatchBrowser) {
-    browser
-      .clearConsole()
-      .clickLaunchIcon('filePanel')
-      .addFile('faulty.sol', sources[0]['faulty.sol'])
-      .clickLaunchIcon('udapp')
-      .waitForElementPresent('*[data-id="Deploy - transact (not payable)"]')
-      .click('*[data-id="Deploy - transact (not payable)"]')
-      .pause(5000)
-      .waitForElementVisible('*[data-id="udappNotifyModalDialogModalBody-react"]', 60000)
-      .click('[data-id="udappNotify-modal-footer-cancel-react"]')
-      .waitForElementVisible({
-        locateStrategy: 'xpath',
-        selector: "//span[@class='text-log' and contains(., 'errored')]"
-      })
+    browser.clearConsole().clickLaunchIcon('filePanel').addFile('faulty.sol', sources[0]['faulty.sol']).clickLaunchIcon('udapp').waitForElementPresent('*[data-id="Deploy - transact (not payable)"]').click('*[data-id="Deploy - transact (not payable)"]').pause(5000).waitForElementVisible('*[data-id="udappNotifyModalDialogModalBody-react"]', 60000).click('[data-id="udappNotify-modal-footer-cancel-react"]').waitForElementVisible({
+      locateStrategy: 'xpath',
+      selector: "//span[@class='text-log' and contains(., 'errored')]",
+    })
   },
   'Should deploy contract on Sepolia Test Network using MetaMask again #group1': function (browser: NightwatchBrowser) {
-    browser.clearConsole().waitForElementPresent('*[data-id="runTabSelectAccount"] option', 45000)
+    browser
+      .clearConsole()
+      .waitForElementPresent('*[data-id="runTabSelectAccount"] option', 45000)
       .clickLaunchIcon('filePanel')
       .openFile('Greet.sol')
       .clickLaunchIcon('udapp')
@@ -195,11 +193,13 @@ const tests = {
 
   // main network tests
   'Should connect to Ethereum Main Network using MetaMask #group1': function (browser: NightwatchBrowser) {
-    browser.waitForElementPresent('*[data-id="remixIdeSidePanel"]')
+    browser
+      .waitForElementPresent('*[data-id="remixIdeSidePanel"]')
       .switchBrowserTab(1)
       .click('[data-testid="network-display"]')
       .click('div[data-testid="Ethereum Mainnet"]') // switch to mainnet
-      .useCss().switchBrowserTab(0)
+      .useCss()
+      .switchBrowserTab(0)
       .refreshPage()
       .waitForElementVisible('*[data-id="remixIdeIconPanel"]', 10000)
       .click('*[data-id="landingPageStartSolidity"]')
@@ -210,7 +210,8 @@ const tests = {
   },
 
   'Should deploy contract on Ethereum Main Network using MetaMask #group1': function (browser: NightwatchBrowser) {
-    browser.waitForElementPresent('*[data-id="runTabSelectAccount"] option')
+    browser
+      .waitForElementPresent('*[data-id="runTabSelectAccount"] option')
       .clickLaunchIcon('filePanel')
       .addFile('Greet.sol', sources[0]['Greet.sol'])
       .clickLaunchIcon('udapp')
@@ -224,11 +225,13 @@ const tests = {
   },
   // debug transaction
   'Should deploy Ballot to Sepolia using metamask #group1': function (browser: NightwatchBrowser) {
-    browser.waitForElementPresent('*[data-id="remixIdeSidePanel"]')
+    browser
+      .waitForElementPresent('*[data-id="remixIdeSidePanel"]')
       .switchBrowserTab(1)
       .click('[data-testid="network-display"]')
       .click('div[data-testid="Sepolia"]') // switch to sepolia
-      .useCss().switchBrowserTab(0)
+      .useCss()
+      .switchBrowserTab(0)
       .addFile('BallotTest.sol', examples.ballot)
       .clickLaunchIcon('udapp')
       .clearConsole()
@@ -242,11 +245,11 @@ const tests = {
       .pause(1000)
       .waitForElementVisible({
         locateStrategy: 'xpath',
-        selector: "//span[@class='text-log' and contains(., 'creation of')]"
+        selector: "//span[@class='text-log' and contains(., 'creation of')]",
       })
       .waitForElementVisible({
         locateStrategy: 'xpath',
-        selector: "//span[@class='text-log' and contains(., 'pending')]"
+        selector: "//span[@class='text-log' and contains(., 'pending')]",
       })
       .perform((done) => {
         browser.switchBrowserWindow(extension_url, 'MetaMask', (browser) => {
@@ -263,15 +266,17 @@ const tests = {
             .perform(() => done())
         })
       })
-    },
+  },
 
-    'do transaction #group1': function (browser: NightwatchBrowser) {
-      browser.waitForElementPresent('*[data-id="universalDappUiContractActionWrapper"]', 60000)
+  'do transaction #group1': function (browser: NightwatchBrowser) {
+    browser
+      .waitForElementPresent('*[data-id="universalDappUiContractActionWrapper"]', 60000)
       .clearConsole()
       .clickInstance(0)
       .clickFunction('delegate - transact (not payable)', { types: 'address to', values: '"0x4b0897b0513fdc7c541b6d9d7e929c4e5364d2db"' })
       .pause(5000)
-      .perform((done) => { // call delegate
+      .perform((done) => {
+        // call delegate
         browser.switchBrowserWindow(extension_url, 'MetaMask', (browser) => {
           browser
             .maximizeWindow()
@@ -286,15 +291,15 @@ const tests = {
             .perform(() => done())
         })
       })
-      .testFunction('last',
-        {
-          status: '0x1 Transaction mined and execution succeed',
-          'decoded input': { 'address to': '0x4B0897b0513fdC7C541B6d9D7E929C4e5364D2dB' }
-        })
+      .testFunction('last', {
+        status: '0x1 Transaction mined and execution succeed',
+        'decoded input': { 'address to': '0x4B0897b0513fdC7C541B6d9D7E929C4e5364D2dB' },
+      })
   },
   'Should debug Sepolia transaction with source highlighting MetaMask #group1': function (browser: NightwatchBrowser) {
     let txhash
-    browser.waitForElementVisible('*[data-id="remixIdeIconPanel"]', 10000)
+    browser
+      .waitForElementVisible('*[data-id="remixIdeIconPanel"]', 10000)
       .clickLaunchIcon('pluginManager') // load debugger and source verification
       .clickLaunchIcon('udapp')
       .perform((done) => {
@@ -316,13 +321,10 @@ const tests = {
           .checkVariableDebug('soliditylocals', localsCheck)
           .perform(() => done())
       })
-
   },
-  'Call web3.eth.getAccounts() using Injected Provider (Metamask) #group1': function (browser: NightwatchBrowser) {
+  'Call web3.zond.getAccounts() using Injected Provider (Metamask) #group1': function (browser: NightwatchBrowser) {
     if (!checkBrowserIsChrome(browser)) return
-    browser
-      .executeScriptInTerminal('web3.eth.getAccounts()')
-      .journalLastChildIncludes('["0x76a3ABb5a12dcd603B52Ed22195dED17ee82708f"]')
+    browser.executeScriptInTerminal('web3.zond.getAccounts()').journalLastChildIncludes('["0x76a3ABb5a12dcd603B52Ed22195dED17ee82708f"]')
   },
   // EIP 712 tests
   'Test EIP 712 Signature with Injected Provider (Metamask) #group1': function (browser: NightwatchBrowser) {
@@ -344,7 +346,8 @@ const tests = {
       .rightClick('li[data-id="treeViewLitreeViewItemEIP-712-data.json"]')
       .click('*[data-id="contextMenuItemsignTypedData"]')
       .pause(1000)
-      .perform((done) => { // call delegate
+      .perform((done) => {
+        // call delegate
         browser.switchBrowserWindow(extension_url, 'MetaMask', (browser) => {
           browser
             .maximizeWindow()
@@ -358,7 +361,7 @@ const tests = {
       })
       .pause(1000)
       .journalChildIncludes('0xec72bbabeb47a3a766af449674a45a91a6e94e35ebf0ae3c644b66def7bd387f1c0b34d970c9f4a1e9398535e5860b35e82b2a8931b7c9046b7766a53e66db3d1b')
-  }
+  },
 }
 
 const branch = process.env.CIRCLE_BRANCH
@@ -368,20 +371,19 @@ if (!checkBrowserIsChrome(browser)) {
   module.exports = {}
 } else {
   module.exports = {
-    ...(branch ? (runTestsConditions ? tests : {}) : tests)
-  };
+    ...(branch ? (runTestsConditions ? tests : {}) : tests),
+  }
 }
-
 
 const EIP712_Example = {
   domain: {
     chainId: 11155111,
-    name: "Example App",
-    verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
-    version: "1",
+    name: 'Example App',
+    verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+    version: '1',
   },
   message: {
-    prompt: "Welcome! In order to authenticate to this website, sign this request and your public address will be sent to the server in a verifiable way.",
+    prompt: 'Welcome! In order to authenticate to this website, sign this request and your public address will be sent to the server in a verifiable way.',
     createdAt: 1718570375196,
   },
   primaryType: 'AuthRequest',
@@ -399,12 +401,10 @@ const EIP712_Example = {
   },
 }
 
-
 const sources = [
   {
     'Greet.sol': {
-      content:
-        `
+      content: `
       pragma solidity ^0.8.0;
       contract HelloWorld {
           string public message;
@@ -416,7 +416,7 @@ const sources = [
           function greet(string memory _message) public {
               message = _message;
           }
-      }`
+      }`,
     },
     'faulty.sol': {
       content: `// SPDX-License-Identifier: GPL-3.0
@@ -428,7 +428,7 @@ const sources = [
           constructor() {
               revert O_o(block.timestamp);
           }
-      }`
-    }
-  }
+      }`,
+    },
+  },
 ]

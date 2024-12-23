@@ -1,5 +1,5 @@
-import { Command } from 'commander';
-import { Web3 } from 'web3'
+import { Command } from 'commander'
+import { Web3 } from '@theqrl/web3'
 import path from 'path'
 import axios, { AxiosResponse } from 'axios'
 import { runTestFiles } from './runTestFiles'
@@ -11,24 +11,24 @@ import colors from 'colors'
 const logger = new Log()
 const log = logger.logger
 
-const commander = new Command();
+const commander = new Command()
 // parse verbosity
-function mapVerbosity (v: string) {
+function mapVerbosity(v: string) {
   const levels = {
     '0': 'error',
     '1': 'warn',
     '2': 'info',
     '3': 'verbose',
     '4': 'debug',
-    '5': 'silly'
+    '5': 'silly',
   }
   return levels[v]
 }
 
-function mapOptimize (v: string) {
+function mapOptimize(v: string) {
   const optimize = {
     true: true,
-    false: false
+    false: false,
   }
   return optimize[v]
 }
@@ -37,13 +37,19 @@ const version = require('../package.json').version // eslint-disable-line
 
 commander.version(version)
 
-commander.command('version').description('output the version number').action(function () {
-  console.log(version)
-})
+commander
+  .command('version')
+  .description('output the version number')
+  .action(function () {
+    console.log(version)
+  })
 
-commander.command('help').description('output usage information').action(function () {
-  commander.help()
-})
+commander
+  .command('help')
+  .description('output usage information')
+  .action(function () {
+    commander.help()
+  })
 
 // get current version
 commander
@@ -58,7 +64,7 @@ commander
   .option('-k, --killProcess <bool>', 'kill process when tests fail')
   .argument('file_path', 'path to test file or directory')
   .action(async (file_path) => {
-    const options = commander.opts();
+    const options = commander.opts()
     // Check if path exists
     if (!fs.existsSync(file_path)) {
       log.error(file_path + ' not found')
@@ -88,7 +94,7 @@ commander
       const compVersion = options.compiler
       const baseURL = 'https://binaries.soliditylang.org/wasm/'
       const response: AxiosResponse = await axios.get(baseURL + 'list.json')
-      const { releases, latestRelease } = response.data as { releases: string[], latestRelease: string }
+      const { releases, latestRelease } = response.data as { releases: string[]; latestRelease: string }
       const compString = releases ? releases[compVersion] : null
       if (!compString) {
         log.error(`No compiler found in releases with version ${compVersion}`)
@@ -125,7 +131,7 @@ commander
     const providerConfig = {
       fork: options.fork || null,
       nodeUrl: options.nodeUrl || null,
-      blockNumber: options.blockNumber || null
+      blockNumber: options.blockNumber || null,
     }
     const provider: any = new Provider(providerConfig)
     await provider.init()
