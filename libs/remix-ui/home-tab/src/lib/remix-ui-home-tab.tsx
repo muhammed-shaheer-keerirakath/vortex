@@ -30,7 +30,7 @@ export const RemixUiHomeTab = (props: RemixUiHomeTabProps) => {
   }>({
     themeQuality: themes.light,
   })
-  const [carouselWidth, setCarouselWidth] = useState(65)
+  const [carouselWidth, setCarouselWidth] = useState(100)
 
   useEffect(() => {
     plugin.call('theme', 'currentTheme').then((theme) => {
@@ -73,15 +73,15 @@ export const RemixUiHomeTab = (props: RemixUiHomeTabProps) => {
     <div className="d-flex flex-column w-100" data-id="remixUIHTAll">
       <ThemeContext.Provider value={state.themeQuality}>
         <div className="d-flex flex-row w-100 custom_home_bg">
-          <div className="px-2 pl-3 justify-content-start border-right d-flex flex-column" id="remixUIHTLeft" style={{ width: 'inherit' }}>
+          <div className="px-3 pl-3 justify-content-start border-right d-flex flex-column" id="remixUIHTLeft" style={{ width: 'inherit' }}>
+            <LanguageOptions plugin={plugin} />
             <HomeTabTitle />
             <HomeTabGetStarted plugin={plugin}></HomeTabGetStarted>
             {!(platform === appPlatformTypes.desktop) ? <HomeTabFile plugin={plugin} /> : <HomeTabFileElectron plugin={plugin}></HomeTabFileElectron>}
           </div>
-          <div className="pl-2 pr-3 justify-content-start d-flex flex-column" style={{ width: `${carouselWidth}%` }} id="remixUIHTRight">
-            <LanguageOptions plugin={plugin} />
-            <HomeTabFeatured plugin={plugin}></HomeTabFeatured>
-            <HomeTabFeaturedPlugins plugin={plugin}></HomeTabFeaturedPlugins>
+          <div className="pl-3 pr-3 justify-content-start d-flex flex-column" style={{ width: `${carouselWidth}%` }} id="remixUIHTRight">
+            {/* <HomeTabFeatured plugin={plugin}></HomeTabFeatured>
+            <HomeTabFeaturedPlugins plugin={plugin}></HomeTabFeaturedPlugins> */}
           </div>
         </div>
       </ThemeContext.Provider>

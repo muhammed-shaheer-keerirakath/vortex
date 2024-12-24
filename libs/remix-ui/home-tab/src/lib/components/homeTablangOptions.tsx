@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, { useEffect, useState } from 'react'
 import { Dropdown, DropdownButton } from 'react-bootstrap'
 import DropdownItem from 'react-bootstrap/DropdownItem'
@@ -26,9 +27,9 @@ export function LanguageOptions({ plugin }: { plugin: any }) {
 
   return (
     <>
-      <div className="d-flex justify-content-between w-100 align-items-center pt-4">
-        <label style={{ fontSize: '1.2rem' }} className="ml-2 pb-0 mb-0">
-          <FormattedMessage id="home.featured" />
+      <div className="d-flex justify-content-end w-100 align-items-center pt-4">
+        <label style={{ fontSize: '1.2rem' }} className="ml-2 mr-2 pb-0 mb-0">
+          <FormattedMessage id="language_selector" defaultMessage="Language" />
         </label>
         <Dropdown>
           <Dropdown.Toggle title={langOptions} id="languagedropdown" size="sm" style={{ backgroundColor: 'var(--secondary)', color: 'var(--text)' }}>
@@ -36,14 +37,13 @@ export function LanguageOptions({ plugin }: { plugin: any }) {
           </Dropdown.Toggle>
           <Dropdown.Menu className="dropdown-menu langSelector" style={{ paddingTop: "0px", paddingBottom: "0px", minWidth: 'fit-content', backgroundColor: 'var(--body-bg)' }}>
             {['EN', 'ES', 'FR', 'IT', 'KO', 'RU', 'ZH'].map((lang, index) => (
-              <DropdownItem as={'span'} className={langOptions === lang ? "border border-primary px-2" : "px-2"} onClick={() =>
-              {
+              <DropdownItem as={'span'} className={langOptions === lang ? "border border-primary px-2" : "px-2"} onClick={() => {
                 changeLanguage(lang.toLowerCase())
                 setLangOptions(lang)
                 _paq.push(['trackEvent', 'hometab', 'switchTo', lang])
               }}
-              style={{ color: 'var(--text)', cursor: 'pointer' }}
-              key={index}
+                style={{ color: 'var(--text)', cursor: 'pointer' }}
+                key={index}
               >
                 {lang}
               </DropdownItem>
