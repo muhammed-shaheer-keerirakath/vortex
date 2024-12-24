@@ -82,7 +82,7 @@ export const initInstance = async () => {
 }
 
 export const updateInstanceBalance = async (address: string) => {
-  const balance = await txRunner.getBalanceInEther(address)
+  const balance = await txRunner.getBalanceInZnd(address)
   await dispatch({ type: 'SET_INSTANCE', payload: { balance } })
 }
 

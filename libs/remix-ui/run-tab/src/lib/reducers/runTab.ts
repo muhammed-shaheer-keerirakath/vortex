@@ -94,7 +94,7 @@ export const runTabInitialState: RunTabState = {
     labelOk: '',
     labelCancel: '',
   },
-  externalEndpoint: 'http://209.250.255.226:8545',
+  externalEndpoint: 'http://127.0.0.1:8545',
   popup: '',
   passphrase: '',
   matchPassphrase: '',
@@ -219,7 +219,7 @@ export const runTabReducer = (state: RunTabState = runTabInitialState, action: A
       return {
         ...state,
         selectExEnv: payload,
-        networkName: state.selectExEnv === 'vm-cancun' ? 'VM' : state.networkName,
+        networkName: state.selectExEnv === 'vm-zond' ? 'VM' : state.networkName,
         accounts: {
           ...state.accounts,
           selectedAccount: '',

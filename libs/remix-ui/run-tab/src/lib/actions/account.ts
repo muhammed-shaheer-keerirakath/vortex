@@ -8,7 +8,7 @@ export const updateAccountBalances = async (plugin: RunTab, dispatch: React.Disp
   const accounts = plugin.REACT_API.accounts.loadedAccounts
 
   for (const account of Object.keys(accounts)) {
-    const balance = await plugin.blockchain.getBalanceInEther(account)
+    const balance = await plugin.blockchain.getBalanceInZnd(account)
     const updated = shortenAddress(account, balance)
     accounts[account] = updated
   }
@@ -25,7 +25,7 @@ export const fillAccountsList = async (plugin: RunTab, dispatch: React.Dispatch<
       const loadedAccounts = {}
 
       for (const account of accounts) {
-        const balance = await plugin.blockchain.getBalanceInEther(account)
+        const balance = await plugin.blockchain.getBalanceInZnd(account)
         loadedAccounts[account] = shortenAddress(account, balance)
       }
       const provider = plugin.blockchain.getProvider()

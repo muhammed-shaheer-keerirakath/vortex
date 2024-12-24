@@ -757,9 +757,9 @@ export class Blockchain extends Plugin {
     return this.getCurrentProvider().newAccount(passwordPromptCb, cb)
   }
 
-  /** Get the balance of an address, and convert wei to ether */
-  getBalanceInEther(address) {
-    return this.getCurrentProvider().getBalanceInEther(address)
+  /** Get the balance of an address, and convert wei to znd */
+  getBalanceInZnd(address) {
+    return this.getCurrentProvider().getBalanceInZnd(address)
   }
 
   pendingTransactionsCount() {

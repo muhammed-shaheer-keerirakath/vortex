@@ -137,7 +137,7 @@ export const setupEvents = (plugin: RunTab) => {
 
           await Promise.all(
             accounts.map(async (account) => {
-              const balance = await plugin.blockchain.getBalanceInEther(account)
+              const balance = await plugin.blockchain.getBalanceInZnd(account)
               const updated = shortenAddress(account, balance)
 
               accountsMap[account] = updated

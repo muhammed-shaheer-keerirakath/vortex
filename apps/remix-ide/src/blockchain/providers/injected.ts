@@ -5,45 +5,58 @@ import { ExecutionContext } from '../execution-context'
 export class InjectedProvider {
   executionContext: ExecutionContext
 
-  constructor (executionContext) {
+  constructor(executionContext) {
     this.executionContext = executionContext
   }
 
-  getAccounts (cb) {
-    return this.executionContext.web3().eth.getAccounts()
-      .then(accounts => cb(null, accounts))
-      .catch(err => {
+  getAccounts(cb) {
+    return this.executionContext
+      .web3()
+      .eth.getAccounts()
+      .then((accounts) => cb(null, accounts))
+      .catch((err) => {
         cb(err.message)
       })
   }
 
-  newAccount (passwordPromptCb, cb) {
+  newAccount(passwordPromptCb, cb) {
     passwordPromptCb((passphrase) => {
-      this.executionContext.web3().eth.personal.newAccount(passphrase).then((result) => cb(null, result)).catch(error => cb(error))
+      this.executionContext
+        .web3()
+        .eth.personal.newAccount(passphrase)
+        .then((result) => cb(null, result))
+        .catch((error) => cb(error))
     })
   }
 
-  async resetEnvironment () {
+  async resetEnvironment() {
     /* Do nothing. */
   }
 
-  async getBalanceInEther (address) {
+  async getBalanceInZnd(address) {
     const balance = await this.executionContext.web3().eth.getBalance(address)
     const balInString = balance.toString(10)
     return balInString === '0' ? balInString : Web3.utils.fromWei(balInString, 'ether')
   }
 
-  getGasPrice (cb) {
-    this.executionContext.web3().eth.getGasPrice().then((result => cb(null, result)))
+  getGasPrice(cb) {
+    this.executionContext
+      .web3()
+      .eth.getGasPrice()
+      .then((result) => cb(null, result))
   }
 
-  signMessage (message, account, _passphrase, cb) {
+  signMessage(message, account, _passphrase, cb) {
     message = isHexString(message) ? message : Web3.utils.utf8ToHex(message)
     const messageHash = hashPersonalMessage(Buffer.from(message))
     try {
-      this.executionContext.web3().eth.sign(messageHash, account).then((signedData) => {
-        cb(null, bytesToHex(messageHash), signedData)
-      }).catch((error => cb(error)))
+      this.executionContext
+        .web3()
+        .eth.sign(messageHash, account)
+        .then((signedData) => {
+          cb(null, bytesToHex(messageHash), signedData)
+        })
+        .catch((error) => cb(error))
     } catch (e) {
       cb(e.message)
     }

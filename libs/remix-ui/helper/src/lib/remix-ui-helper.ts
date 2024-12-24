@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { bytesToHex, toChecksumAddress } from '@ethereumjs/util'
 
 export const extractNameFromKey = (key: string): string => {
@@ -7,7 +8,7 @@ export const extractNameFromKey = (key: string): string => {
   return keyPath[keyPath.length - 1]
 }
 
-export const extractParentFromKey = (key: string):string => {
+export const extractParentFromKey = (key: string): string => {
   if (!key) return
   const keyPath = key.split('/')
 
@@ -71,28 +72,39 @@ export const joinPath = (...paths) => {
 
 export const getPathIcon = (path: string) => {
   return path.endsWith('.txt')
-    ? 'far fa-file-alt' : path.endsWith('.md')
-      ? 'fab fa-markdown' : path.endsWith('.sol')
-        ? 'fa-kit fa-solidity-mono' : path.endsWith('.js')
-          ? 'fab fa-js' : path.endsWith('.json')
-            ? 'small fas fa-brackets-curly' : path.endsWith('.vy')
-              ? 'small fa-kit fa-vyper2' : path.endsWith('.lex')
-                ? 'fa-kit fa-lexon' : path.endsWith('ts')
-                  ? 'small fa-kit fa-ts-logo' : path.endsWith('.tsc')
-                    ? 'fad fa-brackets-curly' : path.endsWith('.cairo')
-                      ? 'small fa-kit fa-cairo' : path.endsWith('.circom')
-                        ? 'fa-kit fa-circom' : path.endsWith('.nr')
-                          ? 'fa-duotone fa-regular fa-diamond' : 'far fa-file'
+    ? 'far fa-file-alt'
+    : path.endsWith('.md')
+    ? 'fab fa-markdown'
+    : path.endsWith('.sol')
+    ? 'fa-kit fa-solidity-mono'
+    : path.endsWith('.js')
+    ? 'fab fa-js'
+    : path.endsWith('.json')
+    ? 'small fas fa-brackets-curly'
+    : path.endsWith('.vy')
+    ? 'small fa-kit fa-vyper2'
+    : path.endsWith('.lex')
+    ? 'fa-kit fa-lexon'
+    : path.endsWith('ts')
+    ? 'small fa-kit fa-ts-logo'
+    : path.endsWith('.tsc')
+    ? 'fad fa-brackets-curly'
+    : path.endsWith('.cairo')
+    ? 'small fa-kit fa-cairo'
+    : path.endsWith('.circom')
+    ? 'fa-kit fa-circom'
+    : path.endsWith('.nr')
+    ? 'fa-duotone fa-regular fa-diamond'
+    : 'far fa-file'
 }
 
 export const isNumeric = (value) => {
   return /^\+?(0|[1-9]\d*)$/.test(value)
 }
 
-export const shortenAddress = (address, etherBalance?) => {
+export const shortenAddress = (address, zndBalance?) => {
   const len = address.length
-
-  return address.slice(0, 5) + '...' + address.slice(len - 5, len) + (etherBalance ? ' (' + etherBalance.toString() + ' ether)' : '')
+  return address.slice(0, 5) + '...' + address.slice(len - 5, len) + (zndBalance ? ' (' + zndBalance.toString() + ' ZND)' : '')
 }
 
 export const addressToString = (address) => {
@@ -111,10 +123,11 @@ export const is0XPrefixed = (value) => {
 }
 
 export const isHexadecimal = (value) => {
-  return /^[0-9a-fA-F]+$/.test(value) && (value.length % 2 === 0)
+  return /^[0-9a-fA-F]+$/.test(value) && value.length % 2 === 0
 }
 
-export const isValidHash = (hash) => { // 0x prefixed, hexadecimal, 64digit
+export const isValidHash = (hash) => {
+  // 0x prefixed, hexadecimal, 64digit
   const hexValue = hash.slice(2, hash.length)
   return is0XPrefixed(hash) && /^[0-9a-fA-F]{64}$/.test(hexValue)
 }
@@ -127,7 +140,7 @@ export const shortenHexData = (data) => {
 }
 
 export const addSlash = (file: string) => {
-  if (!file.startsWith('/'))file = '/' + file
+  if (!file.startsWith('/')) file = '/' + file
   return file
 }
 
@@ -140,5 +153,5 @@ export const shortenProxyAddress = (address: string) => {
 export const shortenDate = (dateString: string) => {
   const date = new Date(dateString)
 
-  return date.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + ', ' + date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
+  return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ', ' + date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
 }
