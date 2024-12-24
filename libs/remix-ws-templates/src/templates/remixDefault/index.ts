@@ -7,6 +7,8 @@ export default async () => {
     // @ts-ignore
     'contracts/3_MyToken.sol': (await import('raw-loader!./contracts/3_MyToken.sol')).default,
     // @ts-ignore
+    'contracts/4_ZndTransfer.sol': (await import('raw-loader!./contracts/4_ZndTransfer.sol')).default,
+    // @ts-ignore
     'scripts/deploy_with_web3.ts': (await import('!!raw-loader!./scripts/deploy_with_web3.ts')).default,
     // @ts-ignore
     'scripts/web3_lib.ts': (await import('!!raw-loader!./scripts/web3_lib.ts')).default,
