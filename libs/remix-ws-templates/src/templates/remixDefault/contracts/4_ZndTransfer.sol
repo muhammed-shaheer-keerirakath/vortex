@@ -5,12 +5,12 @@ contract ZndTransfer {
     // Event to log Znd transfers
     event ZndReceived(address indexed from, uint256 amount);
 
-    // Function to receive Znd directly into the contract
+    // Function to receive ZND directly into the contract
     receive() external payable {
         emit ZndReceived(msg.sender, msg.value);
     }
 
-    // Function to view the contract's Znd balance
+    // Function to view the contract's ZND balance
     function getBalance() public view returns (uint256) {
         return address(this).balance;
     }
