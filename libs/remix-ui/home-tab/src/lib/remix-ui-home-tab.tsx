@@ -30,7 +30,7 @@ export const RemixUiHomeTab = (props: RemixUiHomeTabProps) => {
   }>({
     themeQuality: themes.light,
   })
-  const [carouselWidth, setCarouselWidth] = useState(100)
+  const [carouselWidth, setCarouselWidth] = useState(96)
 
   useEffect(() => {
     plugin.call('theme', 'currentTheme').then((theme) => {
