@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 contract ZndTransfer {
-    // Event to log Znd transfers
+    // Event to log ZND transfers
     event ZndReceived(address indexed from, uint256 amount);
 
     // Function to receive ZND directly into the contract
