@@ -258,7 +258,7 @@ export const DebuggerUI = (props: DebuggerUIProps) => {
 
     const web3 = optWeb3 || (state.opt.debugWithLocalNode ? await debuggerModule.web3() : await debuggerModule.getDebugWeb3())
     try {
-      const networkId = await web3.eth.net.getId()
+      const networkId = await web3.zond.net.getId()
       _paq.push(['trackEvent', 'debugger', 'startDebugging', networkId])
       if (networkId === 42) {
         setState((prevState) => {
@@ -276,9 +276,9 @@ export const DebuggerUI = (props: DebuggerUIProps) => {
     let currentBlock
     let currentTransaction
     try {
-      currentReceipt = await web3.eth.getTransactionReceipt(txNumber)
-      currentBlock = await web3.eth.getBlock(currentReceipt.blockHash)
-      currentTransaction = await web3.eth.getTransaction(txNumber)
+      currentReceipt = await web3.zond.getTransactionReceipt(txNumber)
+      currentBlock = await web3.zond.getBlock(currentReceipt.blockHash)
+      currentTransaction = await web3.zond.getTransaction(txNumber)
     } catch (e) {
       setState((prevState) => {
         return {

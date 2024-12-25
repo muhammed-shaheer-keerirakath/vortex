@@ -66,7 +66,7 @@ const gethDeploy = function (contractName, jsonInterface, bytecode) {
   })
 
   contractName = contractName.replace(/[:./]/g, '_')
-  code += 'var ' + contractName + 'Contract = new web3.eth.Contract(' + JSON.stringify(jsonInterface).replace('\n', '') + ');' +
+  code += 'var ' + contractName + 'Contract = new web3.zond.Contract(' + JSON.stringify(jsonInterface).replace('\n', '') + ');' +
     '\nvar ' + contractName + ' = ' + contractName + 'Contract.deploy({' +
   "\n     data: '0x" + bytecode + "', " +
     '\n     arguments: ['
@@ -77,7 +77,7 @@ const gethDeploy = function (contractName, jsonInterface, bytecode) {
 
   code += '\n     ]' +
     '\n}).send({' +
-    '\n     from: web3.eth.accounts[0], ' +
+    '\n     from: web3.zond.accounts[0], ' +
     "\n     gas: '4700000'" +
     '\n   }, function (e, contract){' +
     '\n    console.log(e, contract);' +

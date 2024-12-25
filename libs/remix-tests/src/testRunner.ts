@@ -219,7 +219,7 @@ export function runTest (testName: string, testObject: any, contractDetails: Com
   if (!isJSONInterfaceAvailable) { return resultsCallback(new Error('Contract interface not available'), { passingNum, failureNum, timePassed }) }
   const runList: RunListInterface[] = createRunList(testObject.options.jsonInterface, fileAST, testName)
   const web3 = opts.web3 || new Web3()
-  web3.eth.handleRevert = true // enables returning error reason on revert
+  web3.zond.handleRevert = true // enables returning error reason on revert
   const accts: TestResultInterface = {
     type: 'accountList',
     value: opts.accounts
@@ -312,7 +312,7 @@ export function runTest (testName: string, testObject: any, contractDetails: Com
             for (const event of events) {
               const eIndex = assertionEventHashes.indexOf(event.topics[0]) // event name topic will always be at index 0
               if (eIndex >= 0) {
-                const testEvent = web3.eth.abi.decodeParameters(assertionEvents[eIndex].params, event.data)
+                const testEvent = web3.zond.abi.decodeParameters(assertionEvents[eIndex].params, event.data)
                 if (!testEvent[0]) {
                   const assertMethod = testEvent[2]
                   if (assertMethod === 'ok') { // for 'Assert.ok' method

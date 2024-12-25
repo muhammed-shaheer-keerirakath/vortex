@@ -56,7 +56,7 @@ cmdLine.initDebugger()
 //   let code = compilation.data.contracts[shortFilename].SimpleStorage.evm.bytecode.object
 //   console.dir('deploying...')
 //   console.dir(code)
-//   _web3.eth.sendTransaction({data: '0x' + code, from: _web3.eth.accounts[0], gas: 800000}, cb)
+//   _web3.zond.sendTransaction({data: '0x' + code, from: _web3.zond.accounts[0], gas: 800000}, cb)
 // }
 
 // let _web3 = cmdLine.debugger.debugger.web3

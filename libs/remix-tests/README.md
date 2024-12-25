@@ -55,7 +55,7 @@ Example to understand the use of special methods can be found [here in tests](te
 It is quite common that a contract needs to be tested in different situation.
 Especially being able to set before hand the sender account (`msg.sender`) used for a specific tests suite enable quite a lot a new test use cases.
 please checkout this [test contract](tests/various_sender/sender_and_value_test.sol) for an example.
-Note that `TestsAccounts` is filled with all the accounts available in `web3.eth.accounts()`.
+Note that `TestsAccounts` is filled with all the accounts available in `web3.zond.accounts()`.
 
 ### How to use
 

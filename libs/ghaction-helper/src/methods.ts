@@ -18,7 +18,7 @@ global.web3Provider = new ethers.providers.Web3Provider(global.remixProvider)
 global.provider = global.web3Provider
 global.ethereum = global.web3Provider
 global.web3 = new Web3(global.web3Provider)
-global.web3.eth.setConfig(config)
+global.web3.zond.setConfig(config)
 
 const isFactoryOptions = (signerOrOptions: any) => {
   if (!signerOrOptions || signerOrOptions === undefined || signerOrOptions instanceof ethers.Signer) return false
