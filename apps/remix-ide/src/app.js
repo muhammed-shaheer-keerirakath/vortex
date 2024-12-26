@@ -32,7 +32,7 @@ import { StoragePlugin } from './app/plugins/storage'
 import { Layout } from './app/panels/layout'
 import { NotificationPlugin } from './app/plugins/notification'
 import { Blockchain } from './blockchain/blockchain'
-import { CancunVMProvider, ZondVMProvider } from './app/providers/vm-provider'
+import { ZondVMProvider } from './app/providers/vm-provider'
 // import { MergeVMProvider, LondonVMProvider, BerlinVMProvider, ShanghaiVMProvider, CancunVMProvider } from './app/providers/vm-provider'
 // import { MainnetForkVMProvider } from './app/providers/mainnet-vm-fork-provider'
 // import { SepoliaForkVMProvider } from './app/providers/sepolia-vm-fork-provider'
@@ -303,7 +303,7 @@ class AppComponent {
     // const vmProviderSepoliaFork = new SepoliaForkVMProvider(blockchain)
     // const vmProviderGoerliFork = new GoerliForkVMProvider(blockchain)
     // const vmProviderShanghai = new ShanghaiVMProvider(blockchain)
-    const vmProviderCancun = new CancunVMProvider(blockchain)
+    // const vmProviderCancun = new CancunVMProvider(blockchain)
     // const vmProviderMerge = new MergeVMProvider(blockchain)
     // const vmProviderBerlin = new BerlinVMProvider(blockchain)
     // const vmProviderLondon = new LondonVMProvider(blockchain)
@@ -378,7 +378,7 @@ class AppComponent {
       storagePlugin,
       vmProviderZond,
       // vmProviderShanghai,
-      vmProviderCancun,
+      // vmProviderCancun,
       // vmProviderMerge,
       // vmProviderBerlin,
       // vmProviderLondon,

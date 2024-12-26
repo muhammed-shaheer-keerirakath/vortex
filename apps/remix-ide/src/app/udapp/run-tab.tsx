@@ -249,7 +249,7 @@ export class RunTab extends ViewPlugin {
     // VM
     const titleVM = 'Execution environment is local to Remix.  Data is only saved to browser memory and will vanish upon reload.'
     await addProvider(1, 'vm-zond', 'Zond VM', false, true)
-    await addProvider(2, 'vm-cancun', 'Remix VM (Temp)', false, true, 'cancun', 'settingsVMCancunMode', titleVM)
+    // await addProvider(2, 'vm-cancun', 'Remix VM (Temp)', false, true, 'cancun', 'settingsVMCancunMode', titleVM)
     // await addProvider(50, 'vm-shanghai', 'Remix VM (Shanghai)', false, true, 'shanghai', 'settingsVMShanghaiMode', titleVM)
     // await addProvider(51, 'vm-paris', 'Remix VM (Paris)', false, true, 'paris', 'settingsVMParisMode', titleVM)
     // await addProvider(52, 'vm-london', 'Remix VM (London)', false, true, 'london', 'settingsVMLondonMode', titleVM)
