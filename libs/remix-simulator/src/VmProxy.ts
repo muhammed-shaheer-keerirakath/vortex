@@ -25,7 +25,7 @@ export class VmProxy {
   processingIndex
   previousDepth
   incr
-  eth
+  zond
   debug
   providers
   currentProvider
@@ -49,7 +49,7 @@ export class VmProxy {
   callIncrement: bigint
   txRunning: boolean
 
-  constructor (vmContext: VMContext) {
+  constructor(vmContext: VMContext) {
     this.vmContext = vmContext
     this.stateCopy
     this.vm = null
@@ -62,14 +62,14 @@ export class VmProxy {
     this.processingIndex = null
     this.previousDepth = 0
     this.incr = 0
-    this.eth = {}
+    this.zond = {}
     this.debug = {}
-    this.eth.getCode = (address, cb) => this.getCode(address, cb)
-    this.eth.getTransaction = (txHash, cb) => this.getTransaction(txHash, cb)
-    this.eth.getTransactionReceipt = (txHash, cb) => this.getTransactionReceipt(txHash, cb)
-    this.eth.getTransactionFromBlock = (blockNumber, txIndex, cb) => this.getTransactionFromBlock(blockNumber, txIndex, cb)
-    this.eth.getBlockNumber = (cb) => this.getBlockNumber(cb)
-    this.eth.getStorageAt = (address: string, position: string, blockNumber: string, cb) => this.getStorageAt(address, position, blockNumber, cb)
+    this.zond.getCode = (address, cb) => this.getCode(address, cb)
+    this.zond.getTransaction = (txHash, cb) => this.getTransaction(txHash, cb)
+    this.zond.getTransactionReceipt = (txHash, cb) => this.getTransactionReceipt(txHash, cb)
+    this.zond.getTransactionFromBlock = (blockNumber, txIndex, cb) => this.getTransactionFromBlock(blockNumber, txIndex, cb)
+    this.zond.getBlockNumber = (cb) => this.getBlockNumber(cb)
+    this.zond.getStorageAt = (address: string, position: string, blockNumber: string, cb) => this.getStorageAt(address, position, blockNumber, cb)
     this.debug.traceTransaction = (txHash, options, cb) => this.traceTransaction(txHash, options, cb)
     this.debug.storageRangeAt = (blockNumber, txIndex, address, start, maxLength, cb) => this.storageRangeAt(blockNumber, txIndex, address, start, maxLength, cb)
     this.debug.preimage = (hashedKey, cb) => this.preimage(hashedKey, cb)
@@ -96,7 +96,7 @@ export class VmProxy {
     this.txRunning = false
   }
 
-  setVM (vm) {
+  setVM(vm) {
     if (this.vm === vm) return
     this.vm = vm
     this.vm.evm.events.on('step', async (data: InterpreterStep, resolve: (result?: any) => void) => {
@@ -115,17 +115,17 @@ export class VmProxy {
     })
   }
 
-  releaseCurrentHash () {
+  releaseCurrentHash() {
     const ret = this.processingHash
     this.processingHash = undefined
     return ret
   }
 
-  recordVMSteps (record) {
+  recordVMSteps(record) {
     this.flagrecordVMSteps = record
   }
 
-  async txWillProcess (data: TypedTransaction) {
+  async txWillProcess(data: TypedTransaction) {
     if (!this.flagrecordVMSteps) return
     this.lastMemoryUpdate = []
     this.stateCopy = await this.vm.stateManager.shallowCopy()
@@ -134,7 +134,7 @@ export class VmProxy {
     this.vmTraces[this.processingHash] = {
       gas: '0x0',
       return: '0x0',
-      structLogs: []
+      structLogs: [],
     }
     const tx = {}
     tx['hash'] = this.processingHash
@@ -153,7 +153,7 @@ export class VmProxy {
     this.storageCache[this.processingHash] = {}
     this.storageCache['after_' + this.processingHash] = {}
     if (data.to) {
-      (async (processingHash, processingAccount, processingAddress, self) => {
+      ;(async (processingHash, processingAccount, processingAddress, self) => {
         try {
           const storage = await self.stateCopy.dumpStorage(processingAccount)
           self.storageCache[processingHash][processingAddress] = storage
@@ -165,7 +165,7 @@ export class VmProxy {
     this.processingIndex = 0
   }
 
-  async txProcessed (data: AfterTxEvent) {
+  async txProcessed(data: AfterTxEvent) {
     if (!this.flagrecordVMSteps) return
     const lastOp = this.vmTraces[this.processingHash].structLogs[this.processingIndex - 1]
     if (lastOp) {
@@ -190,7 +190,7 @@ export class VmProxy {
         address: toChecksumAddress(bytesToHex(log[0])),
         data: bytesToHex(log[2]),
         topics: topics,
-        rawVMResponse: log
+        rawVMResponse: log,
       })
     }
     this.txsReceipt[this.processingHash].logs = logs
@@ -232,7 +232,7 @@ export class VmProxy {
     this.stateCopy = null
   }
 
-  async pushTrace (data: InterpreterStep) {
+  async pushTrace(data: InterpreterStep) {
     if (!this.flagrecordVMSteps) return
 
     try {
@@ -256,7 +256,7 @@ export class VmProxy {
         pc: data.pc,
         gasCost: data.opcode.fee.toString(),
         gas: data.gasLeft.toString(),
-        depth: depth
+        depth: depth,
       }
       step.stack.length = Object.keys(data.stack).length
 
@@ -303,7 +303,7 @@ export class VmProxy {
           this.processingAddress = normalizeHexAddress(toHexPaddedString(step.stack[step.stack.length - 2]))
           this.processingAddress = toChecksumAddress(this.processingAddress)
           if (!this.storageCache[this.processingHash][this.processingAddress]) {
-            (async (processingHash, processingAddress, self) => {
+            ;(async (processingHash, processingAddress, self) => {
               try {
                 const account = Address.fromString(processingAddress)
                 const storage = await self.stateCopy.dumpStorage(account)
@@ -319,7 +319,7 @@ export class VmProxy {
         const preimage = this.getSha3Input(previousOpcode.stack, formatMemory(this.lastMemoryUpdate))
         const imageHash = toHexPaddedString(step.stack[step.stack.length - 1]).replace('0x', '')
         this.sha3Preimages[imageHash] = {
-          preimage: preimage
+          preimage: preimage,
         }
       }
       this.processingIndex++
@@ -329,18 +329,21 @@ export class VmProxy {
     }
   }
 
-  getCode (address, cb) {
+  getCode(address, cb) {
     address = toChecksumAddress(address)
-    this.vm.stateManager.getContractCode(Address.fromString(address)).then((result) => {
-      cb(null, bytesToHex(result))
-    }).catch((error) => {
-      cb(error)
-    })
+    this.vm.stateManager
+      .getContractCode(Address.fromString(address))
+      .then((result) => {
+        cb(null, bytesToHex(result))
+      })
+      .catch((error) => {
+        cb(error)
+      })
   }
 
-  setProvider (provider) {}
+  setProvider(provider) {}
 
-  traceTransaction (txHash, options, cb) {
+  traceTransaction(txHash, options, cb) {
     if (this.vmTraces[txHash]) {
       if (cb) {
         cb(null, this.vmTraces[txHash])
@@ -352,7 +355,7 @@ export class VmProxy {
     }
   }
 
-  getStorageAt (address: string, position: string, blockNumber: string, cb) {
+  getStorageAt(address: string, position: string, blockNumber: string, cb) {
     // we don't use the range params here
     address = toChecksumAddress(address)
 
@@ -371,7 +374,7 @@ export class VmProxy {
     cb(null, '0x0')
   }
 
-  storageRangeAt (blockNumber, txIndex, address, start, maxLength, cb) {
+  storageRangeAt(blockNumber, txIndex, address, start, maxLength, cb) {
     // we don't use the range params here
     address = toChecksumAddress(address)
 
@@ -382,7 +385,7 @@ export class VmProxy {
       const storage = this.storageCache[txHash][address]
       return cb(null, {
         storage: JSON.parse(JSON.stringify(storage)),
-        nextKey: null
+        nextKey: null,
       })
     }
     // Before https://github.com/ethereum/remix-project/pull/1703, it used to throw error as
@@ -390,9 +393,11 @@ export class VmProxy {
     cb(null, { storage: {} })
   }
 
-  getBlockNumber (cb) { cb(null, 'vm provider') }
+  getBlockNumber(cb) {
+    cb(null, 'vm provider')
+  }
 
-  getTransaction (txHash, cb) {
+  getTransaction(txHash, cb) {
     if (this.txs[txHash]) {
       if (cb) {
         cb(null, this.txs[txHash])
@@ -404,7 +409,7 @@ export class VmProxy {
     }
   }
 
-  getTransactionReceipt (txHash, cb) {
+  getTransactionReceipt(txHash, cb) {
     // same as getTransaction but return the created address also
     if (this.txsReceipt[txHash]) {
       if (cb) {
@@ -417,7 +422,7 @@ export class VmProxy {
     }
   }
 
-  getTransactionFromBlock (blockNumber, txIndex, cb) {
+  getTransactionFromBlock(blockNumber, txIndex, cb) {
     const mes = 'not supposed to be needed by remix in vmmode'
     console.log(mes)
     if (cb) {
@@ -425,12 +430,12 @@ export class VmProxy {
     }
   }
 
-  preimage (hashedKey, cb) {
+  preimage(hashedKey, cb) {
     hashedKey = hashedKey.replace('0x', '')
     cb(null, this.sha3Preimages[hashedKey] !== undefined ? this.sha3Preimages[hashedKey].preimage : null)
   }
 
-  getSha3Input (stack, memory) {
+  getSha3Input(stack, memory) {
     const memoryStart = toHexPaddedString(stack[stack.length - 1])
     const memoryLength = toHexPaddedString(stack[stack.length - 2])
     const memStartDec = toBigInt(memoryStart).toString(10)
@@ -456,7 +461,7 @@ export class VmProxy {
     return sha3Input
   }
 
-  emptyFill (size) {
-    return (new Array(size)).join('0')
+  emptyFill(size) {
+    return new Array(size).join('0')
   }
 }

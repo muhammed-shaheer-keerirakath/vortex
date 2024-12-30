@@ -176,6 +176,6 @@ export class Blocks {
   }
 
   zond_getStorageAt(payload, cb) {
-    return this.vmContext.web3().eth.getStorageAt(payload.params[0], payload.params[1], payload.params[2], cb)
+    return this.vmContext.web3().zond.getStorageAt(payload.params[0], payload.params[1], payload.params[2], cb)
   }
 }
