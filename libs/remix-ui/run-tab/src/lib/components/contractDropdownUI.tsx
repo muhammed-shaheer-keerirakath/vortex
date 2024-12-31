@@ -176,13 +176,13 @@ export function ContractDropdownUI(props: ContractDropdownProps) {
       setContractOptions({
         disabled: true,
         title:
-        ['sol', 'vyper', 'lexon', 'contract'].includes(loadType) ? (
-          <FormattedMessage id="udapp.contractOptionsTitle3" />
-        ) : (
-          <span className="text-start">
-            <FormattedMessage id="udapp.contractOptionsTitle4" values={{ br: <br /> }} />
-          </span>
-        ),
+          ['sol', 'vyper', 'lexon', 'contract'].includes(loadType) ? (
+            <FormattedMessage id="udapp.contractOptionsTitle3" />
+          ) : (
+            <span className="text-start">
+              <FormattedMessage id="udapp.contractOptionsTitle4" values={{ br: <br /> }} />
+            </span>
+          ),
       })
     }
   }
@@ -193,7 +193,7 @@ export function ContractDropdownUI(props: ContractDropdownProps) {
 
   const createInstance = (selectedContract, args, deployMode?: DeployMode[]) => {
     if (selectedContract.bytecodeObject.length === 0) {
-      return props.modal(intl.formatMessage({ id: 'udapp.alert' }), intl.formatMessage({ id: 'udapp.thisContractMayBeAbstract' }), intl.formatMessage({ id: 'udapp.ok' }), () => {})
+      return props.modal(intl.formatMessage({ id: 'udapp.alert' }), intl.formatMessage({ id: 'udapp.thisContractMayBeAbstract' }), intl.formatMessage({ id: 'udapp.ok' }), () => { })
     }
     if (selectedContract.name !== currentContract && selectedContract.name === 'ERC1967Proxy') selectedContract.name = currentContract
     const isProxyDeployment = (deployMode || []).find((mode) => mode === 'Deploy with Proxy')
@@ -217,7 +217,7 @@ export function ContractDropdownUI(props: ContractDropdownProps) {
           )
         },
         intl.formatMessage({ id: 'udapp.cancel' }),
-        () => {}
+        () => { }
       )
     } else if (isContractUpgrade) {
       props.modal(
@@ -237,7 +237,7 @@ export function ContractDropdownUI(props: ContractDropdownProps) {
           )
         },
         intl.formatMessage({ id: 'udapp.cancel' }),
-        () => {}
+        () => { }
       )
     } else {
       props.createInstance(loadedContractData, props.gasEstimationPrompt, props.passphrasePrompt, props.publishToStorage, props.mainnetPrompt, isOverSizePrompt, args, deployMode)
@@ -373,7 +373,7 @@ export function ContractDropdownUI(props: ContractDropdownProps) {
     if (loadedContractData && loadedContractData.metadata) {
       evmVersion = JSON.parse(loadedContractData.metadata).settings.evmVersion
     }
-  } catch (err) {}
+  } catch (err) { }
   return (
     <div className="udapp_container mb-2" data-id="contractDropdownContainer">
       <div className="d-flex justify-content-between">
@@ -440,7 +440,7 @@ export function ContractDropdownUI(props: ContractDropdownProps) {
           {abiLabel.content}
         </span>
       </div>
-      {evmVersion && loadedContractData && (
+      {/* {evmVersion && loadedContractData && (
         <CustomTooltip
           placement={'auto-end'}
           tooltipClasses="text-wrap text-left"
@@ -455,7 +455,7 @@ export function ContractDropdownUI(props: ContractDropdownProps) {
             <FormattedMessage id="udapp.evmVersion" />: {evmVersion}
           </span>
         </CustomTooltip>
-      )}
+      )} */}
       <div>
         <div className="udapp_deployDropdown">
           {((contractList[currentFile] && contractList[currentFile].filter((contract) => contract)) || []).length > 0 && loadedContractData && (
