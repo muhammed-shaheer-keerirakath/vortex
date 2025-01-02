@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 export const appInitialState: any = {
   instance: {
     name: '',
@@ -7,7 +8,7 @@ export const appInitialState: any = {
     decodedResponse: {},
     abi: [],
     solcVersion: {},
-    containers: []
+    containers: [],
   },
   settings: {
     sendValue: '0',
@@ -20,32 +21,33 @@ export const appInitialState: any = {
     error: null,
     selectedAccount: '',
     selectedLocaleCode: 'en',
-    provider: window.ethereum ? 'metamask' : 'walletconnect',
+    //@ts-ignore
+    provider: window.zond ? 'metamask' : 'walletconnect',
   },
   terminal: { journalBlocks: [], hidden: false, height: 250 },
-};
+}
 
 export const appReducer = (state = appInitialState, action: any): any => {
   switch (action.type) {
-  case 'SET_INSTANCE':
-    return {
-      ...state,
-      instance: { ...state.instance, ...action.payload },
-    };
+    case 'SET_INSTANCE':
+      return {
+        ...state,
+        instance: { ...state.instance, ...action.payload },
+      }
 
-  case 'SET_SETTINGS':
-    return {
-      ...state,
-      settings: { ...state.settings, ...action.payload },
-    };
+    case 'SET_SETTINGS':
+      return {
+        ...state,
+        settings: { ...state.settings, ...action.payload },
+      }
 
-  case 'SET_TERMINAL':
-    return {
-      ...state,
-      terminal: { ...state.terminal, ...action.payload },
-    };
+    case 'SET_TERMINAL':
+      return {
+        ...state,
+        terminal: { ...state.terminal, ...action.payload },
+      }
 
-  default:
-    throw new Error();
+    default:
+      throw new Error()
   }
-};
+}

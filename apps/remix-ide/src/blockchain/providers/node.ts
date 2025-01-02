@@ -17,13 +17,13 @@ export class NodeProvider {
     if (this.config.get('settings/personal-mode')) {
       return this.executionContext
         .web3()
-        .eth.personal.getAccounts()
+        .zond.personal.getAccounts()
         .then((res) => cb(null, res))
         .catch((err) => cb(err))
     }
     return this.executionContext
       .web3()
-      .eth.getAccounts()
+      .zond.getAccounts()
       .then((res) => cb(null, res))
       .catch((err) => cb(err))
   }
@@ -35,7 +35,7 @@ export class NodeProvider {
     passwordPromptCb((passphrase) => {
       this.executionContext
         .web3()
-        .eth.personal.newAccount(passphrase)
+        .zond.personal.newAccount(passphrase)
         .then((res) => cb(null, res))
         .catch((err) => cb(err))
     })
@@ -46,7 +46,7 @@ export class NodeProvider {
   }
 
   async getBalanceInZnd(address) {
-    const balance = await this.executionContext.web3().eth.getBalance(address)
+    const balance = await this.executionContext.web3().zond.getBalance(address)
     const balInString = balance.toString(10)
     return balInString === '0' ? balInString : Web3.utils.fromWei(balInString, 'ether')
   }
@@ -54,7 +54,7 @@ export class NodeProvider {
   getGasPrice(cb) {
     this.executionContext
       .web3()
-      .eth.getGasPrice()
+      .zond.getGasPrice()
       .then((res) => cb(null, res))
       .catch((err) => cb(err))
   }

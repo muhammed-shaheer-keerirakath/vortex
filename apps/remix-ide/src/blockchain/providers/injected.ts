@@ -12,7 +12,7 @@ export class InjectedProvider {
   getAccounts(cb) {
     return this.executionContext
       .web3()
-      .eth.getAccounts()
+      .zond.getAccounts()
       .then((accounts) => cb(null, accounts))
       .catch((err) => {
         cb(err.message)
@@ -23,7 +23,7 @@ export class InjectedProvider {
     passwordPromptCb((passphrase) => {
       this.executionContext
         .web3()
-        .eth.personal.newAccount(passphrase)
+        .zond.personal.newAccount(passphrase)
         .then((result) => cb(null, result))
         .catch((error) => cb(error))
     })
@@ -34,7 +34,7 @@ export class InjectedProvider {
   }
 
   async getBalanceInZnd(address) {
-    const balance = await this.executionContext.web3().eth.getBalance(address)
+    const balance = await this.executionContext.web3().zond.getBalance(address)
     const balInString = balance.toString(10)
     return balInString === '0' ? balInString : Web3.utils.fromWei(balInString, 'ether')
   }
@@ -42,7 +42,7 @@ export class InjectedProvider {
   getGasPrice(cb) {
     this.executionContext
       .web3()
-      .eth.getGasPrice()
+      .zond.getGasPrice()
       .then((result) => cb(null, result))
   }
 
@@ -52,7 +52,7 @@ export class InjectedProvider {
     try {
       this.executionContext
         .web3()
-        .eth.sign(messageHash, account)
+        .zond.sign(messageHash, account)
         .then((signedData) => {
           cb(null, bytesToHex(messageHash), signedData)
         })

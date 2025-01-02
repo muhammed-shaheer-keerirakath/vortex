@@ -51,7 +51,8 @@ export const setProvider = async (payload: any) => {
   const { provider, networkName } = payload
   const chainId = '0x' + Number(networkName.match(/\(([^)]+)\)/)[1]).toString(16)
   if (provider === 'metamask') {
-    const web3Provider: any = window.ethereum
+    //@ts-ignore
+    const web3Provider: any = window.zond
     await metamask.addCustomNetwork(chainId)
     await web3Provider.request({ method: 'zond_requestAccounts' })
     txRunner.setProvider(web3Provider)
@@ -73,7 +74,8 @@ export const initInstance = async () => {
   })
   await setProvider({
     networkName: resp.data.network,
-    provider: window.ethereum ? 'metamask' : 'walletconnect',
+    //@ts-ignore
+    provider: window.zond ? 'metamask' : 'walletconnect',
   })
   updateInstanceBalance(resp.data.address)
   setInterval(() => {

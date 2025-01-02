@@ -767,11 +767,11 @@ export class Blockchain extends Plugin {
   }
 
   async getCode(address) {
-    return await this.web3().eth.getCode(address)
+    return await this.web3().zond.getCode(address)
   }
 
   async getTransactionReceipt(hash) {
-    return await this.web3().eth.getTransactionReceipt(hash)
+    return await this.web3().zond.getTransactionReceipt(hash)
   }
 
   /**

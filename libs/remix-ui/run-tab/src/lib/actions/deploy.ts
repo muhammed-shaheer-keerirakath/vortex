@@ -385,7 +385,7 @@ export const isValidContractAddress = async (plugin: RunTab, address: string) =>
     return false
   } else {
     if (Web3.utils.isAddress(address)) {
-      return (await plugin.blockchain.web3().eth.getCode(address)) !== '0x'
+      return (await plugin.blockchain.web3().zond.getCode(address)) !== '0x'
     } else {
       return false
     }
