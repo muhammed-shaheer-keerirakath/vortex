@@ -79,7 +79,7 @@ body {
   height: 6px;
 }
 *::-webkit-scrollbar-thumb {
-  background-color: #41455b;
+  background-color: #131f28;
   opacity: 0.3;
   border-radius: 30px;
 }
