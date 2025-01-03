@@ -74,8 +74,7 @@ export const RemixUiHomeTab = (props: RemixUiHomeTabProps) => {
       <ThemeContext.Provider value={state.themeQuality}>
         <div className="d-flex flex-row w-100 custom_home_bg">
           <div className="px-3 pl-3 justify-content-start border-right d-flex flex-column" id="remixUIHTLeft" style={{ width: 'inherit' }}>
-            <LanguageOptions plugin={plugin} />
-            <HomeTabTitle />
+            <HomeTabTitle plugin={plugin} />
             <HomeTabGetStarted plugin={plugin}></HomeTabGetStarted>
             {!(platform === appPlatformTypes.desktop) ? <HomeTabFile plugin={plugin} /> : <HomeTabFileElectron plugin={plugin}></HomeTabFileElectron>}
           </div>
