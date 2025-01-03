@@ -7,17 +7,15 @@ export default async () => {
     // @ts-ignore
     'contracts/3_MyToken.sol': (await import('raw-loader!./contracts/3_MyToken.sol')).default,
     // @ts-ignore
-    'contracts/4_ZndTransfer.sol': (await import('raw-loader!./contracts/4_ZndTransfer.sol')).default,
+    'contracts/4_ZndAmount.sol': (await import('raw-loader!./contracts/4_ZndAmount.sol')).default,
+    // @ts-ignore
+    'tests/MyToken_test.sol': (await import('raw-loader!./tests/MyToken_test.sol')).default,
+    // @ts-ignore
+    'tests/ZndAmount.test.js': (await import('!!raw-loader!./tests/ZndAmount.test.js')).default,
     // @ts-ignore
     'scripts/deploy_with_web3.ts': (await import('!!raw-loader!./scripts/deploy_with_web3.ts')).default,
     // @ts-ignore
     'scripts/web3_lib.ts': (await import('!!raw-loader!./scripts/web3_lib.ts')).default,
-    // @ts-ignore
-    'tests/MyToken_test.sol': (await import('raw-loader!./tests/MyToken_test.sol')).default,
-    // @ts-ignore
-    'tests/storage.test.js': (await import('!!raw-loader!./tests/storage.test.js')).default,
-    // @ts-ignore
-    'tests/ZndTransfer.test.js': (await import('!!raw-loader!./tests/ZndTransfer.test.js')).default,
     // @ts-ignore
     'README.txt': (await import('raw-loader!./README.txt')).default,
     // @ts-ignore
