@@ -3,7 +3,7 @@ import { Web3 } from '@theqrl/web3'
 import { execution } from '@remix-project/remix-lib'
 import EventManager from '../lib/events'
 import { bytesToHex } from '@ethereumjs/util'
-const _paq = window._paq = window._paq || []
+const _paq = (window._paq = window._paq || [])
 
 let web3
 
@@ -12,7 +12,7 @@ if (typeof window !== 'undefined' && typeof window.zond !== 'undefined') {
   var injectedProvider = window.zond
   web3 = new Web3(injectedProvider)
 } else {
-  web3 = new Web3(new Web3.providers.HttpProvider('http://209.250.255.226:8545'))
+  web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
 }
 web3.zond.setConfig(config)
 
@@ -93,20 +93,26 @@ export class ExecutionContext {
           else name = 'Custom'
 
           if (id === 1) {
-            web3.zond.getBlock(0).then((block) => {
-              if (block && block.hash !== this.mainNetGenesisHash) name = 'Custom'
-              callback && callback(err, { id, name, lastBlock: this.lastBlock, currentFork: this.currentFork })
-              return resolve({ id, name, lastBlock: this.lastBlock, currentFork: this.currentFork })
-            }).catch((error) => {
-              callback && callback(error)
-              return reject(error)
-            })
+            web3.zond
+              .getBlock(0)
+              .then((block) => {
+                if (block && block.hash !== this.mainNetGenesisHash) name = 'Custom'
+                callback && callback(err, { id, name, lastBlock: this.lastBlock, currentFork: this.currentFork })
+                return resolve({ id, name, lastBlock: this.lastBlock, currentFork: this.currentFork })
+              })
+              .catch((error) => {
+                callback && callback(error)
+                return reject(error)
+              })
           } else {
             callback && callback(err, { id, name, lastBlock: this.lastBlock, currentFork: this.currentFork })
             return resolve({ id, name, lastBlock: this.lastBlock, currentFork: this.currentFork })
           }
         }
-        web3.zond.net.getId().then(id => cb(null, parseInt(id))).catch(err => cb(err))
+        web3.zond.net
+          .getId()
+          .then((id) => cb(null, parseInt(id)))
+          .catch((err) => cb(err))
       }
     })
   }
@@ -141,9 +147,18 @@ export class ExecutionContext {
   async executionContextChange(value, endPointUrl, confirmCb, infoCb, cb) {
     _paq.push(['trackEvent', 'udapp', 'providerChanged', value.context])
     const context = value.context
-    if (!cb) cb = () => { /* Do nothing. */ }
-    if (!confirmCb) confirmCb = () => { /* Do nothing. */ }
-    if (!infoCb) infoCb = () => { /* Do nothing. */ }
+    if (!cb)
+      cb = () => {
+        /* Do nothing. */
+      }
+    if (!confirmCb)
+      confirmCb = () => {
+        /* Do nothing. */
+      }
+    if (!infoCb)
+      infoCb = () => {
+        /* Do nothing. */
+      }
     if (this.customNetWorks[context]) {
       var network = this.customNetWorks[context]
       await network.init()
@@ -171,7 +186,7 @@ export class ExecutionContext {
       try {
         const block = await web3.zond.getBlock('latest')
         // we can't use the blockGasLimit cause the next blocks could have a lower limit : https://github.com/ethereum/remix/issues/506
-        this.blockGasLimit = (block && block.gasLimit) ? Math.floor(web3.utils.toNumber(block.gasLimit) - (5 * web3.utils.toNumber(block.gasLimit) / 1024)) : web3.utils.toNumber(this.blockGasLimitDefault)
+        this.blockGasLimit = block && block.gasLimit ? Math.floor(web3.utils.toNumber(block.gasLimit) - (5 * web3.utils.toNumber(block.gasLimit)) / 1024) : web3.utils.toNumber(this.blockGasLimitDefault)
         this.lastBlock = block
         try {
           this.currentFork = execution.forkAt(await web3.zond.net.getId(), block.number)
@@ -200,7 +215,7 @@ export class ExecutionContext {
       Ropsten: 'https://ropsten.etherscan.io/tx/',
       Sepolia: 'https://sepolia.etherscan.io/tx/',
       Kovan: 'https://kovan.etherscan.io/tx/',
-      Goerli: 'https://goerli.etherscan.io/tx/'
+      Goerli: 'https://goerli.etherscan.io/tx/',
     }
 
     if (transactionDetailsLinks[network]) {
@@ -214,24 +229,28 @@ export class ExecutionContext {
     const state = {
       db: Object.fromEntries(stateDb.db._database),
       blocks: blocksData.blocks,
-      latestBlockNumber: blocksData.latestBlockNumber
+      latestBlockNumber: blocksData.latestBlockNumber,
     }
-    const stringifyed = JSON.stringify(state, (key, value) => {
-      if (key === 'db') {
-        return value
-      } else if (key === 'blocks') {
-        return value.map(block => bytesToHex(block))
-      } else if (key === '') {
-        return value
-      }
-      if (typeof value === 'string') {
-        return value.startsWith('0x') ? value : '0x' + value
-      } else if (typeof value === 'number') {
-        return '0x' + value.toString(16)
-      } else {
-        return bytesToHex(value)
-      }
-    }, '\t')
+    const stringifyed = JSON.stringify(
+      state,
+      (key, value) => {
+        if (key === 'db') {
+          return value
+        } else if (key === 'blocks') {
+          return value.map((block) => bytesToHex(block))
+        } else if (key === '') {
+          return value
+        }
+        if (typeof value === 'string') {
+          return value.startsWith('0x') ? value : '0x' + value
+        } else if (typeof value === 'number') {
+          return '0x' + value.toString(16)
+        } else {
+          return bytesToHex(value)
+        }
+      },
+      '\t'
+    )
 
     return stringifyed
   }
