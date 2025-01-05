@@ -169,12 +169,12 @@ export const EditorUI = (props: EditorUIProps) => {
   \t\t\t\t\t\t\t${intl.formatMessage({ id: 'editor.editorKeyboardShortcuts' })}:\n
   \t\t\t\t\t\t\t\tCTRL + Alt + F : ${intl.formatMessage({ id: 'editor.editorKeyboardShortcuts.text1' })}\n
   \t\t\t\t\t\t\t${intl.formatMessage({ id: 'editor.importantLinks' })}:\n
-  \t\t\t\t\t\t\t\t${intl.formatMessage({ id: 'editor.importantLinks.text1' })}: https://remix-project.org/\n
-  \t\t\t\t\t\t\t\t${intl.formatMessage({ id: 'editor.importantLinks.text2' })}: https://remix-ide.readthedocs.io/en/latest/\n
-  \t\t\t\t\t\t\t\tGithub: https://github.com/ethereum/remix-project\n
-  \t\t\t\t\t\t\t\tDiscord: https://discord.gg/mh9hFCKkEq\n
-  \t\t\t\t\t\t\t\tMedium: https://medium.com/remix-ide\n
-  \t\t\t\t\t\t\t\tX: https://x.com/ethereumremix\n
+  \t\t\t\t\t\t\t\t${intl.formatMessage({ id: 'editor.importantLinks.text1' })}: https://www.theqrl.org/\n
+  \t\t\t\t\t\t\t\t${intl.formatMessage({ id: 'editor.importantLinks.text2' })}: https://docs.theqrl.org/\n
+  \t\t\t\t\t\t\t\tGithub: https://github.com/theQRL/\n
+  \t\t\t\t\t\t\t\tDiscord: https://theqrl.org/discord\n
+  \t\t\t\t\t\t\t\tYouTube: https://www.youtube.com/c/QRLedger\n
+  \t\t\t\t\t\t\t\tX: https://twitter.com/qrledger\n
   `
   const pasteCodeRef = useRef(false)
   const editorRef = useRef(null)
@@ -485,7 +485,7 @@ export const EditorUI = (props: EditorUIProps) => {
 
   const addDecoration = (decoration: sourceAnnotation | sourceMarker, filePath: string, typeOfDecoration: string) => {
     const model = editorModelsState[filePath]?.model
-    if (!model) return { currentDecorations: []}
+    if (!model) return { currentDecorations: [] }
     const monacoDecoration = convertToMonacoDecoration(decoration, typeOfDecoration)
     return {
       currentDecorations: model.deltaDecorations([], [monacoDecoration]),
@@ -592,38 +592,38 @@ export const EditorUI = (props: EditorUIProps) => {
     if (!editorRef.current) return
     return editorRef.current.getOption(51)
   }
-  ;(window as any).addRemixBreakpoint = (position) => {
-    // make it available from e2e testing...
-    const model = editorRef.current.getModel()
-    if (model) {
-      setCurrentBreakpoints((prevState) => {
-        const currentFile = currentUrlRef.current
-        if (!prevState[currentFile]) prevState[currentFile] = {}
-        const decoration = Object.keys(prevState[currentFile]).filter((line) => parseInt(line) === position.lineNumber)
-        if (decoration.length) {
-          props.events.onBreakPointCleared(currentFile, position.lineNumber)
-          model.deltaDecorations([prevState[currentFile][position.lineNumber]], [])
-          delete prevState[currentFile][position.lineNumber]
-        } else {
-          props.events.onBreakPointAdded(currentFile, position.lineNumber)
-          const decorationIds = model.deltaDecorations(
-            [],
-            [
-              {
-                range: new monacoRef.current.Range(position.lineNumber, 1, position.lineNumber, 1),
-                options: {
-                  isWholeLine: false,
-                  glyphMarginClassName: 'fas fa-circle text-info',
+    ; (window as any).addRemixBreakpoint = (position) => {
+      // make it available from e2e testing...
+      const model = editorRef.current.getModel()
+      if (model) {
+        setCurrentBreakpoints((prevState) => {
+          const currentFile = currentUrlRef.current
+          if (!prevState[currentFile]) prevState[currentFile] = {}
+          const decoration = Object.keys(prevState[currentFile]).filter((line) => parseInt(line) === position.lineNumber)
+          if (decoration.length) {
+            props.events.onBreakPointCleared(currentFile, position.lineNumber)
+            model.deltaDecorations([prevState[currentFile][position.lineNumber]], [])
+            delete prevState[currentFile][position.lineNumber]
+          } else {
+            props.events.onBreakPointAdded(currentFile, position.lineNumber)
+            const decorationIds = model.deltaDecorations(
+              [],
+              [
+                {
+                  range: new monacoRef.current.Range(position.lineNumber, 1, position.lineNumber, 1),
+                  options: {
+                    isWholeLine: false,
+                    glyphMarginClassName: 'fas fa-circle text-info',
+                  },
                 },
-              },
-            ]
-          )
-          prevState[currentFile][position.lineNumber] = decorationIds[0]
-        }
-        return prevState
-      })
+              ]
+            )
+            prevState[currentFile][position.lineNumber] = decorationIds[0]
+          }
+          return prevState
+        })
+      }
     }
-  }
 
   function setReducerListener() {
     if (diffEditorRef.current && diffEditorRef.current.getModifiedEditor() && editorRef.current) {
@@ -646,7 +646,7 @@ export const EditorUI = (props: EditorUIProps) => {
       // 2 is GUTTER_GLYPH_MARGIN
       // 3 is GUTTER_LINE_NUMBERS
       if (e && e.target && (e.target.type === 2 || e.target.type === 3)) {
-        ;(window as any).addRemixBreakpoint(e.target.position)
+        ; (window as any).addRemixBreakpoint(e.target.position)
       }
     })
 
@@ -997,7 +997,7 @@ export const EditorUI = (props: EditorUIProps) => {
     monacoRef.current.languages.json.jsonDefaults.setDiagnosticsOptions({ enableSchemaRequest: true })
 
     // hide the module resolution error. We have to remove this when we know how to properly resolve imports.
-    monacoRef.current.languages.typescript.typescriptDefaults.setDiagnosticsOptions({ diagnosticCodesToIgnore: [2792]})
+    monacoRef.current.languages.typescript.typescriptDefaults.setDiagnosticsOptions({ diagnosticCodesToIgnore: [2792] })
 
     // Register a tokens provider for the language
     monacoRef.current.languages.setMonarchTokensProvider('remix-solidity', solidityTokensProvider as any)
