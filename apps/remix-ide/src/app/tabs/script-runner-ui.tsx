@@ -123,8 +123,12 @@ export class ScriptRunnerUIPlugin extends ViewPlugin {
       await this.saveCustomConfig(this.customConfig)
   }
 
-  async loadScriptRunner(config: ProjectConfiguration): Promise<boolean> {
+  async updateIframeElement(iframeId: string) {
+    const iframe = document.getElementById(`plugin-${iframeId}`) as HTMLIFrameElement;
+    iframe.src = window.location.origin + '/assets/js/script-runner-generator/index.html';
+  }
 
+  async loadScriptRunner(config: ProjectConfiguration): Promise<boolean> {
     const profile: Profile = await this.plugin.call('manager', 'getProfile', 'scriptRunner')
     this.scriptRunnerProfileName = profile.name
     const testPluginName = localStorage.getItem('test-plugin-name')
@@ -157,7 +161,7 @@ export class ScriptRunnerUIPlugin extends ViewPlugin {
         await this.engine.register(plugin)
       }
       await this.plugin.call('manager', 'activatePlugin', newProfile.name)
-
+      await this.updateIframeElement(newProfile.name);
       this.activeConfig = config
       this.on(newProfile.name, 'log', this.log.bind(this))
       this.on(newProfile.name, 'info', this.info.bind(this))
