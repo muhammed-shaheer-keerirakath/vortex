@@ -56,8 +56,8 @@ export const RemixUiTerminal = (props: RemixUiTerminalProps) => {
     okLabel: '',
     cancelLabel: '',
     hide: true,
-    cancelFn: () => {},
-    handleHide: () => {},
+    cancelFn: () => { },
+    handleHide: () => { },
   })
 
   const [isVM, setIsVM] = useState(false)
@@ -122,7 +122,7 @@ export const RemixUiTerminal = (props: RemixUiTerminalProps) => {
         }
         scriptRunnerDispatch({
           type: message.type ? message.type : 'log',
-          payload: { message: [message.value]},
+          payload: { message: [message.value] },
         })
       },
     })
@@ -216,7 +216,7 @@ export const RemixUiTerminal = (props: RemixUiTerminalProps) => {
             return execute(undefined, script)
           },
           loadgist: (id: any) => {
-            return loadgist(id, () => {})
+            return loadgist(id, () => { })
           },
           execute: (fileName, callback) => {
             return execute(fileName, callback)
@@ -237,11 +237,11 @@ export const RemixUiTerminal = (props: RemixUiTerminalProps) => {
         // await this.call('git', 'execute', script) code might be used in the future
         // TODO: rm gpt or redirect gpt to sol-pgt
       } else if (script.trim().startsWith('gpt')) {
-        call('terminal', 'log',{ type: 'warn', value: `> ${script}` })
+        call('terminal', 'log', { type: 'warn', value: `> ${script}` })
         await call('remixAI', 'solidity_answer', script) // No streaming supported in terminal
         _paq.push(['trackEvent', 'ai', 'remixAI', 'askFromTerminal'])
       } else if (script.trim().startsWith('sol-gpt')) {
-        call('terminal', 'log',{ type: 'warn', value: `> ${script}` })
+        call('terminal', 'log', { type: 'warn', value: `> ${script}` })
         await call('remixAI', 'solidity_answer', script) // No streaming supported in terminal
         _paq.push(['trackEvent', 'ai', 'remixAI', 'askFromTerminal'])
       } else {
@@ -402,11 +402,11 @@ export const RemixUiTerminal = (props: RemixUiTerminalProps) => {
   }
 
   useEffect(() => {
-    if (terminalState.clearConsole){
+    if (terminalState.clearConsole) {
       typeWriterIndexes.current = []
       inputEl.current.focus()
     }
-  },[terminalState.clearConsole])
+  }, [terminalState.clearConsole])
 
   /* end of block content that gets rendered from script Runner */
 
@@ -434,7 +434,7 @@ export const RemixUiTerminal = (props: RemixUiTerminalProps) => {
       if (textList.length === 1) {
         setAutoCompleteState((prevState) => ({
           ...prevState,
-          data: { _options: []},
+          data: { _options: [] },
         }))
         const result = Objectfilter(allPrograms, autoCompletState.userInput)
         setAutoCompleteState((prevState) => ({
@@ -444,7 +444,7 @@ export const RemixUiTerminal = (props: RemixUiTerminalProps) => {
       } else {
         setAutoCompleteState((prevState) => ({
           ...prevState,
-          data: { _options: []},
+          data: { _options: [] },
         }))
         const result = Objectfilter(allCommands, autoCompletState.userInput)
         setAutoCompleteState((prevState) => ({
@@ -563,7 +563,7 @@ export const RemixUiTerminal = (props: RemixUiTerminalProps) => {
   }
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const storage = await props.plugin.call('storage', 'formatString', await props.plugin.call('storage', 'getStorage'))
       setStorage(storage)
     })()
@@ -597,7 +597,7 @@ export const RemixUiTerminal = (props: RemixUiTerminalProps) => {
   }
 
   return (
-    ( props.visible &&
+    (props.visible &&
       <div style={{ flexGrow: 1 }} className="remix_ui_terminal_panel h-100 mb-2" ref={panelRef}>
         <div tabIndex={-1} className="remix_ui_terminal_container d-flex h-100 m-0 flex-column" data-id="terminalContainer">
           {handleAutoComplete()}
@@ -605,145 +605,145 @@ export const RemixUiTerminal = (props: RemixUiTerminalProps) => {
             <div id="journal" className="remix_ui_terminal_journal d-flex flex-column pt-3 pb-4 px-2 mx-2 mr-0" data-id="terminalJournal">
               {!terminalState.clearConsole && <TerminalWelcomeMessage storage={storage} packageJson={version} />}
               {terminalState.journalBlocks &&
-              terminalState.journalBlocks.map((x, index) => {
-                if (x.name === EMPTY_BLOCK) {
-                  return (
-                    <div className={classNameBlock} data-id="block" key={index}>
-                      <span className="remix_ui_terminal_tx">
-                        <div className="remix_ui_terminal_txItem">
-                          [<span className="remix_ui_terminal_txItemTitle">block:{x.message} - </span> 0 {'transactions'} ]
-                        </div>
-                      </span>
-                    </div>
-                  )
-                } else if (x.name === UNKNOWN_TRANSACTION) {
-                  return x.message
-                    .filter((x) => includeSearch(x, terminalState.searchInput))
-                    .map((trans) => {
-                      return (
-                        <div className={classNameBlock} data-id={`block_tx${trans.tx.hash}`} key={index}>
-                          {' '}
-                          {
-                            <RenderUnKnownTransactions
-                              tx={trans.tx}
-                              receipt={trans.receipt}
-                              index={index}
-                              plugin={props.plugin}
-                              showTableHash={showTableHash}
-                              txDetails={txDetails}
-                              modal={modal}
-                              provider={x.provider}
-                            />
-                          }
-                        </div>
-                      )
-                    })
-                } else if (x.name === KNOWN_TRANSACTION) {
-                  return x.message
-                    .filter((x) => includeSearch(x, terminalState.searchInput))
-                    .map((trans) => {
-                      return (
-                        <div className={classNameBlock} data-id={`block_tx${trans.tx.hash}`} key={index}>
-                          {trans.tx.isCall ? (
-                            <RenderCall
-                              tx={trans.tx}
-                              resolvedData={trans.resolvedData}
-                              logs={trans.logs}
-                              index={index}
-                              plugin={props.plugin}
-                              showTableHash={showTableHash}
-                              txDetails={txDetails}
-                              modal={modal}
-                            />
-                          ) : (
-                            <RenderKnownTransactions
-                              tx={trans.tx}
-                              receipt={trans.receipt}
-                              resolvedData={trans.resolvedData}
-                              logs={trans.logs}
-                              index={index}
-                              plugin={props.plugin}
-                              showTableHash={showTableHash}
-                              txDetails={txDetails}
-                              modal={modal}
-                              provider={x.provider}
-                            />
-                          )}
-                        </div>
-                      )
-                    })
-                } else if (Array.isArray(x.message)) {
-                  if (terminalState.searchInput !== '') return []
-                  return x.message.map((msg, i) => {
-                    // strictly check condition on 0, false, except undefined, NaN.
-                    // if you type `undefined`, terminal automatically throws error, it's error message: "undefined" is not valid JSON
-                    // if you type `NaN`, terminal would give `null`
-                    if (msg === false || msg === 0) msg = msg.toString()
-                    else if (!msg) msg = 'null'
-                    if (React.isValidElement(msg)) {
-                      return (
-                        <div className="px-4 block" data-id="block" key={i}>
-                          <span className={x.style}>{msg}</span>
-                        </div>
-                      )
-                    } else if (typeof msg === 'object') {
-                      if (msg.value && isHtml(msg.value)) {
+                terminalState.journalBlocks.map((x, index) => {
+                  if (x.name === EMPTY_BLOCK) {
+                    return (
+                      <div className={classNameBlock} data-id="block" key={index}>
+                        <span className="remix_ui_terminal_tx">
+                          <div className="remix_ui_terminal_txItem">
+                            [<span className="remix_ui_terminal_txItemTitle">block:{x.message} - </span> 0 {'transactions'} ]
+                          </div>
+                        </span>
+                      </div>
+                    )
+                  } else if (x.name === UNKNOWN_TRANSACTION) {
+                    return x.message
+                      .filter((x) => includeSearch(x, terminalState.searchInput))
+                      .map((trans) => {
                         return (
-                          <div className={classNameBlock} data-id="block" key={i}>
-                            <span className={x.style}>{parse(msg.value)} </span>
+                          <div className={classNameBlock} data-id={`block_tx${trans.tx.hash}`} key={index}>
+                            {' '}
+                            {
+                              <RenderUnKnownTransactions
+                                tx={trans.tx}
+                                receipt={trans.receipt}
+                                index={index}
+                                plugin={props.plugin}
+                                showTableHash={showTableHash}
+                                txDetails={txDetails}
+                                modal={modal}
+                                provider={x.provider}
+                              />
+                            }
                           </div>
                         )
-                      }
-                      let stringified
-                      try {
-                        stringified = JSON.stringify(msg)
-                      } catch (e) {
-                        console.error(e)
-                        stringified = '< value not displayable >'
-                      }
-                      return (
-                        <div className={classNameBlock} data-id="block" key={i}>
-                          <span className={x.style}>{stringified} </span>
-                        </div>
-                      )
-                    } else {
-                      // typeWriterIndexes: we don't want to rerender using typewriter when the react component updates
-                      if (x.typewriter && !typeWriterIndexes.current.includes(index)) {
-                        typeWriterIndexes.current.push(index)
+                      })
+                  } else if (x.name === KNOWN_TRANSACTION) {
+                    return x.message
+                      .filter((x) => includeSearch(x, terminalState.searchInput))
+                      .map((trans) => {
                         return (
-                          <div className={classNameBlock} data-id="block" key={index}>
-                            <span ref={(element) => {
-                              typewrite(element, msg ? msg.toString() : null, () => scrollToBottom()
-                              )
-                            }} className={x.style}>
-                            </span>
+                          <div className={classNameBlock} data-id={`block_tx${trans.tx.hash}`} key={index}>
+                            {trans.tx.isCall ? (
+                              <RenderCall
+                                tx={trans.tx}
+                                resolvedData={trans.resolvedData}
+                                logs={trans.logs}
+                                index={index}
+                                plugin={props.plugin}
+                                showTableHash={showTableHash}
+                                txDetails={txDetails}
+                                modal={modal}
+                              />
+                            ) : (
+                              <RenderKnownTransactions
+                                tx={trans.tx}
+                                receipt={trans.receipt}
+                                resolvedData={trans.resolvedData}
+                                logs={trans.logs}
+                                index={index}
+                                plugin={props.plugin}
+                                showTableHash={showTableHash}
+                                txDetails={txDetails}
+                                modal={modal}
+                                provider={x.provider}
+                              />
+                            )}
+                          </div>
+                        )
+                      })
+                  } else if (Array.isArray(x.message)) {
+                    if (terminalState.searchInput !== '') return []
+                    return x.message.map((msg, i) => {
+                      // strictly check condition on 0, false, except undefined, NaN.
+                      // if you type `undefined`, terminal automatically throws error, it's error message: "undefined" is not valid JSON
+                      // if you type `NaN`, terminal would give `null`
+                      if (msg === false || msg === 0) msg = msg.toString()
+                      else if (!msg) msg = 'null'
+                      if (React.isValidElement(msg)) {
+                        return (
+                          <div className="px-4 block" data-id="block" key={i}>
+                            <span className={x.style}>{msg}</span>
+                          </div>
+                        )
+                      } else if (typeof msg === 'object') {
+                        if (msg.value && isHtml(msg.value)) {
+                          return (
+                            <div className={classNameBlock} data-id="block" key={i}>
+                              <span className={x.style}>{parse(msg.value)} </span>
+                            </div>
+                          )
+                        }
+                        let stringified
+                        try {
+                          stringified = JSON.stringify(msg)
+                        } catch (e) {
+                          console.error(e)
+                          stringified = '< value not displayable >'
+                        }
+                        return (
+                          <div className={classNameBlock} data-id="block" key={i}>
+                            <span className={x.style}>{stringified} </span>
                           </div>
                         )
                       } else {
+                        // typeWriterIndexes: we don't want to rerender using typewriter when the react component updates
+                        if (x.typewriter && !typeWriterIndexes.current.includes(index)) {
+                          typeWriterIndexes.current.push(index)
+                          return (
+                            <div className={classNameBlock} data-id="block" key={index}>
+                              <span ref={(element) => {
+                                typewrite(element, msg ? msg.toString() : null, () => scrollToBottom()
+                                )
+                              }} className={x.style}>
+                              </span>
+                            </div>
+                          )
+                        } else {
+                          return (
+                            <div className={classNameBlock} data-id="block" key={i}><span className={x.style}>{msg ? msg.toString() : null}</span></div>
+                          )
+                        }
+                      }
+                    })
+                  } else {
+                    // typeWriterIndexes: we don't want to rerender using typewriter when the react component updates
+                    if (x.typewriter && !typeWriterIndexes.current.includes(index)) {
+                      typeWriterIndexes.current.push(index)
+                      return (
+                        <div className={classNameBlock} data-id="block" key={index}> <span ref={(element) => {
+                          typewrite(element, x.message, () => scrollToBottom())
+                        }} className={x.style}></span></div>
+                      )
+                    } else {
+                      if (typeof x.message !== 'function') {
                         return (
-                          <div className={classNameBlock} data-id="block" key={i}><span className={x.style}>{msg ? msg.toString() : null}</span></div>
+                          <div className={classNameBlock} data-id="block" key={index}> <span className={x.style}> {x.message}</span></div>
                         )
                       }
                     }
-                  })
-                } else {
-                  // typeWriterIndexes: we don't want to rerender using typewriter when the react component updates
-                  if (x.typewriter && !typeWriterIndexes.current.includes(index)) {
-                    typeWriterIndexes.current.push(index)
-                    return (
-                      <div className={classNameBlock} data-id="block" key={index}> <span ref={(element) => {
-                        typewrite(element, x.message, () => scrollToBottom())
-                      }} className={x.style}></span></div>
-                    )
-                  } else {
-                    if (typeof x.message !== 'function') {
-                      return (
-                        <div className={classNameBlock} data-id="block" key={index}> <span className={x.style}> {x.message}</span></div>
-                      )
-                    }
                   }
-                }
-              })}
+                })}
               <div ref={messagesEndRef} />
             </div>
             {isOpen && (
@@ -798,7 +798,7 @@ const typewrite = (elementsRef, message, callback) => {
   })()
 }
 
-function isHtml (value) {
+function isHtml(value) {
   if (!value.indexOf) return false
   return value.indexOf('<div') !== -1 || value.indexOf('<span') !== -1 || value.indexOf('<p') !== -1 || value.indexOf('<label') !== -1 || value.indexOf('<b') !== -1
 }
