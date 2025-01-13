@@ -191,6 +191,16 @@ export class ScriptRunnerUIPlugin extends ViewPlugin {
 
   }
 
+  async executeScript(script: string, filePath: string, retries = 1) {
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        return await this.call(`${this.scriptRunnerProfileName}${this.activeConfig.name}`, 'execute', script, filePath)
+      } catch (error) {
+        if (attempt === retries) throw error;
+      }
+    }
+  }
+
   async execute(script: string, filePath: string) {
     this.call('terminal', 'log', { value: `running ${filePath} ...`, type: 'info' })
     if (!this.scriptRunnerProfileName || !this.engine.isRegistered(`${this.scriptRunnerProfileName}${this.activeConfig.name}`)) {
@@ -201,7 +211,7 @@ export class ScriptRunnerUIPlugin extends ViewPlugin {
     }
     try {
       this.setIsLoading(this.activeConfig.name, true)
-      await this.call(`${this.scriptRunnerProfileName}${this.activeConfig.name}`, 'execute', script, filePath)
+      await this.executeScript(script, filePath);
     } catch (e) {
       console.error('Error executing script', e)
     }
