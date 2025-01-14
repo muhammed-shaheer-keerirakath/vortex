@@ -80,6 +80,7 @@ export class ScriptRunnerUIPlugin extends ViewPlugin {
     await this.loadCustomConfig()
     await this.loadConfigurations()
     this.renderComponent()
+    await this.loadScriptRunner(this.activeConfig)
   }
 
   render() {
@@ -157,7 +158,6 @@ export class ScriptRunnerUIPlugin extends ViewPlugin {
       this.setIsLoading(config.name, true)
       const plugin: IframePlugin = new IframePlugin(newProfile)
       if (!this.engine.isRegistered(newProfile.name)) {
-
         await this.engine.register(plugin)
       }
       await this.plugin.call('manager', 'activatePlugin', newProfile.name)
@@ -177,7 +177,6 @@ export class ScriptRunnerUIPlugin extends ViewPlugin {
       if (iframe) {
         await this.call('hiddenPanel', 'removeView', newProfile)
       }
-
       delete (this.engine as any).manager.profiles[newProfile.name]
       delete (this.engine as any).plugins[newProfile.name]
       console.log('Error loading script runner: ', newProfile.name, e)
@@ -187,17 +186,11 @@ export class ScriptRunnerUIPlugin extends ViewPlugin {
 
     this.setIsLoading(config.name, false)
     this.renderComponent()
-    try {
-      await this.call(`${this.scriptRunnerProfileName}${this.activeConfig.name}`, 'execute', 'init')
-    } catch (e) {
-      console.error('Error initializing script runner', e)
-    }
     return result
-
   }
 
   async execute(script: string, filePath: string) {
-    this.call('terminal', 'log', { value: `running ${filePath} ...`, type: 'info' })
+    this.call('terminal', 'log', { value: `running ${filePath ?? 'script'} ...`, type: 'info' })
     if (!this.scriptRunnerProfileName || !this.engine.isRegistered(`${this.scriptRunnerProfileName}${this.activeConfig.name}`)) {
       if (!await this.loadScriptRunner(this.activeConfig)) {
         console.error('Error loading script runner')
@@ -211,7 +204,6 @@ export class ScriptRunnerUIPlugin extends ViewPlugin {
       console.error('Error executing script', e)
     }
     this.setIsLoading(this.activeConfig.name, false)
-
   }
 
   async setErrorStatus(name: string, status: boolean, error: string) {
