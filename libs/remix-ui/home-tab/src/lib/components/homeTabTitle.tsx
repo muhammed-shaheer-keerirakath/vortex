@@ -104,12 +104,12 @@ function HomeTabTitle({ plugin }: HomeTabTitleProps) {
             </span>
             <div className="ml-2 d-flex" style={{ cursor: 'pointer' }}>
               <div onClick={() => playRemi()}>
-                <img className="" src="assets/qrl/images/tree.svg" style={{ height: '3rem' }} alt=""></img>
+                <img src="assets/qrl/images/tree.svg" style={{ height: '4rem', position: "absolute", left: '132px', top: '48px' }} alt=""></img>
               </div>
               <audio id="remiAudio" muted={false} src="assets/audio/remiGuitar-single-power-chord-A-minor.mp3" ref={remiAudioEl}></audio>
             </div>
           </div>
-          <b className="py-1 text-dark" style={{ fontStyle: 'italic' }}>
+          <b className="pb-1 text-dark" style={{ fontStyle: 'italic' }}>
             <FormattedMessage id="home.nativeIDE" />
           </b>
         </div>
