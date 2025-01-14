@@ -5,7 +5,6 @@ const TerminalWelcomeMessage = ({ packageJson, storage }) => {
   return (
     <div className="remix_ui_terminal_block px-4 " data-id="block_null">
       <div className="remix_ui_terminal_welcome">
-        {' '}
         <FormattedMessage id="terminal.welcomeText1" /> Vortex IDE {packageJson}{' '}
       </div>
       <br />
@@ -30,7 +29,8 @@ const TerminalWelcomeMessage = ({ packageJson, storage }) => {
           <br />
           <i>
             {' '}
-            - <FormattedMessage id="terminal.welcomeText7" />{' '}
+            {/* - <FormattedMessage id="terminal.welcomeText7" />{' '} */}
+            - Select a Javascript file in the file explorer and then run `vortex.execute()` or `vortex.exeCurrent()`  in the command line interface
           </i>
           <br />
           <i>
