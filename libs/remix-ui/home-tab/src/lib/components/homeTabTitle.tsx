@@ -96,7 +96,7 @@ function HomeTabTitle({ plugin }: HomeTabTitleProps) {
 
   return (
     <div className="px-2 pb-2 pt-2 d-flex flex-column border-bottom" id="hTTitleSection">
-      <div className="d-flex pb-2 justify-content-between align-items-end">
+      <div className="d-flex pb-2 justify-content-between align-items-end" style={{ height: '100px' }}>
         <div className='d-flex flex-column justify-content-start'>
           <div className="d-flex justify-content-start">
             <span className="h-80 text-uppercase" style={{ fontSize: 'xx-large', fontFamily: 'Noah, sans-serif' }}>
@@ -114,7 +114,7 @@ function HomeTabTitle({ plugin }: HomeTabTitleProps) {
           </b>
         </div>
         <div className='d-flex flex-column justify-content-end'>
-          <LanguageOptions plugin={plugin} />
+          {/* <LanguageOptions plugin={plugin} /> */}
           <span className="d-flex mt-2 flex-nowrap align-self-end">
             {iconButtons.map((button, index) => (
               <CustomTooltip
