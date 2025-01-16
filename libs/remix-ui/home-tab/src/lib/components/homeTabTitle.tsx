@@ -96,7 +96,7 @@ function HomeTabTitle({ plugin }: HomeTabTitleProps) {
 
   return (
     <div className="px-2 pb-2 pt-2 d-flex flex-column border-bottom" id="hTTitleSection">
-      <div className="d-flex pb-2 justify-content-between align-items-end" style={{ height: '100px' }}>
+      <div className="d-flex pb-2 justify-content-between align-items-end" style={{ height: '116px' }}>
         <div className='d-flex flex-column justify-content-start'>
           <div className="d-flex justify-content-start">
             <span className="h-80 text-uppercase" style={{ fontSize: 'xx-large', fontFamily: 'Noah, sans-serif' }}>
@@ -104,7 +104,7 @@ function HomeTabTitle({ plugin }: HomeTabTitleProps) {
             </span>
             <div className="ml-2 d-flex" style={{ cursor: 'pointer' }}>
               <div onClick={() => playRemi()}>
-                <img src="assets/qrl/images/tree.svg" style={{ height: '4rem', position: "absolute", left: '132px', top: '48px' }} alt=""></img>
+                <img src="assets/qrl/images/tree.svg" style={{ height: '4rem', position: "relative", left: '-32px', top: '-16px' }} alt=""></img>
               </div>
               <audio id="remiAudio" muted={false} src="assets/audio/remiGuitar-single-power-chord-A-minor.mp3" ref={remiAudioEl}></audio>
             </div>
