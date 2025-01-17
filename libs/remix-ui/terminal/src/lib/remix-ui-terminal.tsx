@@ -1,31 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect, useReducer, useRef, SyntheticEvent, MouseEvent, useContext } from 'react' // eslint-disable-line
-import { FormattedMessage, useIntl } from 'react-intl'
+import React, { useState, useEffect, useReducer, useRef, SyntheticEvent, useContext } from 'react'; // eslint-disable-line
+import { useIntl } from 'react-intl'
 import {
   registerCommandAction,
   registerLogScriptRunnerAction,
   registerInfoScriptRunnerAction,
   registerErrorScriptRunnerAction,
-  registerWarnScriptRunnerAction,
-  listenOnNetworkAction,
-  initListeningOnNetwork,
+  registerWarnScriptRunnerAction, initListeningOnNetwork
 } from './actions/terminalAction'
 import { isBigInt } from '@theqrl/web3-validator'
-import { initialState, registerCommandReducer, addCommandHistoryReducer, registerScriptRunnerReducer } from './reducers/terminalReducer'
+import { initialState, addCommandHistoryReducer, registerScriptRunnerReducer } from './reducers/terminalReducer'
 import { getKeyOf, getValueOf, Objectfilter, matched } from './utils/utils'
-import { allCommands, allPrograms } from './commands' // eslint-disable-line
-import TerminalWelcomeMessage from './terminalWelcome' // eslint-disable-line
-import { Toaster } from '@remix-ui/toaster' // eslint-disable-line
-import { ModalDialog } from '@remix-ui/modal-dialog' // eslint-disable-line
-import { CustomTooltip } from '@remix-ui/helper'
+import { allCommands, allPrograms } from './commands'; // eslint-disable-line
+import TerminalWelcomeMessage from './terminalWelcome'; // eslint-disable-line
+import { Toaster } from '@remix-ui/toaster'; // eslint-disable-line
+import { ModalDialog } from '@remix-ui/modal-dialog'; // eslint-disable-line
 
 import './remix-ui-terminal.css'
 import vm from 'vm'
 import javascriptserialize from 'javascript-serialize'
 import jsbeautify from 'js-beautify'
-import RenderUnKnownTransactions from './components/RenderUnknownTransactions' // eslint-disable-line
-import RenderCall from './components/RenderCall' // eslint-disable-line
-import RenderKnownTransactions from './components/RenderKnownTransactions' // eslint-disable-line
+import RenderUnKnownTransactions from './components/RenderUnknownTransactions'; // eslint-disable-line
+import RenderCall from './components/RenderCall'; // eslint-disable-line
+import RenderKnownTransactions from './components/RenderKnownTransactions'; // eslint-disable-line
 import parse from 'html-react-parser'
 import { EMPTY_BLOCK, KNOWN_TRANSACTION, RemixUiTerminalProps, SET_ISVM, SET_OPEN, UNKNOWN_TRANSACTION } from './types/terminalTypes'
 import { wrapScript } from './utils/wrapScript'
