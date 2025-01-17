@@ -32,7 +32,7 @@ class Terminal extends Plugin {
   eventsDecoder: any
   txListener: any
   _deps: { fileManager: any; editor: any; compilersArtefacts: any; offsetToLineColumnConverter: any }
-  commandHelp: { 'remix.loadgist(id)': string; 'remix.loadurl(url)': string; 'remix.execute(filepath)': string; 'remix.exeCurrent()': string; 'remix.help()': string }
+  commandHelp: { 'vortex.loadgist(id)': string; 'vortex.loadurl(url)': string; 'vortex.execute(filepath)': string; 'vortex.exeCurrent()': string; 'vortex.help()': string }
   blockchain: any
   vm: typeof vm
   _api: any
@@ -71,11 +71,11 @@ class Terminal extends Plugin {
       offsetToLineColumnConverter: this.globalRegistry.get('offsettolinecolumnconverter').api
     }
     this.commandHelp = {
-      'remix.loadgist(id)': 'Load a gist in the file explorer.',
-      'remix.loadurl(url)': 'Load the given url in the file explorer. The url can be of type github, swarm, ipfs or raw http',
-      'remix.execute(filepath)': 'Run the script specified by file path. If filepath is empty, script currently displayed in the editor is executed.',
-      'remix.exeCurrent()': 'Run the script currently displayed in the editor',
-      'remix.help()': 'Display this help message'
+      'vortex.loadgist(id)': 'Load a gist in the file explorer.',
+      'vortex.loadurl(url)': 'Load the given url in the file explorer. The url can be of type github, swarm, ipfs or raw http',
+      'vortex.execute(filepath)': 'Run the script specified by file path. If filepath is empty, script currently displayed in the editor is executed.',
+      'vortex.exeCurrent()': 'Run the script currently displayed in the editor',
+      'vortex.help()': 'Display this help message'
     }
     this.blockchain = opts.blockchain
     this.vm = vm

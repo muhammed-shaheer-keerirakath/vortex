@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-spacing */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect, useReducer, useRef, SyntheticEvent, useContext } from 'react'; // eslint-disable-line
 import { useIntl } from 'react-intl'
@@ -57,7 +58,6 @@ export const RemixUiTerminal = (props: RemixUiTerminalProps) => {
     handleHide: () => { },
   })
 
-  const [isVM, setIsVM] = useState(false)
   const [paste, setPaste] = useState(false)
   const [storage, setStorage] = useState<any>(null)
   const [autoCompletState, setAutoCompleteState] = useState({
@@ -87,7 +87,6 @@ export const RemixUiTerminal = (props: RemixUiTerminalProps) => {
 
   // terminal draggable
   const panelRef = useRef(null)
-  const terminalMenu = useRef(null)
 
   const intl = useIntl()
 
@@ -201,14 +200,14 @@ export const RemixUiTerminal = (props: RemixUiTerminalProps) => {
 
   const _shell = async (script, scopedCommands, done) => {
     // default shell
-    if (script.indexOf('remix:') === 0) {
+    if (script.indexOf('vortex:') === 0) {
       return done(null, intl.formatMessage({ id: 'terminal.text1' }))
     }
-    if (script.indexOf('remix.') === 0) {
+    if (script.indexOf('vortex.') === 0) {
       // we keep the old feature. This will basically only be called when the command is querying the "remix" object.
       // for all the other case, we use the Code Executor plugin
       const context = {
-        remix: {
+        vortex: {
           exeCurrent: (script: any) => {
             return execute(undefined, script)
           },
