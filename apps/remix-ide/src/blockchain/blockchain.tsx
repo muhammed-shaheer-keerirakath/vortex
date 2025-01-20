@@ -114,7 +114,7 @@ export class Blockchain extends Plugin {
     this.networkcallid = 0
     this.networkStatus = { network: { name: ' - ', id: ' - ' } }
     this.registeredPluginEvents = []
-    this.defaultPinnedProviders = ['vm-zond']
+    this.defaultPinnedProviders = ['injected-ZondWeb3Wallet', 'vm-zond', 'basic-http-provider']
     this.pinnedProviders = []
     this.setupEvents()
     this.setupProviders()
