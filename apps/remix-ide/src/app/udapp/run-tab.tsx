@@ -141,19 +141,21 @@ export class RunTab extends ViewPlugin {
     const udapp = this // eslint-disable-line
 
     const descriptions = {
-      'vm-cancun': 'Deploy to the in-browser virtual machine running the Cancun fork.',
-      'vm-shanghai': 'Deploy to the in-browser virtual machine running the Shanghai fork.',
-      'vm-paris': 'Deploy to the in-browser virtual machine running the Paris fork.',
-      'vm-london': 'Deploy to the in-browser virtual machine running the London fork.',
-      'vm-berlin': 'Deploy to the in-browser virtual machine running the Berlin fork.',
-      'vm-mainnet-fork': 'Deploy to a fork of the Ethereum mainnet in the in-browser virtual machine.',
-      'vm-sepolia-fork': 'Deploy to a fork of the Sepolia testnet in the in-browser virtual machine.',
-      'vm-custom-fork': 'Deploy to a fork of a custom network in the in-browser virtual machine.',
-      'walletconnect': 'Deploy using WalletConnect.',
+      // 'vm-cancun': 'Deploy to the in-browser virtual machine running the Cancun fork.',
+      // 'vm-shanghai': 'Deploy to the in-browser virtual machine running the Shanghai fork.',
+      // 'vm-paris': 'Deploy to the in-browser virtual machine running the Paris fork.',
+      // 'vm-london': 'Deploy to the in-browser virtual machine running the London fork.',
+      // 'vm-berlin': 'Deploy to the in-browser virtual machine running the Berlin fork.',
+      // 'vm-mainnet-fork': 'Deploy to a fork of the Ethereum mainnet in the in-browser virtual machine.',
+      // 'vm-sepolia-fork': 'Deploy to a fork of the Sepolia testnet in the in-browser virtual machine.',
+      // 'vm-custom-fork': 'Deploy to a fork of a custom network in the in-browser virtual machine.',
+      'vm-zond': 'Deploy to the in-browser Zond virtual machine.',
+      // 'walletconnect': 'Deploy using WalletConnect.',
       'basic-http-provider': 'Deploy to a Custom local network.',
-      'hardhat-provider': 'Deploy to the local Hardhat dev chain.',
-      'ganache-provider': 'Deploy to the local Ganache dev chain.',
-      'foundry-provider': 'Deploy to the local Foundry dev chain.',
+      // 'hardhat-provider': 'Deploy to the local Hardhat dev chain.',
+      // 'ganache-provider': 'Deploy to the local Ganache dev chain.',
+      // 'foundry-provider': 'Deploy to the local Foundry dev chain.',
+      'injected-ZondWeb3Wallet': 'Deploy through the Zond Web3 Wallet.',
       'injected-MetaMask': 'Deploy through the Metamask browser extension.',
       'injected-Brave Wallet': 'Deploy through the Brave Wallet extension.',
       'injected-Brave': 'Deploy through the Brave browser extension.',
@@ -165,6 +167,9 @@ export class RunTab extends ViewPlugin {
     }
 
     const logos = {
+      'vm-zond': ['assets/img/qrl-zond-vm.png'],
+      'injected-ZondWeb3Wallet': ['assets/img/qrl-zond.png'],
+      'basic-http-provider': ['assets/img/http.png'],
       'injected-metamask-optimism': ['assets/img/optimism-ethereum-op-logo.png', 'assets/img/metamask.png'],
       'injected-metamask-arbitrum': ['assets/img/arbitrum-arb-logo.png', 'assets/img/metamask.png'],
       'injected-metamask-gnosis': ['assets/img/gnosis_chain.png', 'assets/img/metamask.png'],
@@ -173,9 +178,9 @@ export class RunTab extends ViewPlugin {
       'injected-MetaMask': ['assets/img/metamask.png'],
       'injected-Brave Wallet': ['assets/img/brave.png'],
       'injected-Trust Wallet': ['assets/img/trust-wallet.png'],
-      'hardhat-provider': ['assets/img/hardhat.png'],
-      'walletconnect': ['assets/img/Walletconnect-logo.png'],
-      'foundry-provider': ['assets/img/foundry.png']
+      // 'hardhat-provider': ['assets/img/hardhat.png'],
+      // 'walletconnect': ['assets/img/Walletconnect-logo.png'],
+      // 'foundry-provider': ['assets/img/foundry.png']
     }
 
     const addProvider = async (position, name, displayName, isInjected, isVM, fork = '', dataId = '', title = '', forkedVM = false) => {
@@ -247,8 +252,8 @@ export class RunTab extends ViewPlugin {
     }
 
     // VM
-    const titleVM = 'Execution environment is local to Remix.  Data is only saved to browser memory and will vanish upon reload.'
-    await addProvider(1, 'vm-zond', 'Zond VM', false, true)
+    const titleVM = 'Execution environment is local to Vortex IDE.  Data is only saved to browser memory and will vanish upon reload.'
+    await addProvider(1, 'vm-zond', 'Zond VM', false, true, undefined, 'settingsVMZond', titleVM)
     // await addProvider(2, 'vm-cancun', 'Remix VM (Temp)', false, true, 'cancun', 'settingsVMCancunMode', titleVM)
     // await addProvider(50, 'vm-shanghai', 'Remix VM (Shanghai)', false, true, 'shanghai', 'settingsVMShanghaiMode', titleVM)
     // await addProvider(51, 'vm-paris', 'Remix VM (Paris)', false, true, 'paris', 'settingsVMParisMode', titleVM)
@@ -259,11 +264,11 @@ export class RunTab extends ViewPlugin {
     // await addProvider(4, 'vm-custom-fork', 'Remix VM - Custom fork', false, true, '', 'settingsVMCustomMode', titleVM, true)
 
     // wallet connect
-    await addProvider(6, 'walletconnect', 'WalletConnect', false, false)
+    // await addProvider(6, 'walletconnect', 'WalletConnect', false, false)
 
     // external provider
     // await addProvider(1, 'zond-testnet', 'Zond Testnet', false, false)
-    // await addProvider(10, 'basic-http-provider', 'Custom - External Http Provider', false, false)
+    await addProvider(10, 'basic-http-provider', 'Custom - External Http Provider', false, false)
     // await addProvider(20, 'hardhat-provider', 'Dev - Hardhat Provider', false, false)
     // await addProvider(21, 'ganache-provider', 'Dev - Ganache Provider', false, false)
     // await addProvider(22, 'foundry-provider', 'Dev - Foundry Provider', false, false)
