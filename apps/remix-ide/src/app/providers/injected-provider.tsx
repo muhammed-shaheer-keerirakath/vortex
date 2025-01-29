@@ -68,7 +68,7 @@ export abstract class InjectedProvider extends Plugin implements IProvider {
       try {
         await this.askPermission(true)
       } catch (error) {
-        this.call('notification', 'toast', 'Please make sure your Injected Provider is connected to Remix.')
+        this.call('notification', 'toast', 'Please make sure your Injected Provider is connected to Vortex IDE.')
         throw new Error(this.notFound())
       }
     }
@@ -86,7 +86,7 @@ export abstract class InjectedProvider extends Plugin implements IProvider {
     // This will be displayed on UI tooltip as 'cannot get account list: Environment Updated !!'
     const web3Provider = this.getInjectedProvider()
     if (!web3Provider) {
-      this.call('notification', 'toast', 'No injected provider (e.g Metamask) has been found.')
+      this.call('notification', 'toast', 'No injected provider (e.g Zond Web3 Wallet) has been found.')
       return resolve({
         jsonrpc: '2.0',
         error: { message: 'no injected provider found', code: -32603 },
