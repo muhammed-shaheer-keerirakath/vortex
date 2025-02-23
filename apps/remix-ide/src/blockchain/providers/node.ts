@@ -1,6 +1,5 @@
 import { Web3 } from '@theqrl/web3'
 import { hashPersonalMessage, isHexString, bytesToHex } from '@ethereumjs/util'
-import { Personal } from '@theqrl/web3-zond-personal'
 import { ExecutionContext } from '../execution-context'
 import Config from '../../config'
 
@@ -62,7 +61,7 @@ export class NodeProvider {
   signMessage(message, account, passphrase, cb) {
     const messageHash = hashPersonalMessage(Buffer.from(message))
     try {
-      const personal = new Personal(this.executionContext.web3().currentProvider)
+      const personal = this.executionContext.web3().zond.personal
       message = isHexString(message) ? message : Web3.utils.utf8ToHex(message)
       personal
         .sign(message, account, passphrase)

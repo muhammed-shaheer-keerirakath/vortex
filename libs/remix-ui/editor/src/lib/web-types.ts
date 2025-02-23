@@ -196,8 +196,8 @@ export const loadTypes = async (monaco) => {
   monaco.languages.typescript.typescriptDefaults.addExtraLib(indexWeb3Zond.default, `file:///node_modules/@theqrl/web3-zond/lib/types/index.d.ts`)
 
   // @ts-ignore
-  const indexWeb3Personal = await import('raw-loader!@theqrl/web3-zond-personal')
-  monaco.languages.typescript.typescriptDefaults.addExtraLib(indexWeb3Personal.default, `file:///node_modules/@theqrl/web3-zond-personal/lib/types/index.d.ts`)
+  // const indexWeb3Personal = await import('raw-loader!@theqrl/web3-?zond-personal')
+  // monaco.languages.typescript.typescriptDefaults.addExtraLib(indexWeb3Personal.default, `file:///node_modules/@theqrl/web3-zond-personal/lib/types/index.d.ts`)
 
   // @ts-ignore
   const indexWeb3Contract = await import('raw-loader!@theqrl/web3-zond-contract')

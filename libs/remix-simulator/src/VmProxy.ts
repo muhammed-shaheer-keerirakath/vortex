@@ -12,6 +12,7 @@ import type { EVMStateManagerInterface } from '@ethereumjs/common'
 import type { EVMResult, InterpreterStep, Message } from '@ethereumjs/evm'
 import type { AfterTxEvent, VM } from '@ethereumjs/vm'
 import type { TypedTransaction } from '@ethereumjs/tx'
+import { validator } from "@theqrl/web3";
 
 export class VmProxy {
   vmContext: VMContext
@@ -86,7 +87,7 @@ export class VmProxy {
     this.fromWei = (...args) => utils.fromWei.apply(this, args)
     this.toWei = (...args) => utils.toWei.apply(this, args)
     this.toBigNumber = (...args) => toBigInt.apply(this, args)
-    this.isAddress = (...args) => utils.isAddress.apply(this, args)
+    this.isAddress = (...args) => validator.isAddressString.apply(this, args)
     this.utils = utils
     this.txsMapBlock = {}
     this.blocks = {}
