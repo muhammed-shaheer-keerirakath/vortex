@@ -157,27 +157,27 @@ export class RunTab extends ViewPlugin {
       // 'foundry-provider': 'Deploy to the local Foundry dev chain.',
       'injected-ZondWeb3Wallet': 'Deploy through the Zond Web3 Wallet.',
       'injected-MetaMask': 'Deploy through the Metamask browser extension.',
-      'injected-Brave Wallet': 'Deploy through the Brave Wallet extension.',
-      'injected-Brave': 'Deploy through the Brave browser extension.',
-      'injected-metamask-optimism': 'Deploy to Optimism through the Metamask browser extension.',
-      'injected-metamask-gnosis': 'Deploy to Gnosis through the Metamask browser extension.',
-      'injected-metamask-arbitrum': 'Deploy to Arbitrum through the Metamask browser extension.',
-      'injected-metamask-sepolia': 'Deploy to the Sepolia testnet through the Metamask browser extension.',
-      'injected-metamask-ephemery': 'Deploy to the Ephemery testnet through the Metamask browser extension.'
+      // 'injected-Brave Wallet': 'Deploy through the Brave Wallet extension.',
+      // 'injected-Brave': 'Deploy through the Brave browser extension.',
+      // 'injected-metamask-optimism': 'Deploy to Optimism through the Metamask browser extension.',
+      // 'injected-metamask-gnosis': 'Deploy to Gnosis through the Metamask browser extension.',
+      // 'injected-metamask-arbitrum': 'Deploy to Arbitrum through the Metamask browser extension.',
+      // 'injected-metamask-sepolia': 'Deploy to the Sepolia testnet through the Metamask browser extension.',
+      // 'injected-metamask-ephemery': 'Deploy to the Ephemery testnet through the Metamask browser extension.'
     }
 
     const logos = {
       'vm-zond': ['assets/img/qrl-zond-vm.png'],
       'injected-ZondWeb3Wallet': ['assets/img/qrl-zond.png'],
       'basic-http-provider': ['assets/img/http.png'],
-      'injected-metamask-optimism': ['assets/img/optimism-ethereum-op-logo.png', 'assets/img/metamask.png'],
-      'injected-metamask-arbitrum': ['assets/img/arbitrum-arb-logo.png', 'assets/img/metamask.png'],
-      'injected-metamask-gnosis': ['assets/img/gnosis_chain.png', 'assets/img/metamask.png'],
-      'injected-metamask-sepolia': ['assets/img/metamask.png'],
-      'injected-metamask-ephemery': ['assets/img/metamask.png'],
+      // 'injected-metamask-optimism': ['assets/img/optimism-ethereum-op-logo.png', 'assets/img/metamask.png'],
+      // 'injected-metamask-arbitrum': ['assets/img/arbitrum-arb-logo.png', 'assets/img/metamask.png'],
+      // 'injected-metamask-gnosis': ['assets/img/gnosis_chain.png', 'assets/img/metamask.png'],
+      // 'injected-metamask-sepolia': ['assets/img/metamask.png'],
+      // 'injected-metamask-ephemery': ['assets/img/metamask.png'],
       'injected-MetaMask': ['assets/img/metamask.png'],
-      'injected-Brave Wallet': ['assets/img/brave.png'],
-      'injected-Trust Wallet': ['assets/img/trust-wallet.png'],
+      // 'injected-Brave Wallet': ['assets/img/brave.png'],
+      // 'injected-Trust Wallet': ['assets/img/trust-wallet.png'],
       // 'hardhat-provider': ['assets/img/hardhat.png'],
       // 'walletconnect': ['assets/img/Walletconnect-logo.png'],
       // 'foundry-provider': ['assets/img/foundry.png']
@@ -208,11 +208,13 @@ export class RunTab extends ViewPlugin {
       })
     }
 
+    /*
     const addCustomInjectedProvider = async (position, event, name, displayName, networkId, urls, nativeCurrency?) => {
       // name = `${name} through ${event.detail.info.name}`
       await this.engine.register([new InjectedCustomProvider(event.detail.provider, name, displayName, networkId, urls, nativeCurrency)])
       await addProvider(position, name, displayName + ' - ' + event.detail.info.name, true, false)
     }
+      */
     const registerInjectedProvider = async (event) => {
       const name = 'injected-' + event.detail.info.name
       const displayName = 'Injected Provider - ' + event.detail.info.name
@@ -220,6 +222,7 @@ export class RunTab extends ViewPlugin {
       await addProvider(0, name, displayName, true, false)
 
       if (event.detail.info.name === 'MetaMask') {
+        /*
         await addCustomInjectedProvider(7, event, 'injected-metamask-optimism', 'L2 - Optimism', '0xa', ['https://mainnet.optimism.io'])
         await addCustomInjectedProvider(8, event, 'injected-metamask-arbitrum', 'L2 - Arbitrum', '0xa4b1', ['https://arb1.arbitrum.io/rpc'])
         await addCustomInjectedProvider(5, event, 'injected-metamask-sepolia', 'Sepolia Testnet', '0xaa36a7', [],
@@ -240,7 +243,6 @@ export class RunTab extends ViewPlugin {
             "symbol": "XDAI",
             "decimals": 18
           })
-        /*
         await addCustomInjectedProvider(9, event, 'SKALE Chaos Testnet', '0x50877ed6', ['https://staging-v3.skalenodes.com/v1/staging-fast-active-bellatrix'],
           {
             "name": "sFUEL",
