@@ -279,7 +279,7 @@ export class VMContext {
   constructor(fork?: string, nodeUrl?: string, blockNumber?: number | 'latest', stateDb?: State, blocksData?: string[]) {
     this.blockGasLimitDefault = 4300000
     this.blockGasLimit = this.blockGasLimitDefault
-    this.currentFork = fork || 'cancun'
+    this.currentFork = fork || 'shanghai'
     this.nodeUrl = nodeUrl
     this.stateDb = stateDb
     this.blockNumber = blockNumber

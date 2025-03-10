@@ -1,5 +1,5 @@
 import { signTypedData, SignTypedDataVersion, TypedMessage, MessageTypes } from '@metamask/eth-sig-util'
-import { privateToAddress, toChecksumAddress, isValidPrivate, Address, toBytes, bytesToHex, Account } from '@ethereumjs/util'
+import { privateToAddress, toChecksumAddress, isValidPrivate, toBytes, bytesToHex, Account, createAddressFromString } from '@theqrl/zondjs-util'
 import { seedToAccount } from '@theqrl/web3-zond-accounts'
 import { toBigInt } from '@theqrl/web3-utils'
 import * as crypto from 'crypto'
@@ -26,6 +26,7 @@ export class Web3Accounts {
     this.accounts = {}
     this.accountsKeys = {}
     await this._addAccount('503f38a9c967ed597e47fe25643985f032b072db8075426a92110f82df48dfcb', '0x56BC75E2D63100000')
+    await this._addAccount('503f38a9c967ed597e47fe25643985f032b072db8075426a92110f82df48dfcb', '0x57BC75E2D6300000')
     await this._addAccount('7e5bfb82febc4c2c8529167104271ceec190eafdca277314912eaabdb67c6e5f', '0x56BC75E2D63100000')
     await this._addAccount('cc6d63f85de8fef05446ebdd3c537c72152d0fc437fd7aa62b3019b79bd1fdd4', '0x56BC75E2D63100000')
     await this._addAccount('638b5c6c8c5903b15f0d3bf5d3f175c64e6e98a10bdb9768a2003bf773dcb86a', '0x56BC75E2D63100000')
@@ -44,20 +45,20 @@ export class Web3Accounts {
 
   async _addAccount(privateKey, balance) {
     try {
-      if (typeof privateKey === 'string') privateKey = toBytes('0x' + privateKey)
+      if (typeof privateKey === 'string') privateKey = toBytes(`0x${privateKey}`)
       const address: Uint8Array = privateToAddress(privateKey)
       const addressStr = toChecksumAddress(bytesToHex(address))
       this.accounts[addressStr] = { privateKey, nonce: 0 }
       this.accountsKeys[addressStr] = bytesToHex(privateKey)
 
       const stateManager = this.vmContext.vm().stateManager
-      const account = await stateManager.getAccount(Address.fromString(addressStr))
+      const account = await stateManager.getAccount(createAddressFromString(addressStr))
       if (!account) {
         const account = new Account(BigInt(0), toBigInt(balance || '0xf00000000000000001'))
-        await stateManager.putAccount(Address.fromString(addressStr), account)
+        await stateManager.putAccount(createAddressFromString(addressStr), account)
       } else {
         account.balance = toBigInt(balance || '0xf00000000000000001')
-        await stateManager.putAccount(Address.fromString(addressStr), account)
+        await stateManager.putAccount(createAddressFromString(addressStr), account)
       }
     } catch (e) {
       console.error(e)
@@ -97,7 +98,7 @@ export class Web3Accounts {
     const address = payload.params[0]
     this.vmContext
       .vm()
-      .stateManager.getAccount(Address.fromString(address))
+      .stateManager.getAccount(createAddressFromString(address))
       .then((account) => {
         cb(null, toBigInt(account.balance).toString(10))
       })
