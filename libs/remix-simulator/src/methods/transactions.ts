@@ -1,5 +1,5 @@
 import { toHex, toNumber, toBigInt } from '@theqrl/web3-utils'
-import { toChecksumAddress, Address, bigIntToHex, bytesToHex } from '@ethereumjs/util'
+import { toChecksumAddress, bigIntToHex, bytesToHex, createAddressFromString } from '@theqrl/zondjs-util'
 import { processTx } from './txProcess'
 import { execution } from '@remix-project/remix-lib'
 import { ethers } from 'ethers'
@@ -203,7 +203,7 @@ export class Transactions {
       if (result.execResult.gasRefund) {
         gasUsed += Number(toNumber(result.execResult.gasRefund))
       }
-      gasUsed = gasUsed + Number(toNumber(value.tx.getBaseFee()))
+      gasUsed = gasUsed + Number(toNumber(value.tx.getIntrinsicGas()))
       cb(null, Math.ceil(gasUsed + (15 * gasUsed) / 100))
     })
   }
@@ -290,7 +290,7 @@ export class Transactions {
 
     this.vmContext
       .vm()
-      .stateManager.getAccount(Address.fromString(address))
+      .stateManager.getAccount(createAddressFromString(address))
       .then((account) => {
         const nonce = toBigInt(account.nonce).toString(10)
         cb(null, nonce)

@@ -24,7 +24,7 @@ const profile = {
   displayName: 'Blockchain',
   description: 'Blockchain - Logic',
   methods: ['getCode', 'getTransactionReceipt', 'addProvider', 'removeProvider', 'getCurrentFork', 'getAccounts', 'web3VM', 'web3', 'getProvider', 'getCurrentNetworkStatus', 'getAllProviders', 'getPinnedProviders'],
-  version: packageJson.version
+  version: packageJson.version,
 }
 
 export type TransactionContextAPI = {
@@ -49,8 +49,8 @@ export type Provider = {
   dataId: string
   name: string
   displayName: string
-  logo?: string,
-  logos?: string[],
+  logo?: string
+  logos?: string[]
   fork: string
   description?: string
   isInjected: boolean
@@ -104,7 +104,7 @@ export class Blockchain extends Plugin {
         },
         personalMode: () => {
           return this.getProvider() === 'web3' ? this.config.get('settings/personal-mode') : false
-        }
+        },
       },
       (_) => this.executionContext.web3(),
       (_) => this.executionContext.currentblockGasLimit()
@@ -155,14 +155,18 @@ export class Blockchain extends Plugin {
       _paq.push(['trackEvent', 'blockchain', 'providerUnpinned', name])
     })
 
-    this.call('config', 'getAppParameter', 'settings/pinned-providers').then((providers) => {
-      if (!providers) {
-        this.call('config', 'setAppParameter', 'settings/pinned-providers', JSON.stringify(this.defaultPinnedProviders))
-        this.pinnedProviders = this.defaultPinnedProviders
-      } else {
-        this.pinnedProviders = JSON.parse(providers)
-      }
-    }).catch((error) => { console.log(error) })
+    this.call('config', 'getAppParameter', 'settings/pinned-providers')
+      .then((providers) => {
+        if (!providers) {
+          this.call('config', 'setAppParameter', 'settings/pinned-providers', JSON.stringify(this.defaultPinnedProviders))
+          this.pinnedProviders = this.defaultPinnedProviders
+        } else {
+          this.pinnedProviders = JSON.parse(providers)
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   onDeactivation() {
@@ -264,21 +268,14 @@ export class Blockchain extends Plugin {
   deployContractWithLibrary(selectedContract, args, contractMetadata, compilerContracts, callbacks, confirmationCb) {
     const { continueCb, promptCb, statusCb, finalCb } = callbacks
     const constructor = selectedContract.getConstructorInterface()
-    txFormat.encodeConstructorCallAndLinkLibraries(
-      selectedContract.object,
-      args,
-      constructor,
-      contractMetadata.linkReferences,
-      selectedContract.bytecodeLinkReferences,
-      (error, data) => {
-        if (error) {
-          return statusCb(`creation of ${selectedContract.name} errored: ${error.message ? error.message : error.error ? error.error : error}`)
-        }
-
-        statusCb(`creation of ${selectedContract.name} pending...`)
-        this.createContract(selectedContract, data, continueCb, promptCb, confirmationCb, finalCb)
+    txFormat.encodeConstructorCallAndLinkLibraries(selectedContract.object, args, constructor, contractMetadata.linkReferences, selectedContract.bytecodeLinkReferences, (error, data) => {
+      if (error) {
+        return statusCb(`creation of ${selectedContract.name} errored: ${error.message ? error.message : error.error ? error.error : error}`)
       }
-    )
+
+      statusCb(`creation of ${selectedContract.name} pending...`)
+      this.createContract(selectedContract, data, continueCb, promptCb, confirmationCb, finalCb)
+    })
   }
 
   async deployProxy(proxyData, implementationContractObject) {
@@ -298,7 +295,7 @@ export class Blockchain extends Plugin {
         this.call('notification', 'toast', cancelProxyMsg())
         _paq.push(['trackEvent', 'blockchain', 'Deploy With Proxy', 'cancel proxy deployment'])
       },
-      hideFn: () => null
+      hideFn: () => null,
     }
     this.call('notification', 'modal', proxyModal)
   }
@@ -349,7 +346,7 @@ export class Blockchain extends Plugin {
         this.call('notification', 'toast', cancelUpgradeMsg())
         _paq.push(['trackEvent', 'blockchain', 'Upgrade With Proxy', 'proxy upgrade cancel click'])
       },
-      hideFn: () => null
+      hideFn: () => null,
     }
     this.call('notification', 'modal', upgradeModal)
   }
@@ -404,7 +401,7 @@ export class Blockchain extends Plugin {
         fork: networkInfo.currentFork,
         implementationAddress: implementationAddress,
         solcOutput: contractObject.compiler.data,
-        solcInput: contractObject.compiler.source
+        solcInput: contractObject.compiler.source,
       }
       await this.call(
         'fileManager',
@@ -413,7 +410,7 @@ export class Blockchain extends Plugin {
         JSON.stringify(
           {
             solcInput: contractObject.compiler.source,
-            solcOutput: contractObject.compiler.data
+            solcOutput: contractObject.compiler.data,
           },
           null,
           2
@@ -428,7 +425,7 @@ export class Blockchain extends Plugin {
         JSON.stringify(
           {
             solcInput: contractObject.compiler.source,
-            solcOutput: contractObject.compiler.data
+            solcOutput: contractObject.compiler.data,
           },
           null,
           2
@@ -447,9 +444,9 @@ export class Blockchain extends Plugin {
                 date: new Date().toISOString(),
                 contractName: contractName,
                 fork: networkInfo.currentFork,
-                implementationAddress: implementationAddress
-              }
-            }
+                implementationAddress: implementationAddress,
+              },
+            },
           },
           null,
           2
@@ -597,7 +594,7 @@ export class Blockchain extends Plugin {
   getTxListener(opts) {
     opts.event = {
       // udapp: this.udapp.event
-      udapp: this.event
+      udapp: this.event,
     }
     const txlistener = new Txlistener(opts, this.executionContext)
     return txlistener
@@ -716,7 +713,7 @@ export class Blockchain extends Plugin {
         },
         personalMode: () => {
           return this.getProvider() === 'web3' ? this.config.get('settings/personal-mode') : false
-        }
+        },
       },
       (_) => this.executionContext.web3(),
       (_) => this.executionContext.currentblockGasLimit()
@@ -855,10 +852,7 @@ export class Blockchain extends Plugin {
         if (this.transactionContextAPI.getAddress) {
           return this.transactionContextAPI.getAddress(function (err, address) {
             if (err) return reject(err)
-            if (!address)
-              return reject(
-                '"from" is not defined. Please make sure an account is selected. If you are using a public node, it is likely that no account will be provided. In that case, add the public node to your injected provider (type Metamask) and use injected provider in Remix.'
-              )
+            if (!address) return reject('"from" is not defined. Please make sure an account is selected. If you are using a public node, it is likely that no account will be provided. In that case, add the public node to your injected provider (type Metamask) and use injected provider in Remix.')
             return resolve(address)
           })
         }
@@ -896,7 +890,7 @@ export class Blockchain extends Plugin {
           from: fromAddress,
           value: value,
           gasLimit: gasLimit,
-          timestamp: args.data.timestamp
+          timestamp: args.data.timestamp,
         }
         const payLoad = {
           funAbi: args.data.funAbi,
@@ -904,7 +898,7 @@ export class Blockchain extends Plugin {
           contractBytecode: args.data.contractBytecode,
           contractName: args.data.contractName,
           contractABI: args.data.contractABI,
-          linkReferences: args.data.linkReferences
+          linkReferences: args.data.linkReferences,
         }
 
         if (!tx.timestamp) tx.timestamp = Date.now()
@@ -988,9 +982,7 @@ export class Blockchain extends Plugin {
 
         if (execResult) {
           // if it's not the VM, we don't have return value. We only have the transaction, and it does not contain the return value.
-          returnValue = execResult
-            ? toBytes(execResult.returnValue)
-            : toBytes(addHexPrefix(txResult.result) || '0x0000000000000000000000000000000000000000000000000000000000000000')
+          returnValue = execResult ? toBytes(execResult.returnValue) : toBytes(addHexPrefix(txResult.result) || '0x0000000000000000000000000000000000000000000000000000000000000000')
           const compiledContracts = await this.call('compilerArtefacts', 'getAllContractDatas')
           const vmError = txExecution.checkError({ errorMessage: execResult.exceptionError ? execResult.exceptionError.error : '', errorData: execResult.returnValue }, compiledContracts)
           if (vmError.error) {
@@ -1023,8 +1015,7 @@ export class Blockchain extends Plugin {
         errorMessage = error.message
         errorData = error.data
         cb((await buildError(errorMessage, errorData)).message)
-      } else
-        cb(error)
+      } else cb(error)
     }
   }
 }

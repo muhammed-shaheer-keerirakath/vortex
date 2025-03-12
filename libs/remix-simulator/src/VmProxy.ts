@@ -11,8 +11,8 @@ import { VMContext } from './vm-context'
 import type { EVMStateManagerInterface } from '@ethereumjs/common'
 import type { EVMResult, InterpreterStep, Message } from '@ethereumjs/evm'
 import type { AfterTxEvent, VM } from '@ethereumjs/vm'
-import type { TypedTransaction } from '@ethereumjs/tx'
-import { validator } from "@theqrl/web3";
+import type { TypedTransaction } from '@theqrl/zondjs-tx'
+import { validator } from '@theqrl/web3'
 
 export class VmProxy {
   vmContext: VMContext

@@ -1,20 +1,20 @@
 'use strict'
 import { RunBlockResult, RunTxResult } from '@ethereumjs/vm'
 import { ConsensusType } from '@ethereumjs/common'
-import { LegacyTransaction, FeeMarketEIP1559Transaction } from '@ethereumjs/tx'
+import { createFeeMarket1559Tx, createFeeMarket1559TxFromRLP, createLegacyTx, createLegacyTxFromRLP, LegacyTx } from '@theqrl/zondjs-tx'
 import { Block } from '@ethereumjs/block'
-import { bytesToHex, Address, hexToBytes } from '@ethereumjs/util'
-import { EVM } from '@ethereumjs/evm'
-import type { Account, AddressLike, BigIntLike } from '@ethereumjs/util'
+import { bytesToHex, hexToBytes, createAddressFromString, toBytes, addHexPrefix } from '@theqrl/zondjs-util'
+import type { AddressLike, BigIntLike } from '@theqrl/zondjs-util'
 import { EventManager } from '../eventManager'
 import { LogsManager } from './logsManager'
 import type { Transaction as InternalTransaction } from './txRunner'
+import { signTransaction } from '@theqrl/web3-zond-accounts'
 
 export type VMexecutionResult = {
   result: RunTxResult,
   transactionHash: string
   block: Block,
-  tx: LegacyTransaction
+  tx: LegacyTx
 }
 
 export type VMExecutionCallBack = (error: string | Error, result?: VMexecutionResult) => void
@@ -85,9 +85,9 @@ export class TxRunnerVM {
       let tx
       if (signed) {
         if (!EIP1559) {
-          tx = LegacyTransaction.fromSerializedTx(hexToBytes(data), { common: this.commonContext })
+          tx = createLegacyTxFromRLP(hexToBytes(data), { common: this.commonContext })
         } else {
-          tx = FeeMarketEIP1559Transaction.fromSerializedTx(hexToBytes(data), { common: this.commonContext })
+          tx = createFeeMarket1559TxFromRLP(hexToBytes(data), { common: this.commonContext })
         }
       }
       else {
@@ -100,18 +100,18 @@ export class TxRunnerVM {
           return callback('Invalid account selected')
         }
 
-        const res = await this.getVMObject().stateManager.getAccount(Address.fromString(from))
+        const res = await this.getVMObject().stateManager.getAccount(createAddressFromString(from))
         if (!EIP1559) {
-          tx = LegacyTransaction.fromTxData({
+          tx = createLegacyTx({
             nonce: useCall ? this.nextNonceForCall : res.nonce,
             gasPrice: '0x1',
             gasLimit: gasLimit,
             to: (to as AddressLike),
             value: (value as BigIntLike),
             data: hexToBytes(data)
-          }, { common: this.commonContext }).sign(account.privateKey)
+          }, { common: this.commonContext }).sign(toBytes(addHexPrefix(account.seed)))
         } else {
-          tx = FeeMarketEIP1559Transaction.fromTxData({
+          tx = createFeeMarket1559Tx({
             nonce: useCall ? this.nextNonceForCall : res.nonce,
             maxPriorityFeePerGas: '0x01',
             maxFeePerGas: '0x7',
@@ -119,7 +119,7 @@ export class TxRunnerVM {
             to: (to as AddressLike),
             value: (value as BigIntLike),
             data: hexToBytes(data)
-          }).sign(account.privateKey)
+          }).sign(toBytes(addHexPrefix(account.seed)))
         }
       }
 
