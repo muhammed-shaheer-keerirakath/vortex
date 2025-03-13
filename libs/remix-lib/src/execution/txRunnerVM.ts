@@ -10,9 +10,9 @@ import { LogsManager } from './logsManager'
 import type { Transaction as InternalTransaction } from './txRunner'
 
 export type VMexecutionResult = {
-  result: RunTxResult,
+  result: RunTxResult
   transactionHash: string
-  block: Block,
+  block: Block
   tx: LegacyTx
 }
 
@@ -32,7 +32,7 @@ export class TxRunnerVM {
   standaloneTx: boolean
   getVMObject: () => any
 
-  constructor (vmaccounts, api, getVMObject, blocks: Uint8Array[] = []) {
+  constructor(vmaccounts, api, getVMObject, blocks: Uint8Array[] = []) {
     this.event = new EventManager()
     this.logsManager = new LogsManager()
     // has a default for now for backwards compatibility
@@ -61,7 +61,7 @@ export class TxRunnerVM {
     }
   }
 
-  execute (args: InternalTransaction, confirmationCb, gasEstimationForceSend, promptCb, callback: VMExecutionCallBack) {
+  execute(args: InternalTransaction, confirmationCb, gasEstimationForceSend, promptCb, callback: VMExecutionCallBack) {
     let data = args.data
     if (data.slice(0, 2) !== '0x') {
       data = '0x' + data
@@ -74,7 +74,7 @@ export class TxRunnerVM {
     }
   }
 
-  async runInVm (tx: InternalTransaction, callback: VMExecutionCallBack) {
+  async runInVm(tx: InternalTransaction, callback: VMExecutionCallBack) {
     const { to, data, value, gasLimit, useCall, signed } = tx
     let { from } = tx
     let account
@@ -88,8 +88,7 @@ export class TxRunnerVM {
         } else {
           tx = createFeeMarket1559TxFromRLP(hexToBytes(data), { common: this.commonContext })
         }
-      }
-      else {
+      } else {
         if (!from && useCall && Object.keys(this.vmaccounts).length) {
           from = Object.keys(this.vmaccounts)[0]
           account = this.vmaccounts[from]
@@ -101,23 +100,26 @@ export class TxRunnerVM {
 
         const res = await this.getVMObject().stateManager.getAccount(createAddressFromString(from))
         if (!EIP1559) {
-          tx = createLegacyTx({
-            nonce: useCall ? this.nextNonceForCall : res.nonce,
-            gasPrice: '0x1',
-            gasLimit: gasLimit,
-            to: (to as AddressLike),
-            value: (value as BigIntLike),
-            data: hexToBytes(data)
-          }, { common: this.commonContext }).sign(toBytes(addHexPrefix(account.seed)))
+          tx = createLegacyTx(
+            {
+              nonce: useCall ? this.nextNonceForCall : res.nonce,
+              gasPrice: '0x1',
+              gasLimit: gasLimit,
+              to: to as AddressLike,
+              value: value as BigIntLike,
+              data: hexToBytes(data),
+            },
+            { common: this.commonContext }
+          ).sign(toBytes(addHexPrefix(account.seed)))
         } else {
           tx = createFeeMarket1559Tx({
             nonce: useCall ? this.nextNonceForCall : res.nonce,
             maxPriorityFeePerGas: '0x01',
             maxFeePerGas: '0x7',
             gasLimit: gasLimit,
-            to: (to as AddressLike),
-            value: (value as BigIntLike),
-            data: hexToBytes(data)
+            to: to as AddressLike,
+            value: value as BigIntLike,
+            data: hexToBytes(data),
           }).sign(toBytes(addHexPrefix(account.seed)))
         }
       }
@@ -127,18 +129,21 @@ export class TxRunnerVM {
       const coinbases = ['0x0e9281e9c6a0808672eaba6bd1220e144c9bb07a', '0x8945a1288dc78a6d8952a92c77aee6730b414778', '0x94d76e24f818426ae84aa404140e8d5f60e10e7e']
       const difficulties = [69762765929000, 70762765929000, 71762765929000]
       const difficulty = this.commonContext.consensusType() === ConsensusType.ProofOfStake ? 0 : difficulties[this.blocks.length % difficulties.length]
-      const block = Block.fromBlockData({
-        header: {
-          timestamp: new Date().getTime() / 1000 | 0,
-          number: this.blocks.length,
-          coinbase: coinbases[this.blocks.length % coinbases.length],
-          difficulty,
-          gasLimit,
-          baseFeePerGas: EIP1559 ? '0x1' : undefined,
-          parentHash: this.blockParentHash
+      const block = Block.fromBlockData(
+        {
+          header: {
+            timestamp: (new Date().getTime() / 1000) | 0,
+            number: this.blocks.length,
+            coinbase: coinbases[this.blocks.length % coinbases.length],
+            difficulty,
+            gasLimit,
+            baseFeePerGas: EIP1559 ? '0x1' : undefined,
+            parentHash: this.blockParentHash,
+          },
+          transactions: [tx],
         },
-        transactions: [tx]
-      }, { common: this.commonContext })
+        { common: this.commonContext }
+      )
 
       // standaloneTx represents a gas estimation call
       if (this.standaloneTx || useCall) {
@@ -164,30 +169,36 @@ export class TxRunnerVM {
     }
   }
 
-  runTxInVm (tx, block, callback) {
-    this.getVMObject().vm.runTx({ tx, skipNonce: true, skipBlockValidation: true, skipBalance: false }).then((result: RunTxResult) => {
-      callback(null, {
-        result,
-        transactionHash: bytesToHex(Buffer.from(tx.hash())),
-        block,
-        tx
+  runTxInVm(tx, block, callback) {
+    this.getVMObject()
+      .vm.runTx({ tx, skipNonce: true, skipBlockValidation: true, skipBalance: false })
+      .then((result: RunTxResult) => {
+        callback(null, {
+          result,
+          transactionHash: bytesToHex(Buffer.from(tx.hash())),
+          block,
+          tx,
+        })
       })
-    }).catch(function (err) {
-      callback(err)
-    })
+      .catch(function (err) {
+        callback(err)
+      })
   }
 
-  runBlockInVm (tx, block, callback) {
-    this.getVMObject().vm.runBlock({ block: block, generate: true, skipNonce: true, skipBlockValidation: true, skipBalance: false }).then((results: RunBlockResult) => {
-      const result: RunTxResult = results.results[0]
-      callback(null, {
-        result,
-        transactionHash: bytesToHex(Buffer.from(tx.hash())),
-        block,
-        tx
+  runBlockInVm(tx, block, callback) {
+    this.getVMObject()
+      .vm.runBlock({ block: block, generate: true, skipNonce: true, skipBlockValidation: true, skipBalance: false })
+      .then((results: RunBlockResult) => {
+        const result: RunTxResult = results.results[0]
+        callback(null, {
+          result,
+          transactionHash: bytesToHex(Buffer.from(tx.hash())),
+          block,
+          tx,
+        })
       })
-    }).catch(function (err) {
-      callback(err)
-    })
+      .catch(function (err) {
+        callback(err)
+      })
   }
 }
