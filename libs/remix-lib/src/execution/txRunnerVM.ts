@@ -8,7 +8,6 @@ import type { AddressLike, BigIntLike } from '@theqrl/zondjs-util'
 import { EventManager } from '../eventManager'
 import { LogsManager } from './logsManager'
 import type { Transaction as InternalTransaction } from './txRunner'
-import { signTransaction } from '@theqrl/web3-zond-accounts'
 
 export type VMexecutionResult = {
   result: RunTxResult,

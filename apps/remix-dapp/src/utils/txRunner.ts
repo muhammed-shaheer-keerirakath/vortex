@@ -1,5 +1,5 @@
 import Web3, { FMT_NUMBER, type ZondExecutionAPI, type SupportedProviders, FMT_BYTES, type Bytes } from '@theqrl/web3'
-import { addHexPrefix, toBytes } from '@ethereumjs/util'
+import { addHexPrefix, toBytes } from '@theqrl/zondjs-util'
 import { execution } from '@remix-project/remix-lib'
 import { toBigInt } from '@theqrl/web3-utils'
 import { saveSettings } from '../actions'

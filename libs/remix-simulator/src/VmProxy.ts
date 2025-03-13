@@ -1,18 +1,18 @@
 import { util } from '@remix-project/remix-lib'
-const { toHexPaddedString, formatMemory } = util
 import { helpers } from '@remix-project/remix-lib'
-const { normalizeHexAddress } = helpers.ui
 import { ConsoleLogs, hash } from '@remix-project/remix-lib'
-import { toChecksumAddress, bytesToHex, Address, toBytes, bigIntToHex } from '@ethereumjs/util'
+import { toChecksumAddress, bytesToHex, toBytes, createAddressFromString } from '@theqrl/zondjs-util'
 import utils, { toBigInt } from '@theqrl/web3-utils'
 import { isBigInt } from '@theqrl/web3-validator'
 import { ethers } from 'ethers'
 import { VMContext } from './vm-context'
-import type { EVMStateManagerInterface } from '@ethereumjs/common'
-import type { EVMResult, InterpreterStep, Message } from '@ethereumjs/evm'
-import type { AfterTxEvent, VM } from '@ethereumjs/vm'
+import type { StateManagerInterface } from '@theqrl/zondjs-common'
+import type { InterpreterStep } from '@theqrl/zondjs-evm'
+import type { AfterTxEvent, VM } from '@theqrl/zondjs-vm'
 import type { TypedTransaction } from '@theqrl/zondjs-tx'
 import { validator } from '@theqrl/web3'
+const { toHexPaddedString, formatMemory } = util
+const { normalizeHexAddress } = helpers.ui
 
 export class VmProxy {
   vmContext: VMContext
@@ -44,7 +44,7 @@ export class VmProxy {
   utils
   txsMapBlock
   blocks
-  stateCopy: EVMStateManagerInterface
+  stateCopy: StateManagerInterface
   flagrecordVMSteps: boolean
   lastMemoryUpdate: Array<string>
   callIncrement: bigint
@@ -129,7 +129,7 @@ export class VmProxy {
   async txWillProcess(data: TypedTransaction) {
     if (!this.flagrecordVMSteps) return
     this.lastMemoryUpdate = []
-    this.stateCopy = await this.vm.stateManager.shallowCopy()
+    this.stateCopy = this.vm.stateManager.shallowCopy()
     this.incr++
     this.processingHash = bytesToHex(data.hash())
     this.vmTraces[this.processingHash] = {
@@ -204,7 +204,7 @@ export class VmProxy {
       try {
         await (async (processingHash, processingAddress, self) => {
           try {
-            const account = Address.fromString(processingAddress)
+            const account = createAddressFromString(processingAddress)
             const storage = await self.vm.stateManager.dumpStorage(account)
             self.storageCache['after_' + processingHash][processingAddress] = storage
           } catch (e) {
@@ -306,7 +306,7 @@ export class VmProxy {
           if (!this.storageCache[this.processingHash][this.processingAddress]) {
             ;(async (processingHash, processingAddress, self) => {
               try {
-                const account = Address.fromString(processingAddress)
+                const account = createAddressFromString(processingAddress)
                 const storage = await self.stateCopy.dumpStorage(account)
                 self.storageCache[processingHash][processingAddress] = storage
               } catch (e) {
@@ -333,7 +333,7 @@ export class VmProxy {
   getCode(address, cb) {
     address = toChecksumAddress(address)
     this.vm.stateManager
-      .getContractCode(Address.fromString(address))
+      .getCode(createAddressFromString(address))
       .then((result) => {
         cb(null, bytesToHex(result))
       })
@@ -366,6 +366,7 @@ export class VmProxy {
     const txHash = bytesToHex(block.transactions[block.transactions.length - 1].hash())
 
     if (this.storageCache['after_' + txHash] && this.storageCache['after_' + txHash][address]) {
+      // @ts-ignore
       const slot = bytesToHex(hash.keccak(toBytes(ethers.utils.hexZeroPad(position, 32))))
       const storage = this.storageCache['after_' + txHash][address]
       return cb(null, storage[slot].value)

@@ -18,7 +18,7 @@ import { EVMStateManagerInterface, StorageDump } from '@ethereumjs/common'
 import { EVM } from '@ethereumjs/evm'
 import { Blockchain } from '@ethereumjs/blockchain'
 import { Block } from '@ethereumjs/block'
-import { TypedTransaction } from '@ethereumjs/tx'
+import { TypedTransaction } from '@theqrl/zondjs-tx'
 import { State } from './provider'
 import { hexToBytes } from '@theqrl/web3-utils'
 
