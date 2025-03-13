@@ -1,7 +1,7 @@
 import React from 'react' // eslint-disable-line
 import { fromWei, toBigInt, toWei } from '@theqrl/web3-utils'
 import { Plugin } from '@remixproject/engine'
-import { toBytes, addHexPrefix } from '@ethereumjs/util'
+import { toBytes, addHexPrefix } from '@theqrl/zondjs-util'
 import { EventEmitter } from 'events'
 import { format } from 'util'
 import { ExecutionContext } from './execution-context'

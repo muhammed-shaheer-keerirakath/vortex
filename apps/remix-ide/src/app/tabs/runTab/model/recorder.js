@@ -1,6 +1,6 @@
 var async = require('async')
 var remixLib = require('@remix-project/remix-lib')
-import { bytesToHex } from '@ethereumjs/util'
+import { bytesToHex } from '@theqrl/zondjs-util'
 import { hash } from '@remix-project/remix-lib'
 import { Plugin } from '@remixproject/engine'
 import * as packageJson from '../../../../.././../../package.json'

@@ -1,5 +1,5 @@
 var async = require('async')
-import { toChecksumAddress, bytesToHex } from '@ethereumjs/util'
+import { toChecksumAddress, bytesToHex } from '@theqrl/zondjs-util'
 
 export default  {
   shortenAddress: function (address, etherBalance) {

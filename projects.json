@@ -971,7 +971,7 @@
               "hash": "d004888a58dd18463a3747bc40fdf5f9a52b4ccf",
               "deps": [
                 "npm:@remixproject/engine",
-                "npm:@ethereumjs/util"
+                "npm:@theqrl/zondjs-util"
               ]
             },
             {
@@ -1411,10 +1411,10 @@
               "file": "libs/remix-astwalker/package.json",
               "hash": "636700b360818f8250561a0c6e08496b03b16950",
               "deps": [
-                "npm:@ethereumjs/block",
-                "npm:@ethereumjs/tx",
-                "npm:@ethereumjs/util",
-                "npm:@ethereumjs/vm",
+                "npm:@theqrl/zondjs-block",
+                "npm:@theqrl/zondjs-tx",
+                "npm:@theqrl/zondjs-util",
+                "npm:@theqrl/zondjs-vm",
                 "remix-lib",
                 "npm:@types/tape",
                 "npm:async",
@@ -1588,11 +1588,11 @@
               "file": "libs/remix-simulator/package.json",
               "hash": "594f82c8f24f4fb02dc768f31bfbdfa8a1ca7ad2",
               "deps": [
-                "npm:@ethereumjs/block",
-                "npm:@ethereumjs/common",
-                "npm:@ethereumjs/tx",
-                "npm:@ethereumjs/util",
-                "npm:@ethereumjs/vm",
+                "npm:@theqrl/zondjs-block",
+                "npm:@theqrl/zondjs-common",
+                "npm:@theqrl/zondjs-tx",
+                "npm:@theqrl/zondjs-util",
+                "npm:@theqrl/zondjs-vm",
                 "remix-lib",
                 "npm:ansi-gray",
                 "npm:async",
@@ -1633,7 +1633,7 @@
               "file": "libs/remix-simulator/src/methods/accounts.ts",
               "hash": "ffbfc89a3a26437a7de6e2618654761d5e2e71b3",
               "deps": [
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:bn.js",
                 "npm:web3-eth-accounts"
               ]
@@ -1643,7 +1643,7 @@
               "hash": "60b47bab25b6ec3b6843564ba15422693e4f5896",
               "deps": [
                 "npm:web3-utils",
-                "npm:@ethereumjs/util"
+                "npm:@theqrl/zondjs-util"
               ]
             },
             {
@@ -1671,10 +1671,10 @@
               "deps": [
                 "npm:web3-utils",
                 "npm:bn.js",
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:ethers",
-                "npm:@ethereumjs/vm",
-                "npm:@ethereumjs/evm"
+                "npm:@theqrl/zondjs-vm",
+                "npm:@theqrl/zondjs-evm"
               ]
             },
             {
@@ -1711,18 +1711,18 @@
               "file": "libs/remix-simulator/src/vm-context.ts",
               "hash": "62122a61c91539cfac79e478694078fa60490340",
               "deps": [
-                "npm:@ethereumjs/statemanager",
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-statemanager",
+                "npm:@theqrl/zondjs-util",
                 "npm:ethereum-cryptography",
                 "npm:rlp",
                 "npm:ethers",
-                "npm:@ethereumjs/vm",
-                "npm:@ethereumjs/common",
-                "npm:@ethereumjs/trie",
-                "npm:@ethereumjs/evm",
-                "npm:@ethereumjs/blockchain",
-                "npm:@ethereumjs/block",
-                "npm:@ethereumjs/tx"
+                "npm:@theqrl/zondjs-vm",
+                "npm:@theqrl/zondjs-common",
+                "npm:@theqrl/zondjs-trie",
+                "npm:@theqrl/zondjs-evm",
+                "npm:@theqrl/zondjs-blockchain",
+                "npm:@theqrl/zondjs-block",
+                "npm:@theqrl/zondjs-tx"
               ]
             },
             {
@@ -1731,12 +1731,12 @@
               "deps": [
                 "npm:bn.js",
                 "npm:web3-utils",
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:ethers",
-                "npm:@ethereumjs/statemanager",
-                "npm:@ethereumjs/evm",
-                "npm:@ethereumjs/vm",
-                "npm:@ethereumjs/tx"
+                "npm:@theqrl/zondjs-statemanager",
+                "npm:@theqrl/zondjs-evm",
+                "npm:@theqrl/zondjs-vm",
+                "npm:@theqrl/zondjs-tx"
               ]
             },
             {
@@ -1865,10 +1865,10 @@
               "file": "libs/remix-analyzer/package.json",
               "hash": "781a3a3bdca08efa7fff04e369e4ad1c3c736abd",
               "deps": [
-                "npm:@ethereumjs/block",
-                "npm:@ethereumjs/tx",
-                "npm:@ethereumjs/util",
-                "npm:@ethereumjs/vm",
+                "npm:@theqrl/zondjs-block",
+                "npm:@theqrl/zondjs-tx",
+                "npm:@theqrl/zondjs-util",
+                "npm:@theqrl/zondjs-vm",
                 "remix-astwalker",
                 "remix-lib",
                 "npm:async",
@@ -2486,10 +2486,10 @@
               "file": "libs/remix-solidity/package.json",
               "hash": "5a9ecbc02026c6c8472a3649087766eb000ef91e",
               "deps": [
-                "npm:@ethereumjs/block",
-                "npm:@ethereumjs/tx",
-                "npm:@ethereumjs/util",
-                "npm:@ethereumjs/vm",
+                "npm:@theqrl/zondjs-block",
+                "npm:@theqrl/zondjs-tx",
+                "npm:@theqrl/zondjs-util",
+                "npm:@theqrl/zondjs-vm",
                 "remix-lib",
                 "npm:async",
                 "npm:eslint-scope",
@@ -2852,11 +2852,11 @@
               "file": "libs/remix-debug/package.json",
               "hash": "32799caf494544ca97f967e4958d359d881dbe81",
               "deps": [
-                "npm:@ethereumjs/block",
-                "npm:@ethereumjs/common",
-                "npm:@ethereumjs/tx",
-                "npm:@ethereumjs/util",
-                "npm:@ethereumjs/vm",
+                "npm:@theqrl/zondjs-block",
+                "npm:@theqrl/zondjs-common",
+                "npm:@theqrl/zondjs-tx",
+                "npm:@theqrl/zondjs-util",
+                "npm:@theqrl/zondjs-vm",
                 "remix-astwalker",
                 "remix-lib",
                 "remix-simulator",
@@ -2915,15 +2915,15 @@
               "file": "libs/remix-debug/src/code/codeUtils.ts",
               "hash": "f9784bb135f1fb9097d9acf1db2b8657384a1db1",
               "deps": [
-                "npm:@ethereumjs/common",
-                "npm:@ethereumjs/evm"
+                "npm:@theqrl/zondjs-common",
+                "npm:@theqrl/zondjs-evm"
               ]
             },
             {
               "file": "libs/remix-debug/src/code/disassembler.ts",
               "hash": "b828fe7e5d6e54ad28f72ca092a7880b8a808fee",
               "deps": [
-                "npm:@ethereumjs/util"
+                "npm:@theqrl/zondjs-util"
               ]
             },
             {
@@ -3036,7 +3036,7 @@
               "file": "libs/remix-debug/src/solidity-decoder/types/Mapping.ts",
               "hash": "870c0b01a82e9f37dad4307bcf9ec459e7897fc2",
               "deps": [
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:bn.js"
               ]
             },
@@ -3063,7 +3063,7 @@
               "file": "libs/remix-debug/src/solidity-decoder/types/util.ts",
               "hash": "bd6a7f4bd1bdccc1f51d1179a336b9ae2063263d",
               "deps": [
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:bn.js"
               ]
             },
@@ -3230,7 +3230,7 @@
               "hash": "52b457e8ce1677891ecb18063b0322f091702be7",
               "deps": [
                 "npm:solc",
-                "npm:@ethereumjs/util"
+                "npm:@theqrl/zondjs-util"
               ]
             },
             {
@@ -3323,7 +3323,7 @@
               "file": "libs/remix-debug/test/vmCall.ts",
               "hash": "56d15729e970f28166187e78b822718dedfe4948",
               "deps": [
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:web3"
               ]
             },
@@ -3444,11 +3444,11 @@
               "hash": "a9462d0075967537747e533bd48da292ebb6f048",
               "deps": [
                 "npm:@erebos/bzz-node",
-                "npm:@ethereumjs/block",
-                "npm:@ethereumjs/common",
-                "npm:@ethereumjs/tx",
-                "npm:@ethereumjs/util",
-                "npm:@ethereumjs/vm",
+                "npm:@theqrl/zondjs-block",
+                "npm:@theqrl/zondjs-common",
+                "npm:@theqrl/zondjs-tx",
+                "npm:@theqrl/zondjs-util",
+                "npm:@theqrl/zondjs-vm",
                 "remix-lib",
                 "remix-simulator",
                 "remix-solidity",
@@ -5095,7 +5095,7 @@
               "deps": [
                 "npm:react",
                 "npm:react-intl",
-                "npm:@ethereumjs/common"
+                "npm:@theqrl/zondjs-common"
               ]
             },
             {
@@ -5507,7 +5507,7 @@
               "hash": "f1d67391170c45b2516fa91a1f17588d22d02bd1",
               "deps": [
                 "npm:async",
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:@remixproject/engine"
               ]
             },
@@ -5989,7 +5989,7 @@
                 "npm:react",
                 "npm:web3",
                 "npm:@remixproject/engine",
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:events",
                 "npm:util"
               ]
@@ -6010,7 +6010,7 @@
               "hash": "bc6ab49e7f11c87183ba9dfa72c19eac432901cd",
               "deps": [
                 "npm:web3",
-                "npm:@ethereumjs/util"
+                "npm:@theqrl/zondjs-util"
               ]
             },
             {
@@ -6018,7 +6018,7 @@
               "hash": "65116b4923eb71e08b1aa500e4bfed3839eae47e",
               "deps": [
                 "npm:web3",
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:web3-eth-personal"
               ]
             },
@@ -6027,7 +6027,7 @@
               "hash": "4234e42616a79ff6f151ecc0971d5a9557576900",
               "deps": [
                 "npm:web3",
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:bn.js"
               ]
             },
@@ -6075,7 +6075,7 @@
               "hash": "d332c7e9371f4ff48a534a12da006e57c85be7ad",
               "deps": [
                 "npm:async",
-                "npm:@ethereumjs/util"
+                "npm:@theqrl/zondjs-util"
               ]
             },
             {
@@ -6229,7 +6229,7 @@
               "file": "libs/remix-lib/package.json",
               "hash": "afec35ad63cac130f215898247723a64a6a69293",
               "deps": [
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:async",
                 "npm:ethers",
                 "npm:ethjs-util",
@@ -6275,7 +6275,7 @@
               "hash": "a8ae3ec3c8e59fdf596bb6958544a52c13a22012",
               "deps": [
                 "npm:async",
-                "npm:@ethereumjs/util"
+                "npm:@theqrl/zondjs-util"
               ]
             },
             {
@@ -6292,7 +6292,7 @@
                 "npm:ethers",
                 "npm:async",
                 "npm:solc",
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:from-exponential"
               ]
             },
@@ -6308,7 +6308,7 @@
               "hash": "d4251f029743000497374c5ce2f605834feaefca",
               "deps": [
                 "npm:ethers",
-                "npm:@ethereumjs/util"
+                "npm:@theqrl/zondjs-util"
               ]
             },
             {
@@ -6319,11 +6319,11 @@
               "file": "libs/remix-lib/src/execution/txRunnerVM.ts",
               "hash": "31364c045a7d1c3f4c160b1faef4df2e3b8fce6d",
               "deps": [
-                "npm:@ethereumjs/vm",
-                "npm:@ethereumjs/common",
-                "npm:@ethereumjs/tx",
-                "npm:@ethereumjs/block",
-                "npm:@ethereumjs/util"
+                "npm:@theqrl/zondjs-vm",
+                "npm:@theqrl/zondjs-common",
+                "npm:@theqrl/zondjs-tx",
+                "npm:@theqrl/zondjs-block",
+                "npm:@theqrl/zondjs-util"
               ]
             },
             {
@@ -6338,7 +6338,7 @@
               "hash": "46a25bff8afae7898e32b39683cc69b96dc5ae8a",
               "deps": [
                 "npm:bn.js",
-                "npm:@ethereumjs/util"
+                "npm:@theqrl/zondjs-util"
               ]
             },
             {
@@ -6348,7 +6348,7 @@
                 "npm:ethereum-cryptography",
                 "npm:create-hash",
                 "npm:rlp",
-                "npm:@ethereumjs/util"
+                "npm:@theqrl/zondjs-util"
               ]
             },
             {
@@ -6363,7 +6363,7 @@
               "file": "libs/remix-lib/src/helpers/txResultHelper.ts",
               "hash": "a7a89163c6ede005e74e18e03966b6bdb6bb9a5d",
               "deps": [
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:ethjs-util"
               ]
             },
@@ -6398,7 +6398,7 @@
               "file": "libs/remix-lib/src/util.ts",
               "hash": "f28d6c80c0ab6e09f087609755241a0e8d29f9ad",
               "deps": [
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:string-similarity"
               ]
             },
@@ -6446,7 +6446,7 @@
               "deps": [
                 "npm:tape",
                 "npm:bn.js",
-                "npm:@ethereumjs/util"
+                "npm:@theqrl/zondjs-util"
               ]
             },
             {
@@ -7270,7 +7270,7 @@
               "file": "libs/remix-ui/helper/src/lib/remix-ui-helper.ts",
               "hash": "21925ed8f84761710b12b87a44180e704dadb886",
               "deps": [
-                "npm:@ethereumjs/util"
+                "npm:@theqrl/zondjs-util"
               ]
             },
             {
@@ -7757,7 +7757,7 @@
               "deps": [
                 "npm:react",
                 "npm:react-intl",
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:process"
               ]
             },
@@ -7870,7 +7870,7 @@
               "deps": [
                 "npm:react",
                 "npm:react-intl",
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:bn.js"
               ]
             },
@@ -8700,7 +8700,7 @@
               "hash": "0f9166f5f17a42f96124a1dffab4e65d3d8f0b09",
               "deps": [
                 "npm:react",
-                "npm:@ethereumjs/util",
+                "npm:@theqrl/zondjs-util",
                 "npm:axios",
                 "remix-ide",
                 "npm:is-electron"

@@ -1,6 +1,6 @@
 import { Web3, FMT_BYTES, FMT_NUMBER, LegacySendAsyncProvider, LegacyRequestProvider } from '@theqrl/web3'
 import { fromWei, toBigInt } from '@theqrl/web3-utils'
-import { privateToAddress, hashPersonalMessage, isHexString, bytesToHex } from '@ethereumjs/util'
+import { privateToAddress, hashPersonalMessage, isHexString, bytesToHex } from '@theqrl/zondjs-util'
 import { extend, JSONRPCRequestPayload, JSONRPCResponseCallback } from '@remix-project/remix-simulator'
 import { ExecutionContext } from '../execution-context'
 

@@ -1,5 +1,5 @@
 import { Web3 } from '@theqrl/web3'
-import { hashPersonalMessage, isHexString, bytesToHex } from '@ethereumjs/util'
+import { hashPersonalMessage, isHexString, bytesToHex } from '@theqrl/zondjs-util'
 import { ExecutionContext } from '../execution-context'
 
 export class InjectedProvider {

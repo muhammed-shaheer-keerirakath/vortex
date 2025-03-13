@@ -2,7 +2,7 @@
 import { Web3 } from '@theqrl/web3'
 import { execution } from '@remix-project/remix-lib'
 import EventManager from '../lib/events'
-import { bytesToHex } from '@ethereumjs/util'
+import { bytesToHex } from '@theqrl/zondjs-util'
 const _paq = (window._paq = window._paq || [])
 
 let web3
