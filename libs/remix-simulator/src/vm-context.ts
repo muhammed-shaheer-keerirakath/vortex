@@ -2,9 +2,9 @@
 /* global ethereum */
 'use strict'
 import { hash } from '@remix-project/remix-lib'
-import { bytesToHex, Account, bigIntToHex, MapDB, toBytes, bytesToBigInt, BIGINT_0 } from '@ethereumjs/util'
+import { bytesToHex, Account, bigIntToHex, MapDB, toBytes, bytesToBigInt, BIGINT_0, createAccount } from '@theqrl/zondjs-util'
 import { keccak256 } from 'ethereum-cryptography/keccak'
-import { Address } from '@ethereumjs/util'
+import { Address } from '@theqrl/zondjs-util'
 import { decode } from 'rlp'
 import { ethers } from 'ethers'
 import { execution } from '@remix-project/remix-lib'
@@ -153,6 +153,7 @@ class CustomEthersStateManager extends StateManagerCommonStorageDump {
     const code = await super.getContractCode(address)
     if (code && code.length > 0) return code
     else {
+      // @ts-ignore
       const code = toBytes(await this.provider.getCode(address.toString(), this.blockTag))
       await super.putContractCode(address, code)
       return code
@@ -172,6 +173,7 @@ class CustomEthersStateManager extends StateManagerCommonStorageDump {
     let storage = await super.getContractStorage(address, key)
     if (storage && storage.length > 0) return storage
     else {
+      // @ts-ignore
       storage = toBytes(await this.provider.getStorageAt(address.toString(), bytesToBigInt(key), this.blockTag))
       await super.putContractStorage(address, key, storage)
       return storage
@@ -189,13 +191,14 @@ class CustomEthersStateManager extends StateManagerCommonStorageDump {
     // Get merkle proof for `address` from provider
     const proof = await this.provider.send('zond_getProof', [address.toString(), [], this.blockTag])
 
+    // @ts-ignore
     const proofBuf = proof.accountProof.map((proofNode: string) => toBytes(proofNode))
 
     const trie = new Trie({ useKeyHashing: true })
     const verified = await trie.verifyProof(Buffer.from(keccak256(proofBuf[0])), address.bytes, proofBuf)
     if (verified) {
       const codeHash = proof.codeHash === '0x0000000000000000000000000000000000000000000000000000000000000000' ? '0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470' : proof.codeHash
-      const account = Account.fromAccountData({
+      const account = createAccount({
         balance: BigInt(proof.balance),
         nonce: BigInt(proof.nonce),
         codeHash: hexToBytes(codeHash),
@@ -221,14 +224,14 @@ class CustomEthersStateManager extends StateManagerCommonStorageDump {
     }
     let account
     if (!accountData) {
-      account = Account.fromAccountData({
+      account = createAccount({
         balance: BigInt(0),
         nonce: BigInt(0),
         codeHash: hexToBytes('0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470'),
       })
     } else {
       const codeHash = accountData.codeHash === '0x0000000000000000000000000000000000000000000000000000000000000000' ? '0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470' : accountData.codeHash
-      account = Account.fromAccountData({
+      account = createAccount({
         balance: BigInt(accountData.balance),
         nonce: BigInt(accountData.nonce),
         codeHash: hexToBytes(codeHash),

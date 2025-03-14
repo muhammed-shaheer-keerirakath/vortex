@@ -1,6 +1,6 @@
 'use strict'
 import { BN } from 'bn.js'
-import { bytesToHex } from '@ethereumjs/util'
+import { bytesToHex } from '@theqrl/zondjs-util'
 import { isBigInt } from '@theqrl/web3-validator'
 
 export function toInt (h) {

@@ -1,6 +1,6 @@
 'use strict'
 import { hash } from '@remix-project/remix-lib'
-import { bytesToHex, setLengthLeft, toBytes, addHexPrefix } from '@ethereumjs/util'
+import { bytesToHex, setLengthLeft, toBytes, addHexPrefix } from '@theqrl/zondjs-util'
 import stringSimilarity from 'string-similarity'
 import { BN } from 'bn.js'
 import { isBigInt } from '@theqrl/web3-validator'

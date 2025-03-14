@@ -1,5 +1,5 @@
 'use strict'
-import { bytesToHex } from '@ethereumjs/util'
+import { bytesToHex } from '@theqrl/zondjs-util'
 import { Common } from '@ethereumjs/common'
 // TODO fix the import when getOpcodesForHF is exported
 import { getOpcodesForHF } from '@ethereumjs/evm'

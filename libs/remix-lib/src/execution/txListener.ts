@@ -1,6 +1,6 @@
 'use strict'
 import { ethers } from 'ethers'
-import { toBytes, addHexPrefix } from '@ethereumjs/util'
+import { toBytes, addHexPrefix } from '@theqrl/zondjs-util'
 import { EventManager } from '../eventManager'
 import { compareByteCode, getinputParameters } from '../util'
 import { decodeResponse } from './txFormat'

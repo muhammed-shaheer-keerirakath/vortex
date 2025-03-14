@@ -1,7 +1,7 @@
 /* eslint-disable object-curly-spacing */
 import { eachOf } from 'async'
 import { randomBytes } from 'crypto'
-import { toChecksumAddress, bytesToHex } from '@ethereumjs/util'
+import { toChecksumAddress, bytesToHex } from '@theqrl/zondjs-util'
 
 export class LogsManager {
   notificationCallbacks

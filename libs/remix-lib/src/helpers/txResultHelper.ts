@@ -1,5 +1,5 @@
 'use strict'
-import { bytesToHex } from '@ethereumjs/util'
+import { bytesToHex } from '@theqrl/zondjs-util'
 import { isHexString } from 'ethjs-util'
 import { BN } from 'bn.js'
 import { isBigInt } from '@theqrl/web3-validator'

@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import { encodeParams as encodeParamsHelper, encodeFunctionId, makeFullTypeDefinition } from './txHelper'
 import { eachOfSeries } from 'async'
 import { linkBytecode as linkBytecodeSolc } from 'solc/linker'
-import { isValidAddress, addHexPrefix } from '@ethereumjs/util'
+import { isValidAddress, addHexPrefix } from '@theqrl/zondjs-util'
 import fromExponential from 'from-exponential';
 
 /**

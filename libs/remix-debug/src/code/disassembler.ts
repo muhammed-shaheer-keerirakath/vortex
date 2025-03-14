@@ -2,7 +2,7 @@
 
 import { parseCode } from './codeUtils'
 import { util } from '@remix-project/remix-lib'
-import { bytesToHex } from '@ethereumjs/util'
+import { bytesToHex } from '@theqrl/zondjs-util'
 
 function createExpressions (instructions) {
   const expressions = []
