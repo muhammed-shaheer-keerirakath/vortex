@@ -1,4 +1,4 @@
-const {composePlugins, withNx} = require('@nrwl/webpack')
+const { composePlugins, withNx } = require('@nrwl/webpack')
 const webpack = require('webpack')
 const TerserPlugin = require('terser-webpack-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
@@ -43,7 +43,6 @@ module.exports = composePlugins(withNx(), (config) => {
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
       url: ['url', 'URL'],
-      process: 'process/browser',
     })
   )
 

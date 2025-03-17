@@ -1,5 +1,5 @@
-const {composePlugins, withNx} = require('@nrwl/webpack')
-const {withReact} = require('@nrwl/react')
+const { composePlugins, withNx } = require('@nrwl/webpack')
+const { withReact } = require('@nrwl/react')
 const webpack = require('webpack')
 const CopyPlugin = require('copy-webpack-plugin')
 const version = require('../../package.json').version
@@ -11,7 +11,7 @@ const path = require('path')
 const versionData = {
   version: version,
   timestamp: Date.now(),
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development'
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
 }
 
 const loadLocalSolJson = async () => {
@@ -24,7 +24,6 @@ const loadLocalSolJson = async () => {
 
 fs.writeFileSync(__dirname + '/src/assets/version.json', JSON.stringify(versionData))
 
-
 loadLocalSolJson()
 
 const project = fs.readFileSync(__dirname + '/project.json', 'utf8')
@@ -35,8 +34,7 @@ const copyPatterns = implicitDependencies.map((dep) => {
   try {
     fs.statSync(__dirname + `/../../dist/apps/${dep}`).isDirectory()
     return { from: __dirname + `/../../dist/apps/${dep}`, to: `plugins/${dep}` }
-  }
-  catch (e) {
+  } catch (e) {
     console.log('error', e)
     return false
   }
@@ -69,7 +67,7 @@ module.exports = composePlugins(withNx(), withReact(), (config) => {
     readline: false,
     child_process: false,
     buffer: require.resolve('buffer/'),
-    vm: require.resolve('vm-browserify')
+    vm: require.resolve('vm-browserify'),
   }
 
   // add externals
@@ -88,7 +86,7 @@ module.exports = composePlugins(withNx(), withReact(), (config) => {
 
   // use the web build instead of the node.js build
   // we do like that because using "config.resolve.alias" doesn't work
-  let  pkgVerkle = fs.readFileSync(path.resolve(__dirname, '../../node_modules/rust-verkle-wasm/package.json'), 'utf8')
+  let pkgVerkle = fs.readFileSync(path.resolve(__dirname, '../../node_modules/rust-verkle-wasm/package.json'), 'utf8')
   pkgVerkle = pkgVerkle.replace('"main": "./nodejs/rust_verkle_wasm.js",', '"main": "./web/rust_verkle_wasm.js",')
   fs.writeFileSync(path.resolve(__dirname, '../../node_modules/rust-verkle-wasm/package.json'), pkgVerkle)
 
@@ -97,11 +95,10 @@ module.exports = composePlugins(withNx(), withReact(), (config) => {
     // 'rust-verkle-wasm$': path.resolve(__dirname, '../../node_modules/rust-verkle-wasm/web/run_verkle_wasm.js')
   }
 
-
   // add public path
-  if(process.env.NX_DESKTOP_FROM_DIST){
+  if (process.env.NX_DESKTOP_FROM_DIST) {
     config.output.publicPath = './'
-  }else{
+  } else {
     config.output.publicPath = '/'
   }
 
@@ -115,16 +112,15 @@ module.exports = composePlugins(withNx(), withReact(), (config) => {
       patterns: [
         {
           from: '../../node_modules/monaco-editor/min/vs',
-          to: 'assets/js/monaco-editor/min/vs'
+          to: 'assets/js/monaco-editor/min/vs',
         },
-        ...copyPatterns
-      ].filter(Boolean)
+        ...copyPatterns,
+      ].filter(Boolean),
     }),
     new CopyFileAfterBuild(),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
       url: ['url', 'URL'],
-      process: 'process/browser'
     })
   )
 
@@ -132,7 +128,7 @@ module.exports = composePlugins(withNx(), withReact(), (config) => {
   config.module.rules.push({
     test: /\.js$/,
     use: ['source-map-loader'],
-    enforce: 'pre'
+    enforce: 'pre',
   })
 
   config.ignoreWarnings = [/Failed to parse source map/, /require function/] // ignore source-map-loader warnings & AST warnings
@@ -146,25 +142,24 @@ module.exports = composePlugins(withNx(), withReact(), (config) => {
         compress: false,
         mangle: false,
         format: {
-          comments: false
-        }
+          comments: false,
+        },
       },
-      extractComments: false
+      extractComments: false,
     }),
-    new CssMinimizerPlugin()
+    new CssMinimizerPlugin(),
   ]
 
   // minify code
-  if(process.env.NX_DESKTOP_FROM_DIST)
-    config.optimization.minimize = true
+  if (process.env.NX_DESKTOP_FROM_DIST) config.optimization.minimize = true
 
   config.watchOptions = {
-    ignored: /node_modules/
+    ignored: /node_modules/,
   }
 
   console.log('config', process.env.NX_DESKTOP_FROM_DIST)
-  return config;
-});
+  return config
+})
 
 class CopyFileAfterBuild {
   apply(compiler) {

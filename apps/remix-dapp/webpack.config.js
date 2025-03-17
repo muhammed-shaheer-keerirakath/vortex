@@ -1,4 +1,4 @@
-const {composePlugins, withNx} = require('@nrwl/webpack')
+const { composePlugins, withNx } = require('@nrwl/webpack')
 const webpack = require('webpack')
 const TerserPlugin = require('terser-webpack-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
@@ -44,7 +44,6 @@ module.exports = composePlugins(withNx(), (config) => {
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
       url: ['url', 'URL'],
-      process: 'process/browser',
     })
   )
 
@@ -61,13 +60,13 @@ module.exports = composePlugins(withNx(), (config) => {
       publicPath: '/',
       generate: (seed, files, entrypoints) => {
         const manifest = files.reduce((manifest, { name, path }) => {
-          manifest[name] = path;
-          return manifest;
-        }, seed);
-        return manifest;
+          manifest[name] = path
+          return manifest
+        }, seed)
+        return manifest
       },
       filter: (file) => {
-        return !(file.path.includes('assets') || file.path.includes('.map'));
+        return !(file.path.includes('assets') || file.path.includes('.map'))
       },
     })
   )
