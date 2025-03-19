@@ -43,6 +43,7 @@ module.exports = composePlugins(withNx(), (config) => {
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
       url: ['url', 'URL'],
+      process: 'process/browser',
     })
   )
 
