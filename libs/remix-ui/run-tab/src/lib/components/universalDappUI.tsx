@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 // eslint-disable-next-line no-use-before-define
 import React, { useEffect, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
@@ -5,7 +6,7 @@ import { UdappProps } from '../types'
 import { FuncABI } from '@remix-project/core-plugin'
 import { CopyToClipboard } from '@remix-ui/clipboard'
 import * as remixLib from '@remix-project/remix-lib'
-import * as ethJSUtil from '@ethereumjs/util'
+import * as ethJSUtil from '@theqrl/zondjs-util'
 import { ContractGUI } from './contractGUI'
 import { TreeView, TreeViewItem } from '@remix-ui/tree-view'
 import { BN } from 'bn.js'
@@ -64,7 +65,7 @@ export function UniversalDappUI(props: UdappProps) {
       funcABI: fallback || receive,
       address: address,
       contractName: props.instance.name,
-      contractABI: contractABI
+      contractABI: contractABI,
     }
     const amount = props.sendValue
 
@@ -135,7 +136,7 @@ export function UniversalDappUI(props: UdappProps) {
       address: props.instance.address,
       abi: props.instance.abi || props.instance.contractData.abi,
       filePath: props.instance.filePath || `${workspace.name}/${props.instance.contractData.contract.file}`,
-      pinnedAt: Date.now()
+      pinnedAt: Date.now(),
     }
     await props.plugin.call('fileManager', 'writeFile', `.deploys/pinned-contracts/${props.plugin.REACT_API.chainId}/${props.instance.address}.json`, JSON.stringify(objToSave, null, 2))
     _paq.push(['trackEvent', 'udapp', 'pinContracts', `pinned at ${props.plugin.REACT_API.chainId}`])
@@ -147,21 +148,7 @@ export function UniversalDappUI(props: UdappProps) {
     const functionName = funcABI.type === 'function' ? funcABI.name : `(${funcABI.type})`
     const logMsg = `${lookupOnly ? 'call' : 'transact'} to ${props.instance.name}.${functionName}`
 
-    props.runTransactions(
-      props.index,
-      lookupOnly,
-      funcABI,
-      inputsValues,
-      props.instance.name,
-      contractABI,
-      props.instance.contractData,
-      address,
-      logMsg,
-      props.mainnetPrompt,
-      props.gasEstimationPrompt,
-      props.passphrasePrompt,
-      funcIndex
-    )
+    props.runTransactions(props.index, lookupOnly, funcABI, inputsValues, props.instance.name, contractABI, props.instance.contractData, address, logMsg, props.mainnetPrompt, props.gasEstimationPrompt, props.passphrasePrompt, funcIndex)
   }
 
   const extractDataDefault = (item, parent?) => {
@@ -240,39 +227,41 @@ export function UniversalDappUI(props: UdappProps) {
   }
 
   return (
-    <div
-      className={`instance udapp_instance udapp_run-instance border-dark ${toggleExpander ? 'udapp_hidesub' : 'bg-light'}`}
-      id={`instance${address}`}
-      data-shared="universalDappUiInstance"
-      data-id={props.instance.isPinned ? `pinnedInstance${address}` : `unpinnedInstance${address}`}
-    >
+    <div className={`instance udapp_instance udapp_run-instance border-dark ${toggleExpander ? 'udapp_hidesub' : 'bg-light'}`} id={`instance${address}`} data-shared="universalDappUiInstance" data-id={props.instance.isPinned ? `pinnedInstance${address}` : `unpinnedInstance${address}`}>
       <div className="udapp_title pb-0 alert alert-secondary">
-        <span data-id={`universalDappUiTitleExpander${props.index}`} className="btn udapp_titleExpander" onClick={toggleClass} style={{ padding: "0.45rem" }}>
+        <span data-id={`universalDappUiTitleExpander${props.index}`} className="btn udapp_titleExpander" onClick={toggleClass} style={{ padding: '0.45rem' }}>
           <i className={`fas ${toggleExpander ? 'fa-angle-right' : 'fa-angle-down'}`} aria-hidden="true"></i>
         </span>
         <div className="input-group udapp_nameNbuts">
           <div className="udapp_titleText input-group-prepend">
-            {props.instance.isPinned ? (<CustomTooltip placement="top" tooltipClasses="text-nowrap" tooltipId="udapp_udappUnpinTooltip" tooltipText={props.instance.isPinned ? `Pinned for network: ${props.plugin.REACT_API.chainId}, at:  ${new Date(props.instance.pinnedAt).toLocaleString()}` : ''}>
+            {props.instance.isPinned ? (
+              <CustomTooltip placement="top" tooltipClasses="text-nowrap" tooltipId="udapp_udappUnpinTooltip" tooltipText={props.instance.isPinned ? `Pinned for network: ${props.plugin.REACT_API.chainId}, at:  ${new Date(props.instance.pinnedAt).toLocaleString()}` : ''}>
+                <span className="input-group-text udapp_spanTitleText">
+                  {props.instance.name} at {shortenAddress(address)}
+                </span>
+              </CustomTooltip>
+            ) : (
               <span className="input-group-text udapp_spanTitleText">
-                {props.instance.name} at {shortenAddress(address)}
+                {props.instance.name} at {shortenAddress(address)} ({props.context})
               </span>
-            </CustomTooltip>) : (<span className="input-group-text udapp_spanTitleText">
-              {props.instance.name} at {shortenAddress(address)} ({props.context})
-            </span>)}
+            )}
           </div>
           <div className="btn" style={{ padding: '0.15rem' }}>
             <CopyToClipboard tip={intl.formatMessage({ id: 'udapp.copyAddress' })} content={address} direction={'top'} />
           </div>
-          {props.instance.isPinned ? (<div className="btn" style={{ padding: '0.15rem', marginLeft: '-0.5rem' }}>
-            <CustomTooltip placement="top" tooltipClasses="text-nowrap" tooltipId="udapp_udappUnpinTooltip" tooltipText={<FormattedMessage id="udapp.tooltipTextUnpin" />}>
-              <i className="fas fa-thumbtack p-2" aria-hidden="true" data-id="universalDappUiUdappUnpin" onClick={unpinContract}></i>
-            </CustomTooltip>
-          </div>) : (<div className="btn" style={{ padding: '0.15rem', marginLeft: '-0.5rem' }}>
-            <CustomTooltip placement="top" tooltipClasses="text-nowrap" tooltipId="udapp_udappPinTooltip" tooltipText={<FormattedMessage id="udapp.tooltipTextPin" />}>
-              <i className="far fa-thumbtack p-2" aria-hidden="true" data-id="universalDappUiUdappPin" onClick={pinContract}></i>
-            </CustomTooltip>
-          </div>)
-          }
+          {props.instance.isPinned ? (
+            <div className="btn" style={{ padding: '0.15rem', marginLeft: '-0.5rem' }}>
+              <CustomTooltip placement="top" tooltipClasses="text-nowrap" tooltipId="udapp_udappUnpinTooltip" tooltipText={<FormattedMessage id="udapp.tooltipTextUnpin" />}>
+                <i className="fas fa-thumbtack p-2" aria-hidden="true" data-id="universalDappUiUdappUnpin" onClick={unpinContract}></i>
+              </CustomTooltip>
+            </div>
+          ) : (
+            <div className="btn" style={{ padding: '0.15rem', marginLeft: '-0.5rem' }}>
+              <CustomTooltip placement="top" tooltipClasses="text-nowrap" tooltipId="udapp_udappPinTooltip" tooltipText={<FormattedMessage id="udapp.tooltipTextPin" />}>
+                <i className="far fa-thumbtack p-2" aria-hidden="true" data-id="universalDappUiUdappPin" onClick={pinContract}></i>
+              </CustomTooltip>
+            </div>
+          )}
         </div>
         <div className="btn" style={{ padding: '0.15rem', marginLeft: '-0.5rem' }}>
           <CustomTooltip placement="top" tooltipClasses="text-nowrap" tooltipId="udapp_udappCloseTooltip" tooltipText={<FormattedMessage id="udapp.tooltipTextRemove" />}>
@@ -284,7 +273,10 @@ export function UniversalDappUI(props: UdappProps) {
         <div className="udapp_contractActionsContainer">
           <div className="d-flex flex-row justify-content-between align-items-center pb-2" data-id="instanceContractBal">
             <span className="remixui_runtabBalancelabel run-tab">
-              <b><FormattedMessage id="udapp.balance" />:</b> {instanceBalance} ZND
+              <b>
+                <FormattedMessage id="udapp.balance" />:
+              </b>{' '}
+              {instanceBalance} ZND
             </span>
             <div></div>
             <div className="btn d-flex p-0 align-self-center">
@@ -304,14 +296,20 @@ export function UniversalDappUI(props: UdappProps) {
           {props.instance.isPinned && props.instance.pinnedAt ? (
             <div className="d-flex" data-id="instanceContractPinnedAt">
               <label>
-                <b><FormattedMessage id="udapp.pinnedAt" />:</b> {(new Date(props.instance.pinnedAt)).toLocaleString()}
+                <b>
+                  <FormattedMessage id="udapp.pinnedAt" />:
+                </b>{' '}
+                {new Date(props.instance.pinnedAt).toLocaleString()}
               </label>
             </div>
           ) : null}
           {props.instance.isPinned && props.instance.filePath ? (
-            <div className="d-flex" data-id="instanceContractFilePath" style={{ textAlign: "start", lineBreak: "anywhere" }}>
+            <div className="d-flex" data-id="instanceContractFilePath" style={{ textAlign: 'start', lineBreak: 'anywhere' }}>
               <label>
-                <b><FormattedMessage id="udapp.filePath" />:</b> {props.instance.filePath}
+                <b>
+                  <FormattedMessage id="udapp.filePath" />:
+                </b>{' '}
+                {props.instance.filePath}
               </label>
             </div>
           ) : null}
@@ -348,8 +346,8 @@ export function UniversalDappUI(props: UdappProps) {
 
                           return key === funcIndex
                             ? Object.keys(response || {}).map((innerkey, index) => {
-                              return renderData(props.instance.decodedResponse[key][innerkey], response, innerkey, innerkey)
-                            })
+                                return renderData(props.instance.decodedResponse[key][innerkey], response, innerkey, innerkey)
+                              })
                             : null
                         })}
                       </TreeView>
@@ -364,41 +362,29 @@ export function UniversalDappUI(props: UdappProps) {
             <div className="py-2 border-top d-flex justify-content-start flex-grow-1">
               <FormattedMessage id="udapp.lowLevelInteractions" />
             </div>
-            <CustomTooltip
-              placement={'bottom-end'}
-              tooltipClasses="text-wrap"
-              tooltipId="receiveEthDocstoolTip"
-              tooltipText={<FormattedMessage id="udapp.tooltipText8" />}
-            >
-              { // receive method added to solidity v0.6.x. use this as diff.
+            <CustomTooltip placement={'bottom-end'} tooltipClasses="text-wrap" tooltipId="receiveEthDocstoolTip" tooltipText={<FormattedMessage id="udapp.tooltipText8" />}>
+              {
+                // receive method added to solidity v0.6.x. use this as diff.
                 props.solcVersion.canReceive === false ? (
                   <a href={`https://solidity.readthedocs.io/en/v${props.solcVersion.version}/contracts.html`} target="_blank" rel="noreferrer">
                     <i aria-hidden="true" className="fas fa-info my-2 mr-1"></i>
                   </a>
-                ) : <a href={`https://solidity.readthedocs.io/en/v${props.solcVersion.version}/contracts.html#receive-ether-function`} target="_blank" rel="noreferrer">
-                  <i aria-hidden="true" className="fas fa-info my-2 mr-1"></i>
-                </a>
+                ) : (
+                  <a href={`https://solidity.readthedocs.io/en/v${props.solcVersion.version}/contracts.html#receive-ether-function`} target="_blank" rel="noreferrer">
+                    <i aria-hidden="true" className="fas fa-info my-2 mr-1"></i>
+                  </a>
+                )
               }
             </CustomTooltip>
           </div>
           <div className="d-flex flex-column align-items-start">
             <label className="">CALLDATA</label>
             <div className="d-flex justify-content-end w-100 align-items-center">
-              <CustomTooltip
-                placement="bottom"
-                tooltipClasses="text-nowrap"
-                tooltipId="deployAndRunLLTxCalldataInputTooltip"
-                tooltipText={<FormattedMessage id="udapp.tooltipText9" />}
-              >
+              <CustomTooltip placement="bottom" tooltipClasses="text-nowrap" tooltipId="deployAndRunLLTxCalldataInputTooltip" tooltipText={<FormattedMessage id="udapp.tooltipText9" />}>
                 <input id="deployAndRunLLTxCalldata" onChange={handleCalldataChange} className="udapp_calldataInput form-control" />
               </CustomTooltip>
               <CustomTooltip placement="right" tooltipClasses="text-nowrap" tooltipId="deployAndRunLLTxCalldataTooltip" tooltipText={<FormattedMessage id="udapp.tooltipText10" />}>
-                <button
-                  id="deployAndRunLLTxSendTransaction"
-                  data-id="pluginManagerSettingsDeployAndRunLLTxSendTransaction"
-                  className="btn udapp_instanceButton p-0 w-50 border-warning text-warning"
-                  onClick={sendData}
-                >
+                <button id="deployAndRunLLTxSendTransaction" data-id="pluginManagerSettingsDeployAndRunLLTxSendTransaction" className="btn udapp_instanceButton p-0 w-50 border-warning text-warning" onClick={sendData}>
                   Transact
                 </button>
               </CustomTooltip>

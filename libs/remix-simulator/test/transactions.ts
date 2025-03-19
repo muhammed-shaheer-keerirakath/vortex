@@ -5,7 +5,7 @@ import { Provider } from '../src/index'
 const web3 = new Web3()
 import * as assert from 'assert'
 import { bytesToHex, hexToBytes } from '@theqrl/web3-utils'
-import type { AddressLike } from '@ethereumjs/util'
+import type { AddressLike } from '@theqrl/zondjs-util'
 
 describe('Transactions', () => {
   before(async function () {

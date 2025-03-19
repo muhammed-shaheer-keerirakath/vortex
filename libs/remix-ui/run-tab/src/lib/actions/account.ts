@@ -2,7 +2,7 @@ import { shortenAddress } from '@remix-ui/helper'
 import { RunTab } from '../types/run-tab'
 import { clearInstances, setAccount, setExecEnv } from './actions'
 import { displayNotification, fetchAccountsListFailed, fetchAccountsListRequest, fetchAccountsListSuccess, setMatchPassphrase, setPassphrase } from './payload'
-import { toChecksumAddress } from '@ethereumjs/util'
+import { toChecksumAddress } from '@theqrl/zondjs-util'
 
 export const updateAccountBalances = async (plugin: RunTab, dispatch: React.Dispatch<any>) => {
   const accounts = plugin.REACT_API.accounts.loadedAccounts

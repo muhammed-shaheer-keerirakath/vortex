@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { bytesToHex, toChecksumAddress } from '@ethereumjs/util'
+import { bytesToHex, toChecksumAddress } from '@theqrl/zondjs-util'
 
 export const extractNameFromKey = (key: string): string => {
   if (!key) return
