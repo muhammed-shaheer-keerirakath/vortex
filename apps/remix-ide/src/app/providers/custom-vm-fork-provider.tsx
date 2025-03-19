@@ -1,9 +1,9 @@
-import React, {useRef} from 'react' // eslint-disable-line
+import React, { useRef } from 'react' // eslint-disable-line
 import { FormattedMessage } from 'react-intl'
 import * as packageJson from '../../../../../package.json'
 import { AppModal, ModalTypes } from '@remix-ui/app'
 import { BasicVMProvider } from './vm-provider'
-import { Hardfork } from '@ethereumjs/common'
+import { Hardfork } from '@theqrl/zondjs-common'
 
 export class CustomForkVMProvider extends BasicVMProvider {
   nodeUrl: string
@@ -18,7 +18,7 @@ export class CustomForkVMProvider extends BasicVMProvider {
         kind: 'provider',
         description: 'Custom fork - Remix VM',
         methods: ['sendAsync', 'init'],
-        version: packageJson.version
+        version: packageJson.version,
       },
       blockchain
     )
@@ -46,14 +46,7 @@ export class CustomForkVMProvider extends BasicVMProvider {
             <label className="mt-3 mb-1">
               <FormattedMessage id="udapp.blockNumber" />
             </label>
-            <input
-              data-id="CustomForkBlockNumber"
-              name="blockNumber"
-              type="text"
-              defaultValue="latest"
-              placeholder='block number or "latest"'
-              className="border form-control border-right-0"
-            />
+            <input data-id="CustomForkBlockNumber" name="blockNumber" type="text" defaultValue="latest" placeholder='block number or "latest"' className="border form-control border-right-0" />
           </div>
           <div>
             <label className="mt-3 mb-1">EVM</label>
@@ -80,18 +73,18 @@ export class CustomForkVMProvider extends BasicVMProvider {
             if (data.nodeUrl !== '' && !data.nodeUrl.startsWith('http')) {
               return {
                 valid: false,
-                message: 'node URL should be a valid URL'
+                message: 'node URL should be a valid URL',
               }
             }
             if (data.blockNumber !== 'latest' && isNaN(data.blockNumber)) {
               return {
                 valid: false,
-                message: 'blockNumber should be a number or "latest"'
+                message: 'blockNumber should be a number or "latest"',
               }
             }
             return {
               valid: true,
-              message: ''
+              message: '',
             }
           },
           modalType: ModalTypes.form,
@@ -105,7 +98,7 @@ export class CustomForkVMProvider extends BasicVMProvider {
           },
           hideFn: () => {
             setTimeout(() => reject(new Error('Hide')), 0)
-          }
+          },
         }
         return this.call('notification', 'modal', modalContent)
       })
@@ -123,7 +116,7 @@ export class CustomForkVMProvider extends BasicVMProvider {
     return {
       fork: this.fork,
       nodeUrl: this.nodeUrl,
-      blockNumber: this.blockNumber
+      blockNumber: this.blockNumber,
     }
   }
 }

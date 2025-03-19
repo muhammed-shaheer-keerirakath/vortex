@@ -1,12 +1,12 @@
 'use strict'
 import { bytesToHex } from '@theqrl/zondjs-util'
-import { Common } from '@ethereumjs/common'
+import { Common, Mainnet } from '@theqrl/zondjs-common'
 // TODO fix the import when getOpcodesForHF is exported
-import { getOpcodesForHF } from '@ethereumjs/evm'
+import { getOpcodesForHF } from '@theqrl/zondjs-evm'
 import getOpcodes from './opcodes'
 
-export function nameOpCodes (raw, hardfork) {
-  const common = new Common({ chain: 'mainnet', hardfork })
+export function nameOpCodes(raw, hardfork) {
+  const common = new Common({ chain: Mainnet, hardfork })
   const opcodes = getOpcodesForHF(common).opcodes
 
   let pushData = ''
@@ -29,7 +29,7 @@ export function nameOpCodes (raw, hardfork) {
       i += jumpNum
     }
 
-    const hexCode = bytesToHex((pushData as any))
+    const hexCode = bytesToHex(pushData as any)
     // @ts-ignore
     const data = hexCode !== '' ? ' ' + hexCode : ''
 
@@ -40,7 +40,7 @@ export function nameOpCodes (raw, hardfork) {
 }
 
 type Opcode = {
-  name: string,
+  name: string
   pushData?: Array<number>
   in?: number
   out?: number
@@ -49,8 +49,8 @@ type Opcode = {
  * Parses code as a list of integers into a list of objects containing
  * information about the opcode.
  */
-export function parseCode (raw) {
-  const common = new Common({ chain: 'mainnet', hardfork: 'cancun' })
+export function parseCode(raw) {
+  const common = new Common({ chain: Mainnet, hardfork: 'cancun' })
   const opcodes = getOpcodesForHF(common).opcodes
 
   const code = []
@@ -81,16 +81,16 @@ export function parseCode (raw) {
   return code
 }
 
-export function pad (num, size) {
+export function pad(num, size) {
   let s = num + ''
   while (s.length < size) s = '0' + s
   return s
 }
 
-export function log (num, base) {
+export function log(num, base) {
   return Math.log(num) / Math.log(base)
 }
 
-export function roundLog (num, base) {
+export function roundLog(num, base) {
   return Math.ceil(log(num, base))
 }
