@@ -5,7 +5,7 @@ import { execution } from '@remix-project/remix-lib'
 import { ethers } from 'ethers'
 import { VMexecutionResult } from '@remix-project/remix-lib'
 import { VMContext } from '../vm-context'
-import { Log, EvmError } from '@ethereumjs/evm'
+import { Log, EvmError } from '@theqrl/zondjs-evm'
 const TxRunnerVM = execution.TxRunnerVM
 const TxRunner = execution.TxRunner
 

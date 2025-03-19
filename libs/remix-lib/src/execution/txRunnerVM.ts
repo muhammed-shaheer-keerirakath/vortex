@@ -1,8 +1,8 @@
 'use strict'
-import { RunBlockResult, RunTxResult } from '@ethereumjs/vm'
-import { ConsensusType } from '@ethereumjs/common'
+import { RunBlockResult, RunTxResult } from '@theqrl/zondjs-vm'
+import { ConsensusType } from '@theqrl/zondjs-common'
 import { createFeeMarket1559Tx, createFeeMarket1559TxFromRLP, createLegacyTx, createLegacyTxFromRLP, LegacyTx } from '@theqrl/zondjs-tx'
-import { Block } from '@ethereumjs/block'
+import { Block, createBlock, createBlockFromRLP } from '@theqrl/zondjs-block'
 import { bytesToHex, hexToBytes, createAddressFromString, toBytes, addHexPrefix } from '@theqrl/zondjs-util'
 import type { AddressLike, BigIntLike } from '@theqrl/zondjs-util'
 import { EventManager } from '../eventManager'
@@ -51,7 +51,7 @@ export class TxRunnerVM {
 
     const vm = this.getVMObject().vm
     if (Array.isArray(blocks) && (blocks || []).length > 0) {
-      const lastBlock = Block.fromRLPSerializedBlock(blocks[blocks.length - 1], { common: this.commonContext })
+      const lastBlock = createBlockFromRLP(blocks[blocks.length - 1], { common: this.commonContext })
 
       this.blockParentHash = lastBlock.hash()
       this.blocks = blocks
@@ -129,11 +129,12 @@ export class TxRunnerVM {
       const coinbases = ['0x0e9281e9c6a0808672eaba6bd1220e144c9bb07a', '0x8945a1288dc78a6d8952a92c77aee6730b414778', '0x94d76e24f818426ae84aa404140e8d5f60e10e7e']
       const difficulties = [69762765929000, 70762765929000, 71762765929000]
       const difficulty = this.commonContext.consensusType() === ConsensusType.ProofOfStake ? 0 : difficulties[this.blocks.length % difficulties.length]
-      const block = Block.fromBlockData(
+      const block = createBlock(
         {
           header: {
             timestamp: (new Date().getTime() / 1000) | 0,
             number: this.blocks.length,
+            // @ts-ignore
             coinbase: coinbases[this.blocks.length % coinbases.length],
             difficulty,
             gasLimit,

@@ -1,6 +1,6 @@
 import { toHex } from '@theqrl/web3-utils'
 import { VMContext } from '../vm-context'
-import { bigIntToHex, bytesToHex } from '@ethereumjs/util'
+import { bigIntToHex, bytesToHex } from '@theqrl/zondjs-util'
 
 export class Blocks {
   vmContext: VMContext
