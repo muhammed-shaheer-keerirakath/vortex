@@ -33,7 +33,6 @@
     ]
   },
   "dependencies": {
-    "@ethereumjs/tx": "5.4.0",
     "@ethereumjs/vm": "8.1.1",
     "@remix-project/remix-lib": "^0.5.68",
     "@types/tape": "^4.2.33",

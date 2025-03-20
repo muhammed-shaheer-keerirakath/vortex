@@ -17,7 +17,6 @@
     "test": "./../../node_modules/.bin/ts-node --project ../../tsconfig.base.json --require tsconfig-paths/register ./../../node_modules/.bin/mocha test/*.ts"
   },
   "dependencies": {
-    "@ethereumjs/tx": "5.4.0",
     "@ethereumjs/vm": "8.1.1",
     "@metamask/eth-sig-util": "^7.0.2",
     "@remix-project/remix-lib": "^0.5.68",
