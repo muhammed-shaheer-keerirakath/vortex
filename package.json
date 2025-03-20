@@ -379,7 +379,6 @@
   },
   "resolutions": {
     "@metamask/eth-sig-util/@ethereumjs/util": "^8.1.0",
-    "@types/react": "^18.2.0",
-    "@ethereumjs/trie": "6.2.1"
+    "@types/react": "^18.2.0"
   }
 }

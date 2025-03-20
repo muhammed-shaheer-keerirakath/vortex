@@ -72,9 +72,6 @@
     "ts-node": "^8.0.2",
     "typescript": "^3.3.1"
   },
-  "resolutions": {
-    "@ethereumjs/trie": "6.2.1"
-  },
   "typings": "src/index.d.ts",
   "gitHead": "ce62593c58cbabdc4fe2eef3b6989621114c3e62"
 }
