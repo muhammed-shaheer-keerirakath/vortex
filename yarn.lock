@@ -2842,7 +2842,7 @@
     bigint-crypto-utils "^3.2.2"
     ethereum-cryptography "^2.2.1"
 
-"@ethereumjs/evm@3.1.1", "@ethereumjs/evm@^3.1.1":
+"@ethereumjs/evm@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@ethereumjs/evm/-/evm-3.1.1.tgz#f593ea99e564ba6d916d81a833bb9af5713caf34"
   integrity sha512-JbDXtIn0PPZFU2oqVngje0YvW/JuNa6Y+kIYp1MCh5pn9NRplR8FkBbvb991fVSSo6AzuFMHJxSwgVl+OksnvQ==
