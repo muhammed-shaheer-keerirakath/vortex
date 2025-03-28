@@ -1,7 +1,7 @@
 'use strict'
-import { RunBlockResult, RunTxResult } from '@theqrl/zondjs-vm'
-import { ConsensusType } from '@theqrl/zondjs-common'
-import { createFeeMarket1559Tx, createFeeMarket1559TxFromRLP, createLegacyTx, createLegacyTxFromRLP, LegacyTx } from '@theqrl/zondjs-tx'
+import { runBlock, RunBlockResult, runTx, RunTxResult, VM } from '@theqrl/zondjs-vm'
+import { Common, ConsensusType, StateManagerInterface } from '@theqrl/zondjs-common'
+import { createFeeMarket1559Tx, createFeeMarket1559TxFromRLP, createLegacyTx, createLegacyTxFromRLP, FeeMarket1559Tx, LegacyTx } from '@theqrl/zondjs-tx'
 import { Block, createBlock, createBlockFromRLP } from '@theqrl/zondjs-block'
 import { bytesToHex, hexToBytes, createAddressFromString, toBytes, addHexPrefix } from '@theqrl/zondjs-util'
 import type { AddressLike, BigIntLike } from '@theqrl/zondjs-util'
@@ -18,6 +18,14 @@ export type VMexecutionResult = {
 
 export type VMExecutionCallBack = (error: string | Error, result?: VMexecutionResult) => void
 
+export type CurrentVm = {
+  vm: VM
+  web3vm: any
+  stateManager: StateManagerInterface
+  common: Common
+  blocks: Block[]
+}
+
 export class TxRunnerVM {
   event
   blockNumber
@@ -30,7 +38,7 @@ export class TxRunnerVM {
   blockParentHash
   nextNonceForCall: number
   standaloneTx: boolean
-  getVMObject: () => any
+  getVMObject: () => CurrentVm
 
   constructor(vmaccounts, api, getVMObject, blocks: Uint8Array[] = []) {
     this.event = new EventManager()
@@ -56,7 +64,9 @@ export class TxRunnerVM {
       this.blockParentHash = lastBlock.hash()
       this.blocks = blocks
     } else {
+      // @ts-ignore
       this.blockParentHash = vm.blockchain.genesisBlock.hash()
+      // @ts-ignore
       this.blocks = [vm.blockchain.genesisBlock.serialize()]
     }
   }
@@ -80,48 +90,33 @@ export class TxRunnerVM {
     let account
 
     try {
-      const EIP1559 = this.commonContext.hardfork() !== 'berlin' // berlin is the only pre eip1559 fork that we handle.
       let tx
       if (signed) {
-        if (!EIP1559) {
-          tx = createLegacyTxFromRLP(hexToBytes(data), { common: this.commonContext })
-        } else {
-          tx = createFeeMarket1559TxFromRLP(hexToBytes(data), { common: this.commonContext })
-        }
+        tx = createFeeMarket1559TxFromRLP(hexToBytes(data), { common: this.commonContext })
       } else {
         if (!from && useCall && Object.keys(this.vmaccounts).length) {
           from = Object.keys(this.vmaccounts)[0]
           account = this.vmaccounts[from]
-        } else account = this.vmaccounts[from]
+        } else {
+          account = this.vmaccounts[from]
+        }
 
         if (!account) {
           return callback('Invalid account selected')
         }
 
         const res = await this.getVMObject().stateManager.getAccount(createAddressFromString(from))
-        if (!EIP1559) {
-          tx = createLegacyTx(
-            {
-              nonce: useCall ? this.nextNonceForCall : res.nonce,
-              gasPrice: '0x1',
-              gasLimit: gasLimit,
-              to: to as AddressLike,
-              value: value as BigIntLike,
-              data: hexToBytes(data),
-            },
-            { common: this.commonContext }
-          ).sign(toBytes(addHexPrefix(account.seed)))
-        } else {
-          tx = createFeeMarket1559Tx({
-            nonce: useCall ? this.nextNonceForCall : res.nonce,
-            maxPriorityFeePerGas: '0x01',
-            maxFeePerGas: '0x7',
-            gasLimit: gasLimit,
-            to: to as AddressLike,
-            value: value as BigIntLike,
-            data: hexToBytes(data),
-          }).sign(toBytes(addHexPrefix(account.seed)))
-        }
+
+        tx = createFeeMarket1559Tx({
+          nonce: useCall ? this.nextNonceForCall : res.nonce,
+          maxPriorityFeePerGas: '0x01',
+          maxFeePerGas: '0x7',
+          gasLimit: gasLimit,
+          to: to as AddressLike,
+          value: value as BigIntLike,
+          data: hexToBytes(data),
+        })
+        tx = tx.sign(hexToBytes(addHexPrefix(account.seed)))
       }
 
       if (useCall) this.nextNonceForCall++
@@ -138,7 +133,7 @@ export class TxRunnerVM {
             coinbase: coinbases[this.blocks.length % coinbases.length],
             difficulty,
             gasLimit,
-            baseFeePerGas: EIP1559 ? '0x1' : undefined,
+            baseFeePerGas: '0x1',
             parentHash: this.blockParentHash,
           },
           transactions: [tx],
@@ -171,8 +166,7 @@ export class TxRunnerVM {
   }
 
   runTxInVm(tx, block, callback) {
-    this.getVMObject()
-      .vm.runTx({ tx, skipNonce: true, skipBlockValidation: true, skipBalance: false })
+    runTx(this.getVMObject().vm, { tx, skipNonce: true, skipBlockGasLimitValidation: true, skipBalance: false })
       .then((result: RunTxResult) => {
         callback(null, {
           result,
@@ -187,8 +181,7 @@ export class TxRunnerVM {
   }
 
   runBlockInVm(tx, block, callback) {
-    this.getVMObject()
-      .vm.runBlock({ block: block, generate: true, skipNonce: true, skipBlockValidation: true, skipBalance: false })
+    runBlock(this.getVMObject().vm, { block, generate: true, skipNonce: true, skipBlockValidation: true, skipBalance: false })
       .then((results: RunBlockResult) => {
         const result: RunTxResult = results.results[0]
         callback(null, {

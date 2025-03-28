@@ -196,6 +196,7 @@ export type CurrentVm = {
   web3vm: VmProxy
   stateManager: StateManagerInterface
   common: Common
+  blocks: Block[]
 }
 
 export class VMCommon extends Common {
@@ -249,7 +250,7 @@ export class VMContext {
     this.currentVm = await this.createVm(this.currentFork)
   }
 
-  async createVm(hardfork) {
+  async createVm(hardfork: string) {
     let stateManager: StateManagerInterface
     if (this.nodeUrl) {
       let block = this.blockNumber
