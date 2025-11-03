@@ -63,7 +63,7 @@ export const initWorkspace = (filePanelPlugin) => async (reducerDispatch: React.
     let workspaces = []
     plugin.on('editor', 'editorMounted', async () => {
       editorMounted = true
-      if (filePathToOpen){
+      if (filePathToOpen) {
         setTimeout(async () => {
           await plugin.fileManager.openFile(filePathToOpen)
           filePathToOpen = null
@@ -86,9 +86,10 @@ export const initWorkspace = (filePanelPlugin) => async (reducerDispatch: React.
       dispatch(setCurrentWorkspace({ name: 'code-sample', isGitRepo: false }))
       const filePath = await loadWorkspacePreset('code-template')
       plugin.on('filePanel', 'workspaceInitializationCompleted', async () => {
-        if (editorMounted){
+        if (editorMounted) {
           setTimeout(async () => {
-            await plugin.fileManager.openFile(filePath)}, 1000)
+            await plugin.fileManager.openFile(filePath)
+          }, 1000)
         } else {
           filePathToOpen = filePath
         }
@@ -115,9 +116,10 @@ export const initWorkspace = (filePanelPlugin) => async (reducerDispatch: React.
             await workspaceProvider.set(filePath, data.compilationTargets[filePath]['content'])
 
           plugin.on('filePanel', 'workspaceInitializationCompleted', async () => {
-            if (editorMounted){
+            if (editorMounted) {
               setTimeout(async () => {
-                await plugin.fileManager.openFile(filePath)}, 1000)
+                await plugin.fileManager.openFile(filePath)
+              }, 1000)
             } else {
               filePathToOpen = filePath
             }
@@ -168,9 +170,10 @@ export const initWorkspace = (filePanelPlugin) => async (reducerDispatch: React.
           }
 
           plugin.on('filePanel', 'workspaceInitializationCompleted', async () => {
-            if (editorMounted){
+            if (editorMounted) {
               setTimeout(async () => {
-                await plugin.fileManager.openFile(filePath)}, 1000)
+                await plugin.fileManager.openFile(filePath)
+              }, 1000)
             } else {
               filePathToOpen = filePath
             }
@@ -262,7 +265,7 @@ export type SolidityConfiguration = {
 const buildGistPayload = (selectedFiles: { key: string, type: 'file' | 'folder', content: string }[]) => {
   if (!selectedFiles || selectedFiles.length === 0) return
 
-  const files: { [key: string]: { content: string }} = {}
+  const files: { [key: string]: { content: string } } = {}
   for (const file of selectedFiles) {
     const resultingSplits = file.key.split('/')
     files[resultingSplits[resultingSplits.length - 1]] = { content: file.content }
@@ -472,7 +475,8 @@ export const copyShareURL = async (path: string) => {
     // const projectSecret = ''
     // const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64')
 
-    const ipfs = IpfsHttpClient({ port, host, protocol
+    const ipfs = IpfsHttpClient({
+      port, host, protocol
       , headers: {
         // authorization: auth
       }
@@ -523,7 +527,7 @@ export const signTypedData = async (path: string) => {
 
   try {
     const result = await web3.currentProvider.request({
-      method: 'eth_signTypedData_v4',
+      method: 'zond_signTypedData_v4',
       params: [settings.selectedAccount, parsed]
     })
 
@@ -539,7 +543,7 @@ export const emitContextMenuEvent = async (cmd: customAction) => {
   await plugin.call(cmd.id, cmd.name, cmd)
 }
 
-export const handleClickFile = async (path: string, type: 'file' | 'folder' ) => {
+export const handleClickFile = async (path: string, type: 'file' | 'folder') => {
   if (type === 'file' && path.endsWith('.md')) {
     // just opening the preview
     await plugin.call('doc-viewer' as any, 'viewDocs', [path])

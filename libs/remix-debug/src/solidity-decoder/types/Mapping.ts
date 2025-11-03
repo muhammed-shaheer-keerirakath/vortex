@@ -2,7 +2,7 @@
 import { hash } from '@remix-project/remix-lib'
 import { RefType } from './RefType'
 import { normalizeHex } from './util'
-import { toBytes, setLengthLeft, bytesToHex, addHexPrefix } from '@ethereumjs/util'
+import { toBytes, setLengthLeft, bytesToHex, addHexPrefix } from '@theqrl/zondjs-util'
 import BN from 'bn.js'
 
 export class Mapping extends RefType {

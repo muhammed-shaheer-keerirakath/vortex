@@ -80,6 +80,7 @@ export class ScriptRunnerUIPlugin extends ViewPlugin {
     await this.loadCustomConfig()
     await this.loadConfigurations()
     this.renderComponent()
+    await this.loadScriptRunner(this.activeConfig)
   }
 
   render() {
@@ -123,8 +124,12 @@ export class ScriptRunnerUIPlugin extends ViewPlugin {
       await this.saveCustomConfig(this.customConfig)
   }
 
-  async loadScriptRunner(config: ProjectConfiguration): Promise<boolean> {
+  async updateIframeElement(iframeId: string) {
+    const iframe = document.getElementById(`plugin-${iframeId}`) as HTMLIFrameElement;
+    iframe.src = window.location.origin + '/assets/js/script-runner-generator/index.html';
+  }
 
+  async loadScriptRunner(config: ProjectConfiguration): Promise<boolean> {
     const profile: Profile = await this.plugin.call('manager', 'getProfile', 'scriptRunner')
     this.scriptRunnerProfileName = profile.name
     const testPluginName = localStorage.getItem('test-plugin-name')
@@ -153,11 +158,10 @@ export class ScriptRunnerUIPlugin extends ViewPlugin {
       this.setIsLoading(config.name, true)
       const plugin: IframePlugin = new IframePlugin(newProfile)
       if (!this.engine.isRegistered(newProfile.name)) {
-
         await this.engine.register(plugin)
       }
       await this.plugin.call('manager', 'activatePlugin', newProfile.name)
-
+      await this.updateIframeElement(newProfile.name);
       this.activeConfig = config
       this.on(newProfile.name, 'log', this.log.bind(this))
       this.on(newProfile.name, 'info', this.info.bind(this))
@@ -173,7 +177,6 @@ export class ScriptRunnerUIPlugin extends ViewPlugin {
       if (iframe) {
         await this.call('hiddenPanel', 'removeView', newProfile)
       }
-
       delete (this.engine as any).manager.profiles[newProfile.name]
       delete (this.engine as any).plugins[newProfile.name]
       console.log('Error loading script runner: ', newProfile.name, e)
@@ -184,11 +187,10 @@ export class ScriptRunnerUIPlugin extends ViewPlugin {
     this.setIsLoading(config.name, false)
     this.renderComponent()
     return result
-
   }
 
   async execute(script: string, filePath: string) {
-    this.call('terminal', 'log', { value: `running ${filePath} ...`, type: 'info' })
+    this.call('terminal', 'log', { value: `running ${filePath ?? 'script'} ...`, type: 'info' })
     if (!this.scriptRunnerProfileName || !this.engine.isRegistered(`${this.scriptRunnerProfileName}${this.activeConfig.name}`)) {
       if (!await this.loadScriptRunner(this.activeConfig)) {
         console.error('Error loading script runner')
@@ -202,7 +204,6 @@ export class ScriptRunnerUIPlugin extends ViewPlugin {
       console.error('Error executing script', e)
     }
     this.setIsLoading(this.activeConfig.name, false)
-
   }
 
   async setErrorStatus(name: string, status: boolean, error: string) {

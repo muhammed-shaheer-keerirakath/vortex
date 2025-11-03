@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, ReactElement, useContext } from 're
 import { FormattedMessage, useIntl } from 'react-intl'
 import * as semver from 'semver'
 import { eachOfSeries } from 'async' // eslint-disable-line
-import type Web3 from 'web3'
+import type Web3 from '@theqrl/web3'
 import { canUseWorker, urlFromVersion } from '@remix-project/remix-solidity'
 import { Renderer } from '@remix-ui/renderer' // eslint-disable-line
 import { Toaster } from '@remix-ui/toaster' // eslint-disable-line

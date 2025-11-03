@@ -1,6 +1,6 @@
 import React from 'react' // eslint-disable-line
 import DropdownPanel from './dropdown-panel' // eslint-disable-line
-import {toBigInt} from 'web3-utils' // eslint-disable-line
+import { toBigInt } from '@theqrl/web3-utils' // eslint-disable-line
 
 export const GlobalVariables = ({ block, receipt, tx, className }) => {
   // see https://docs.soliditylang.org/en/latest/units-and-global-variables.html#block-and-transaction-properties

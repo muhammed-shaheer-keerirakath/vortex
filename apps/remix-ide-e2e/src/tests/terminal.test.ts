@@ -2,9 +2,9 @@
 import { NightwatchBrowser } from 'nightwatch'
 import init from '../helpers/init'
 
-const branch = process.env.CIRCLE_BRANCH;
-const isMasterBranch = branch === 'master';
-const runMasterTests: boolean = (branch ? (isMasterBranch ? true : false) : true)
+const branch = process.env.CIRCLE_BRANCH
+const isMasterBranch = branch === 'master'
+const runMasterTests: boolean = branch ? (isMasterBranch ? true : false) : true
 
 module.exports = {
   '@disabled': true,
@@ -12,50 +12,37 @@ module.exports = {
     init(browser, done, 'http://127.0.0.1:8080?plugins=solidity,udapp', false)
   },
   'Should execution a simple console command #group1': function (browser: NightwatchBrowser) {
-    browser
-      .waitForElementVisible('*[data-id="terminalCli"]', 10000)
-      .executeScriptInTerminal('console.log(1 + 1)')
-      .pause(2000)
-      .waitForElementContainsText('*[data-id="terminalJournal"]', '2', 60000)
+    browser.waitForElementVisible('*[data-id="terminalCli"]', 10000).executeScriptInTerminal('console.log(1 + 1)').pause(2000).waitForElementContainsText('*[data-id="terminalJournal"]', '2', 60000)
   },
 
   'Should clear console #group1': function (browser: NightwatchBrowser) {
-    browser
-      .waitForElementVisible('*[data-id="terminalCli"]')
-      .journalChildIncludes('Welcome to Remix')
-      .click('#clearConsole')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', '', 60000)
+    browser.waitForElementVisible('*[data-id="terminalCli"]').journalChildIncludes('Welcome to Remix').click('#clearConsole').waitForElementContainsText('*[data-id="terminalJournal"]', '', 60000)
   },
 
   'Async/Await Script #group1': function (browser: NightwatchBrowser) {
-    browser
-      .addFile('asyncAwait.js', { content: asyncAwait })
-      .executeScriptInTerminal('remix.execute("asyncAwait.js")')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'Waiting Promise', 60000)
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'result - ', 60000)
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'Promise Resolved', 60000)
+    browser.addFile('asyncAwait.js', { content: asyncAwait }).executeScriptInTerminal('remix.execute("asyncAwait.js")').waitForElementContainsText('*[data-id="terminalJournal"]', 'Waiting Promise', 60000).waitForElementContainsText('*[data-id="terminalJournal"]', 'result - ', 60000).waitForElementContainsText('*[data-id="terminalJournal"]', 'Promise Resolved', 60000)
   },
 
   'Call Remix File Manager from a script #group2': function (browser: NightwatchBrowser) {
-    browser
-      .addFile('asyncAwaitWithFileManagerAccess.js', { content: asyncAwaitWithFileManagerAccess })
-      .executeScriptInTerminal('remix.execute(\'asyncAwaitWithFileManagerAccess.js\')')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'contract Ballot {', 60000)
+    browser.addFile('asyncAwaitWithFileManagerAccess.js', { content: asyncAwaitWithFileManagerAccess }).executeScriptInTerminal("remix.execute('asyncAwaitWithFileManagerAccess.js')").waitForElementContainsText('*[data-id="terminalJournal"]', 'contract Ballot {', 60000)
   },
 
-  'Call web3.eth.getAccounts() using Remix VM #group2': function (browser: NightwatchBrowser) {
+  'Call web3.zond.getAccounts() using Remix VM #group2': function (browser: NightwatchBrowser) {
     browser
-      .executeScriptInTerminal('web3.eth.getAccounts()')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', '["0x5B38Da6a701c568545dCfcB03FcB875f56beddC4","0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2","0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db","0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB","0x617F2E2fD72FD9D5503197092aC168c91465E7f2","0x17F6AD8Ef982297579C203069C1DbfFE4348c372","0x5c6B0f7Bf3E7ce046039Bd8FABdfD3f9F5021678","0x03C6FcED478cBbC9a4FAB34eF9f40767739D1Ff7","0x1aE0EA34a72D944a8C7603FfB3eC30a6669E454C","0x0A098Eda01Ce92ff4A4CCb7A4fFFb5A43EBC70DC","0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c","0x14723A09ACff6D2A60DcdF7aA4AFf308FDDC160C","0x4B0897b0513fdC7C541B6d9D7E929C4e5364D2dB","0x583031D1113aD414F02576BD6afaBfb302140225","0xdD870fA1b7C4700F2BD7f44238821C26f7392148"]')
+      .executeScriptInTerminal('web3.zond.getAccounts()')
+      .waitForElementContainsText(
+        '*[data-id="terminalJournal"]',
+        '["0x5B38Da6a701c568545dCfcB03FcB875f56beddC4","0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2","0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db","0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB","0x617F2E2fD72FD9D5503197092aC168c91465E7f2","0x17F6AD8Ef982297579C203069C1DbfFE4348c372","0x5c6B0f7Bf3E7ce046039Bd8FABdfD3f9F5021678","0x03C6FcED478cBbC9a4FAB34eF9f40767739D1Ff7","0x1aE0EA34a72D944a8C7603FfB3eC30a6669E454C","0x0A098Eda01Ce92ff4A4CCb7A4fFFb5A43EBC70DC","0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c","0x14723A09ACff6D2A60DcdF7aA4AFf308FDDC160C","0x4B0897b0513fdC7C541B6d9D7E929C4e5364D2dB","0x583031D1113aD414F02576BD6afaBfb302140225","0xdD870fA1b7C4700F2BD7f44238821C26f7392148"]'
+      )
   },
 
-  'Call web3.eth.getAccounts() using External Http Provider #group5': function (browser: NightwatchBrowser) {
+  'Call web3.zond.getAccounts() using External Http Provider #group5': function (browser: NightwatchBrowser) {
     browser
       .click('*[data-id="terminalClearConsole"]') // clear  the terminal
       .clickLaunchIcon('udapp')
       .switchEnvironment('basic-http-provider')
       .modalFooterOKClick('basic-http-provider')
-      .executeScriptInTerminal('web3.eth.getAccounts()')
+      .executeScriptInTerminal('web3.zond.getAccounts()')
       .waitForElementContainsText('*[data-id="terminalJournal"]', '["', 60000) // we check if an array is present, don't need to check for the content
       .waitForElementContainsText('*[data-id="terminalJournal"]', '"]', 60000)
       .waitForElementContainsText('*[data-id="terminalJournal"]', '","', 60000)
@@ -67,7 +54,7 @@ module.exports = {
       .addFile('resolveExternalUrlAndSave.js', { content: resolveExternalUrlAndSave })
       .openFile('resolveExternalUrlAndSave.js')
       .pause(1000)
-      .executeScriptInTerminal('remix.execute(\'resolveExternalUrlAndSave.js\')')
+      .executeScriptInTerminal("remix.execute('resolveExternalUrlAndSave.js')")
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'Implementation of the {IERC20} interface.', 60000)
       .openFile('.deps/github/OpenZeppelin/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol')
   },
@@ -78,7 +65,7 @@ module.exports = {
       .addFile('resolveUrl.js', { content: resolveUrl })
       .openFile('resolveUrl.js')
       .pause(1000)
-      .executeScriptInTerminal('remix.execute(\'resolveUrl.js\')')
+      .executeScriptInTerminal("remix.execute('resolveUrl.js')")
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'contract Ballot {', 60000)
   },
 
@@ -88,10 +75,9 @@ module.exports = {
       .addFile('resolveExternalUrlAndSaveToaPath.js', { content: resolveExternalUrlAndSaveToaPath })
       .openFile('resolveExternalUrlAndSaveToaPath.js')
       .pause(1000)
-      .executeScriptInTerminal('remix.execute(\'resolveExternalUrlAndSaveToaPath.js\')')
+      .executeScriptInTerminal("remix.execute('resolveExternalUrlAndSaveToaPath.js')")
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'abstract contract ERC20Burnable', 60000)
       .openFile('.deps/github/newFile.sol')
-
   },
 
   'Deploy "Owner" using an ether.js script, listen to event and check event are logged in the terminal #group4': function (browser: NightwatchBrowser) {
@@ -111,8 +97,9 @@ module.exports = {
       .click('[data-id="treeViewDivtreeViewItemcontracts"]')
       .openFile('contracts/2_Owner.sol')
       .clickLaunchIcon('solidity')
-      .click('*[data-id="compilerContainerCompileBtn"]').pause(5000) // compile Owner
-      .executeScriptInTerminal('remix.execute(\'deployWithEthersJs.js\')')
+      .click('*[data-id="compilerContainerCompileBtn"]')
+      .pause(5000) // compile Owner
+      .executeScriptInTerminal("remix.execute('deployWithEthersJs.js')")
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'Contract Address:', 60000)
       .waitForElementContainsText('*[data-id="terminalJournal"]', '0xd9145CCE52D386f254917e481eB44e9943F39138', 60000)
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'Deployment successful.', 60000)
@@ -134,7 +121,7 @@ module.exports = {
       .clickLaunchIcon('solidity')
       .click('*[data-id="compilerContainerCompileBtn"]')
       .pause(1000) // compile Storage
-      .executeScriptInTerminal('remix.execute(\'scripts/storage.test.js\')')
+      .executeScriptInTerminal("remix.execute('scripts/storage.test.js')")
       .pause(1000)
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'RUNS scripts/script.ts....')
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'storage contract Address:')
@@ -157,7 +144,7 @@ module.exports = {
       .clickLaunchIcon('solidity')
       .click('*[data-id="compilerContainerCompileBtn"]')
       .pause(1000) // compile StorageWithLib
-      .executeScriptInTerminal('remix.execute(\'scripts/storageWithLib.test.js\')')
+      .executeScriptInTerminal("remix.execute('scripts/storageWithLib.test.js')")
       .pause(1000)
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'RUNS scripts/script.ts....')
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'Storage')
@@ -165,7 +152,7 @@ module.exports = {
       .waitForElementContainsText('*[data-id="terminalJournal"]', '✘ test library integration by calling a lib method')
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'Expected: 34')
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'Received: 14')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'Message: expected \'14\' to equal \'34\'')
+      .waitForElementContainsText('*[data-id="terminalJournal"]', "Message: expected '14' to equal '34'")
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'Passed: 0')
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'Failed: 1')
   },
@@ -196,20 +183,11 @@ module.exports = {
   },
 
   'Should display auto-complete menu #group4': function (browser: NightwatchBrowser) {
-    browser
-      .waitForElementVisible('*[data-id="terminalCli"]')
-      .click('*[data-id="terminalCli"]')
-      .sendKeys('*[data-id="terminalCliInput"]', 'remix.')
-      .assert.visible('*[data-id="autoCompletePopUpAutoCompleteItem"]')
+    browser.waitForElementVisible('*[data-id="terminalCli"]').click('*[data-id="terminalCli"]').sendKeys('*[data-id="terminalCliInput"]', 'remix.').assert.visible('*[data-id="autoCompletePopUpAutoCompleteItem"]')
   },
 
   'Should run a script right after compilation #group6': function (browser: NightwatchBrowser) {
-    browser
-      .addFile('contracts/storage.sol', { content: scriptAutoExec.contract })
-      .addFile('scripts/deploy_storage.js', { content: scriptAutoExec.script })
-      .openFile('contracts/storage.sol')
-      .sendKeys('body', [browser.Keys.CONTROL, browser.Keys.SHIFT, 's'])
-      .journalLastChildIncludes('147')
+    browser.addFile('contracts/storage.sol', { content: scriptAutoExec.contract }).addFile('scripts/deploy_storage.js', { content: scriptAutoExec.script }).openFile('contracts/storage.sol').sendKeys('body', [browser.Keys.CONTROL, browser.Keys.SHIFT, 's']).journalLastChildIncludes('147')
   },
 
   'Should run a script which log transaction and block using web3.js and ethers #group7': function (browser: NightwatchBrowser) {
@@ -218,18 +196,26 @@ module.exports = {
         .clickLaunchIcon('udapp')
         .switchEnvironment('basic-http-provider')
         .waitForElementPresent('[data-id="basic-http-provider-modal-footer-ok-react"]')
-        .execute(() => {
-          (document.querySelector('*[data-id="basic-http-providerModalDialogContainer-react"] input[data-id="modalDialogCustomPromp"]') as any).focus()
-        }, [], () => { })
+        .execute(
+          () => {
+            ;(document.querySelector('*[data-id="basic-http-providerModalDialogContainer-react"] input[data-id="modalDialogCustomPromp"]') as any).focus()
+          },
+          [],
+          () => {}
+        )
         .setValue('[data-id="modalDialogCustomPromp"]', 'https://go.getblock.io/ee42d0a88f314707be11dd799b122cb9')
         .modalFooterOKClick('basic-http-provider')
         .clickLaunchIcon('filePanel')
         .openFile('README.txt')
         .addFile('scripts/log_tx_block.js', { content: scriptBlockAndTransaction })
         .pause(1000)
-        .executeScriptInTerminal('remix.execute(\'scripts/log_tx_block.js\')')
+        .executeScriptInTerminal("remix.execute('scripts/log_tx_block.js')")
         // check if the input of the transaction is being logged (web3 call)
-        .waitForElementContainsText('*[data-id="terminalJournal"]', '0x2b0006fa00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004e9e0000000000000000000000000000000000000000000000000000000000004ea373ded44d6900b8b479935bee9c82176261653e334586e0fd282f569357c0777bd9d084474837ac94bf96f2e26590222a2b8e46545657c7cf06ce2833d267bd6f131b5b3fd36cb1ca3e07cf422224df0766d1a677bbdb7ee4cc0d634efa5367a302a94dac422a16b9b8d5c10fe0555924f8189f6b498bef507b1d32e7915bd4df184f51e6d79ae6a1b11d5745ce7d625cecc3bd0dc50af4f999ffb927225f5e5c019b499f5e1fdcbc70c45df61df76013d1b0d45cdf6a267dac1b4620c0db2efd251f6548509c9c69f5bd9d1ee38ac0df0c73be2774f7d2e1fb7ef5129010f29d091e3c48aed0f035fc29804c99927d33ff2a19ff526979355ac50b2542bc5d8f2d41e4f850d5981e0420807469e828b03173b96b757fbaeacda335e11b3ab8b02a48456fab35d41ca26abde751d5fca8ef5e7ba5295278b6e46ce2aab6c10b3d185a6137d3e5c28bb8dd3a797feaf35520fcb949ea074e1869e0011ef01f8162135e44bb797d3d6215ff74ffbee972c97264fc15d11c840e6a7e796dc1a418572f6dbcc842594a558e1a9e3cb7a159284e16fec758bbc303d13edc28fb6d8bb110c3a398e4ded1748da9854eb84679ad0c99bc59bea7956b521db3ed0a9057510cc11365858704989690f0d891af81b213b1f2e91e41e4998a467656eac87e7025ac2840c17f2b106df7d32a0139036bdf5d87344ca37e9ce770e0dbeb5e021d03a7d496a6695eb06d3de9258b43f3883ce155767962b52083504b19d6d609090a2f96e9724902bf1adbf57359ac1dda48a8ffe596b8d95cac1429378769a6ec2ff1c8a9c0bc343b0a6468f36696bfb202cde9f6cd5241b814096d777751b44f0cc2ac9e7ba142227e8d5f2dd8da62573953540da1abce82c59287b2f7a87a111851758c2505d8c1ded6c42a49fc5577451ee56126d2275da490baa645c3bcac0c31dabee7aa35e6cdffb56ac0d952c2583c6f50f906dfb96f5a98c49a5919031cff880bffbe371a50162a7bd0fa0398a5898eaf6ad6db868a7d807846a3592325bb4207d67ad96bac76435368962ba8944d0201c2f620fb29373a6f35c815d101af98111e9b4cc61e8ae77fc63ce375068328ec8d05b49486666fb0f756f99d2fe747c95b2a553965f304a324879393897315d310841f0a200cd156f6ca4ed2', 120000)
+        .waitForElementContainsText(
+          '*[data-id="terminalJournal"]',
+          '0x2b0006fa00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004e9e0000000000000000000000000000000000000000000000000000000000004ea373ded44d6900b8b479935bee9c82176261653e334586e0fd282f569357c0777bd9d084474837ac94bf96f2e26590222a2b8e46545657c7cf06ce2833d267bd6f131b5b3fd36cb1ca3e07cf422224df0766d1a677bbdb7ee4cc0d634efa5367a302a94dac422a16b9b8d5c10fe0555924f8189f6b498bef507b1d32e7915bd4df184f51e6d79ae6a1b11d5745ce7d625cecc3bd0dc50af4f999ffb927225f5e5c019b499f5e1fdcbc70c45df61df76013d1b0d45cdf6a267dac1b4620c0db2efd251f6548509c9c69f5bd9d1ee38ac0df0c73be2774f7d2e1fb7ef5129010f29d091e3c48aed0f035fc29804c99927d33ff2a19ff526979355ac50b2542bc5d8f2d41e4f850d5981e0420807469e828b03173b96b757fbaeacda335e11b3ab8b02a48456fab35d41ca26abde751d5fca8ef5e7ba5295278b6e46ce2aab6c10b3d185a6137d3e5c28bb8dd3a797feaf35520fcb949ea074e1869e0011ef01f8162135e44bb797d3d6215ff74ffbee972c97264fc15d11c840e6a7e796dc1a418572f6dbcc842594a558e1a9e3cb7a159284e16fec758bbc303d13edc28fb6d8bb110c3a398e4ded1748da9854eb84679ad0c99bc59bea7956b521db3ed0a9057510cc11365858704989690f0d891af81b213b1f2e91e41e4998a467656eac87e7025ac2840c17f2b106df7d32a0139036bdf5d87344ca37e9ce770e0dbeb5e021d03a7d496a6695eb06d3de9258b43f3883ce155767962b52083504b19d6d609090a2f96e9724902bf1adbf57359ac1dda48a8ffe596b8d95cac1429378769a6ec2ff1c8a9c0bc343b0a6468f36696bfb202cde9f6cd5241b814096d777751b44f0cc2ac9e7ba142227e8d5f2dd8da62573953540da1abce82c59287b2f7a87a111851758c2505d8c1ded6c42a49fc5577451ee56126d2275da490baa645c3bcac0c31dabee7aa35e6cdffb56ac0d952c2583c6f50f906dfb96f5a98c49a5919031cff880bffbe371a50162a7bd0fa0398a5898eaf6ad6db868a7d807846a3592325bb4207d67ad96bac76435368962ba8944d0201c2f620fb29373a6f35c815d101af98111e9b4cc61e8ae77fc63ce375068328ec8d05b49486666fb0f756f99d2fe747c95b2a553965f304a324879393897315d310841f0a200cd156f6ca4ed2',
+          120000
+        )
         // check if the logsBloom is being logged (web3 call)
         .waitForElementContainsText('*[data-id="terminalJournal"]', '0x0fbbd94c448fe6949f848380a1d145a974f386624b4b10aa40f9afb212b3ddeb', 120000) // hash of 4757766
         // check if the logsBloom is being logged (ethers.js call)
@@ -252,7 +238,7 @@ module.exports = {
       .waitForElementNotPresent({
         locateStrategy: 'xpath',
         selector: "//*[@class='remix_ui_terminal_log' and contains(.,'to:') and contains(.,'from:')]",
-        timeout: 120000
+        timeout: 120000,
       })
       .click({
         selector: '[data-id="listenNetworkCheckInput"]',
@@ -266,8 +252,8 @@ module.exports = {
           locateStrategy: 'xpath',
           selector: "//*[@class='remix_ui_terminal_log' and contains(.,'to:') and contains(.,'from:')]",
           timeout: 120000,
-        }
-        , async (result) => {
+        },
+        async (result) => {
           if (Array.isArray(result.value) && result.value.length > 0) {
             console.log('Found ' + result.value.length + ' transactions')
             browser
@@ -284,18 +270,17 @@ module.exports = {
               .waitForElementNotPresent({
                 locateStrategy: 'xpath',
                 selector: "//*[@class='remix_ui_terminal_log' and contains(.,'to:') and contains(.,'from:')]",
-                timeout: 120000
+                timeout: 120000,
               })
               .end()
           } else {
-            browser
-              .assert.fail('No transaction found')
-              .end()
+            browser.assert.fail('No transaction found').end()
           }
-        })
+        }
+      )
   },
 
-  'Should connect to mainnet fork and run web3.eth.getCode in the terminal #group9': function (browser: NightwatchBrowser) {
+  'Should connect to mainnet fork and run web3.zond.getCode in the terminal #group9': function (browser: NightwatchBrowser) {
     if (runMasterTests)
       browser
         .clickLaunchIcon('udapp')
@@ -303,40 +288,59 @@ module.exports = {
         .waitForElementPresent({
           locateStrategy: 'css selector',
           selector: 'select[data-id="runTabSelectAccount"] option[value="0xdD870fA1b7C4700F2BD7f44238821C26f7392148"]',
-          timeout: 240000
+          timeout: 240000,
         })
-        .executeScriptInTerminal(`web3.eth.getCode('0x180587b00c8642e2c7ac3a758712d97e6f7bdcc7')`) // mainnet contract
-        .waitForElementContainsText('*[data-id="terminalJournal"]', '0x608060405260043610601f5760003560e01c80635c60da1b14603157602b565b36602b576029605f565b005b6029605f565b348015603c57600080fd5b5060436097565b6040516001600160a01b03909116815260200160405180910390f35b609560917f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc546001600160a01b031690565b60d1565b565b600060c97f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc546001600160a01b031690565b905090565b90565b3660008037600080366000845af43d6000803e80801560ef573d6000f35b3d6000fdfea2646970667358221220969dbb4b1d8aec2bb348e26488dc1a33b6bcf0190f567d161312ab7ca9193d8d64736f6c63430008110033', 120000)
+        .executeScriptInTerminal(`web3.zond.getCode('0x180587b00c8642e2c7ac3a758712d97e6f7bdcc7')`) // mainnet contract
+        .waitForElementContainsText(
+          '*[data-id="terminalJournal"]',
+          '0x608060405260043610601f5760003560e01c80635c60da1b14603157602b565b36602b576029605f565b005b6029605f565b348015603c57600080fd5b5060436097565b6040516001600160a01b03909116815260200160405180910390f35b609560917f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc546001600160a01b031690565b60d1565b565b600060c97f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc546001600160a01b031690565b905090565b90565b3660008037600080366000845af43d6000803e80801560ef573d6000f35b3d6000fdfea2646970667358221220969dbb4b1d8aec2bb348e26488dc1a33b6bcf0190f567d161312ab7ca9193d8d64736f6c63430008110033',
+          120000
+        )
         .click('*[data-id="terminalClearConsole"]')
   },
 
-  'Should connect to the sepolia fork and run web3.eth.getCode in the terminal #group9': function (browser: NightwatchBrowser) {
+  'Should connect to the sepolia fork and run web3.zond.getCode in the terminal #group9': function (browser: NightwatchBrowser) {
     if (runMasterTests)
       browser
         .pinGrid('vm-custom-fork', true)
         .switchEnvironment('vm-custom-fork')
         .waitForElementVisible('[data-id="vm-custom-fork-modal-footer-ok-react"]')
-        .execute(() => {
-          (document.querySelector('*[data-id="vm-custom-forkModalDialogContainer-react"] input[data-id="CustomForkNodeUrl"]') as any).focus()
-        }, [], () => { })
-        .clearValue('*[data-id="CustomForkNodeUrl"]').pause(1000).setValue('*[data-id="CustomForkNodeUrl"]', 'https://go.getblock.io/ee42d0a88f314707be11dd799b122cb9')
-        .execute(() => {
-          (document.querySelector('*[data-id="vm-custom-forkModalDialogContainer-react"] input[data-id="CustomForkBlockNumber"]') as any).focus()
-        }, [], () => { })
-        .clearValue('*[data-id="CustomForkBlockNumber"]').setValue('*[data-id="CustomForkBlockNumber"]', 'latest')
-        .execute(() => {
-          (document.querySelector('*[data-id="vm-custom-forkModalDialogContainer-react"] input[data-id="CustomForkEvmType"]') as any).focus()
-        }, [], () => { })
+        .execute(
+          () => {
+            ;(document.querySelector('*[data-id="vm-custom-forkModalDialogContainer-react"] input[data-id="CustomForkNodeUrl"]') as any).focus()
+          },
+          [],
+          () => {}
+        )
+        .clearValue('*[data-id="CustomForkNodeUrl"]')
+        .pause(1000)
+        .setValue('*[data-id="CustomForkNodeUrl"]', 'https://go.getblock.io/ee42d0a88f314707be11dd799b122cb9')
+        .execute(
+          () => {
+            ;(document.querySelector('*[data-id="vm-custom-forkModalDialogContainer-react"] input[data-id="CustomForkBlockNumber"]') as any).focus()
+          },
+          [],
+          () => {}
+        )
+        .clearValue('*[data-id="CustomForkBlockNumber"]')
+        .setValue('*[data-id="CustomForkBlockNumber"]', 'latest')
+        .execute(
+          () => {
+            ;(document.querySelector('*[data-id="vm-custom-forkModalDialogContainer-react"] input[data-id="CustomForkEvmType"]') as any).focus()
+          },
+          [],
+          () => {}
+        )
         .click('*[data-id="CustomForkEvmType"] [value="cancun"]')
         .pause(5000)
         .modalFooterOKClick('vm-custom-fork')
         .waitForElementPresent({
           locateStrategy: 'css selector',
           selector: 'select[data-id="runTabSelectAccount"] option[value="0xdD870fA1b7C4700F2BD7f44238821C26f7392148"]',
-          timeout: 240000
+          timeout: 240000,
         })
         .pause(5000)
-        .executeScriptInTerminal(`web3.eth.getCode('0x75F509A4eDA030470272DfBAf99A47D587E76709')`) // sepolia contract
+        .executeScriptInTerminal(`web3.zond.getCode('0x75F509A4eDA030470272DfBAf99A47D587E76709')`) // sepolia contract
         .waitForElementContainsText('*[data-id="terminalJournal"]', byteCodeInSepolia, 120000)
         .click('*[data-id="terminalClearConsole"]')
   },
@@ -361,10 +365,10 @@ module.exports = {
         Resolver resolver = ens.resolver(node);
         console.log(resolver.addr(node));
     }
-    `    
+    `
     if (runMasterTests) {
       const path = "//*[@class='view-line' and contains(.,'resolveENS') and contains(.,'view')]//span//span[contains(.,'(')]"
-      
+
       browser
         // .clickLaunchIcon('udapp')
         .switchEnvironment('vm-mainnet-fork')
@@ -376,11 +380,8 @@ module.exports = {
         .scrollToLine(16)
         .click(path)
         .perform(function () {
-          const actions = this.actions({ async: true });
-          return actions
-            .keyDown(this.Keys.SHIFT)
-            .keyDown(this.Keys.ALT)
-            .sendKeys('r')
+          const actions = this.actions({ async: true })
+          return actions.keyDown(this.Keys.SHIFT).keyDown(this.Keys.ALT).sendKeys('r')
         })
         .useCss()
         .waitForElementContainsText('*[data-id="terminalJournal"]', '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', 120000)
@@ -401,18 +402,15 @@ module.exports = {
       .waitForElementVisible('#editorView')
       .pause(10000) // the parser need to parse the code
       .useXpath()
-      .scrollToLine(3)      
-      .click(path)      
+      .scrollToLine(3)
+      .click(path)
       .perform(function () {
-        const actions = this.actions({ async: true });
-        return actions
-          .keyDown(this.Keys.SHIFT)
-          .keyDown(this.Keys.ALT)
-          .sendKeys('r')
+        const actions = this.actions({ async: true })
+        return actions.keyDown(this.Keys.SHIFT).keyDown(this.Keys.ALT).sendKeys('r')
       })
       .useCss()
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'test running free function', 120000)
-  }
+  },
 }
 
 const asyncAwait = `
@@ -815,15 +813,15 @@ const scriptAutoExec = {
           console.error(e.message)
       }
     })()
-  `
+  `,
 }
 
 const scriptBlockAndTransaction = `
 // Right click on the script name and hit "Run" to execute
 (async () => {
     try {
-      web3.eth.getTransaction('0x0d2baaed96425861677e87dcf6961d34e2b73ad9a0929c32a05607ca94f98d17').then(console.log).catch(console.error)
-      web3.eth.getBlock(4757766).then(console.log).catch(console.error)
+      web3.zond.getTransaction('0x0d2baaed96425861677e87dcf6961d34e2b73ad9a0929c32a05607ca94f98d17').then(console.log).catch(console.error)
+      web3.zond.getBlock(4757766).then(console.log).catch(console.error)
       let ethersProvider = new ethers.providers.Web3Provider(web3Provider)
       ethersProvider.getBlock(4757767).then(console.log).catch(console.error)
     } catch (e) {

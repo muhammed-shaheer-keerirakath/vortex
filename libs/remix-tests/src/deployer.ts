@@ -1,6 +1,6 @@
 import async from 'async'
 import { execution } from '@remix-project/remix-lib'
-import { Web3, FMT_BYTES, FMT_NUMBER } from 'web3'
+import { Web3, FMT_BYTES, FMT_NUMBER } from '@theqrl/web3'
 import { compilationInterface } from './types'
 
 /**
@@ -89,7 +89,7 @@ export function deployAll (compileResult: compilationInterface, web3: Web3, test
         const contract = compiledObject[contractName]
         const encodeDataFinalCallback = (error, contractDeployData) => {
           if (error) return nextEach(error)
-          const contractObject = new web3.eth.Contract(contract.abi)
+          const contractObject = new web3.zond.Contract(contract.abi)
           const deployObject = contractObject.deploy({ arguments: [], data: '0x' + contractDeployData.dataHex })
           deployRunner(deployObject, contractObject, contractName, contract.filename, (error) => { nextEach(error) })
         }
@@ -99,7 +99,7 @@ export function deployAll (compileResult: compilationInterface, web3: Web3, test
         const encodeDataDeployLibraryCallback = (libData, callback) => {
           const abi = compiledObject[libData.data.contractName].abi
           const code = compiledObject[libData.data.contractName].code
-          const libraryObject = new web3.eth.Contract(abi)
+          const libraryObject = new web3.zond.Contract(abi)
           const deployObject = libraryObject.deploy({ arguments: [], data: '0x' + code })
           deployRunner(deployObject, libraryObject, libData.data.contractName, contract.filename, callback)
         }

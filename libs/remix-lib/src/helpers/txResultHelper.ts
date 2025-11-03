@@ -1,8 +1,8 @@
 'use strict'
-import { bytesToHex } from '@ethereumjs/util'
+import { bytesToHex } from '@theqrl/zondjs-util'
 import { isHexString } from 'ethjs-util'
 import { BN } from 'bn.js'
-import { isBigInt } from 'web3-validator'
+import { isBigInt } from '@theqrl/web3-validator'
 
 function convertToPrefixedHex (input) {
   if (input === undefined || input === null || isHexString(input)) {

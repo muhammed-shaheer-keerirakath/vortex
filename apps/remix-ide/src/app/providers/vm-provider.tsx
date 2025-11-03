@@ -7,14 +7,14 @@ import { IProvider } from './abstract-provider'
 export class BasicVMProvider extends Plugin implements IProvider {
   blockchain
   fork: string
-  options: {[id: string]: any} = {}
+  options: { [id: string]: any } = {}
   constructor(profile, blockchain) {
     super(profile)
     this.blockchain = blockchain
     this.fork = ''
   }
 
-  async init(): Promise<{[id: string]: any}> {
+  async init(): Promise<{ [id: string]: any }> {
     return {}
   }
 
@@ -129,5 +129,23 @@ export class CancunVMProvider extends BasicVMProvider {
     )
     this.blockchain = blockchain
     this.fork = 'cancun'
+  }
+}
+
+export class ZondVMProvider extends BasicVMProvider {
+  constructor(blockchain) {
+    super(
+      {
+        name: 'vm-zond',
+        displayName: 'Zond VM',
+        kind: 'provider',
+        description: 'Zond VM Provider',
+        methods: ['sendAsync', 'init'],
+        version: packageJson.version
+      },
+      blockchain
+    )
+    this.blockchain = blockchain
+    this.fork = ''
   }
 }

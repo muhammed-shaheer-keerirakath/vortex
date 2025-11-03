@@ -10,7 +10,7 @@ export class InjectedProviderDefaultBase extends InjectedProvider {
   async init() {
     const injectedProvider = this.getInjectedProvider()
     if (injectedProvider && injectedProvider._metamask && injectedProvider._metamask.isUnlocked) {
-      if (!(await injectedProvider._metamask.isUnlocked())) this.call('notification', 'toast', 'Please make sure the injected provider is unlocked (e.g Metamask).')
+      if (!(await injectedProvider._metamask.isUnlocked())) this.call('notification', 'toast', 'Please make sure the injected provider is unlocked (e.g Zond Web3 Wallet).')
     }
     return super.init()
   }
@@ -20,7 +20,7 @@ export class InjectedProviderDefaultBase extends InjectedProvider {
   }
 
   notFound() {
-    return 'No injected provider found. Make sure your provider (e.g. MetaMask, ...) is active and running (when recently activated you may have to reload the page).'
+    return 'No injected provider found. Make sure your provider (e.g. Zond Web3 Wallet, ...) is active and running (when recently activated you may have to reload the page).'
   }
 }
 

@@ -20,7 +20,6 @@ export class HardhatProvider extends AbstractProvider {
   body(): JSX.Element {
     return (
       <div>
-        {' '}
         <FormattedMessage id="udapp.hardhatProviderText1" />
         <div className="p-1 pl-3">
           <b>npx hardhat node</b>

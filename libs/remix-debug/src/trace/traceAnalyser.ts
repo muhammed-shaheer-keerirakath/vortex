@@ -1,6 +1,6 @@
 'use strict'
 import { util } from '@remix-project/remix-lib'
-import { bytesToHex } from '@ethereumjs/util'
+import { bytesToHex } from '@theqrl/zondjs-util'
 const { toHexPaddedString } = util
 import * as traceHelper from './traceHelper'
 

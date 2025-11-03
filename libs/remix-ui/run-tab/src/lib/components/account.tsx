@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 // eslint-disable-next-line no-use-before-define
 import React, { useEffect, useState, useRef } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
@@ -5,7 +6,7 @@ import { CopyToClipboard } from '@remix-ui/clipboard'
 import { AccountProps } from '../types'
 import { PassphrasePrompt } from './passphrase'
 import { CustomTooltip } from '@remix-ui/helper'
-const _paq = window._paq = window._paq || []
+const _paq = (window._paq = window._paq || [])
 
 export function AccountUI(props: AccountProps) {
   const { selectedAccount, loadedAccounts } = props.accounts
@@ -13,7 +14,7 @@ export function AccountUI(props: AccountProps) {
   const accounts = Object.keys(loadedAccounts)
   const [plusOpt, setPlusOpt] = useState({
     classList: '',
-    title: ''
+    title: '',
   })
   const messageRef = useRef('')
 
@@ -30,64 +31,64 @@ export function AccountUI(props: AccountProps) {
     if (selectExEnv && selectExEnv.startsWith('injected')) {
       setPlusOpt({
         classList: 'udapp_disableMouseEvents',
-        title: intl.formatMessage({ id: 'udapp.injectedTitle' })
+        title: intl.formatMessage({ id: 'udapp.injectedTitle' }),
       })
     } else {
       switch (selectExEnv) {
-      case 'vm-cancun':
-        setPlusOpt({
-          classList: '',
-          title: intl.formatMessage({ id: 'udapp.createNewAccount' })
-        })
-        break
-
-      case 'vm-paris':
-        setPlusOpt({
-          classList: '',
-          title: intl.formatMessage({ id: 'udapp.createNewAccount' })
-        })
-        break
-
-      case 'vm-london':
-        setPlusOpt({
-          classList: '',
-          title: intl.formatMessage({ id: 'udapp.createNewAccount' })
-        })
-        break
-
-      case 'vm-berlin':
-        setPlusOpt({
-          classList: '',
-          title: intl.formatMessage({ id: 'udapp.createNewAccount' })
-        })
-        break
-
-      case 'vm-shanghai':
-        setPlusOpt({
-          classList: '',
-          title: intl.formatMessage({ id: 'udapp.createNewAccount' })
-        })
-        break
-
-      case 'web3':
-        if (!personalMode) {
-          setPlusOpt({
-            classList: 'disableMouseEvents',
-            title: intl.formatMessage({ id: 'udapp.web3Title' })
-          })
-        } else {
+        case 'vm-cancun':
           setPlusOpt({
             classList: '',
-            title: intl.formatMessage({ id: 'udapp.createNewAccount' })
+            title: intl.formatMessage({ id: 'udapp.createNewAccount' }),
           })
-        }
-        break
+          break
 
-      default:
-        setPlusOpt({
-          classList: 'disableMouseEvents',
-          title: intl.formatMessage({ id: 'udapp.defaultTitle' }, { selectExEnv })
-        })
+        case 'vm-paris':
+          setPlusOpt({
+            classList: '',
+            title: intl.formatMessage({ id: 'udapp.createNewAccount' }),
+          })
+          break
+
+        case 'vm-london':
+          setPlusOpt({
+            classList: '',
+            title: intl.formatMessage({ id: 'udapp.createNewAccount' }),
+          })
+          break
+
+        case 'vm-berlin':
+          setPlusOpt({
+            classList: '',
+            title: intl.formatMessage({ id: 'udapp.createNewAccount' }),
+          })
+          break
+
+        case 'vm-shanghai':
+          setPlusOpt({
+            classList: '',
+            title: intl.formatMessage({ id: 'udapp.createNewAccount' }),
+          })
+          break
+
+        case 'web3':
+          if (!personalMode) {
+            setPlusOpt({
+              classList: 'disableMouseEvents',
+              title: intl.formatMessage({ id: 'udapp.web3Title' }),
+            })
+          } else {
+            setPlusOpt({
+              classList: '',
+              title: intl.formatMessage({ id: 'udapp.createNewAccount' }),
+            })
+          }
+          break
+
+        default:
+          setPlusOpt({
+            classList: 'disableMouseEvents',
+            title: intl.formatMessage({ id: 'udapp.defaultTitle' }, { selectExEnv }),
+          })
       }
     }
   }, [selectExEnv, personalMode])
@@ -165,34 +166,41 @@ export function AccountUI(props: AccountProps) {
     return (
       <div>
         <FormattedMessage id="udapp.enterAMessageToSign" />
-        <textarea
-          id="prompt_text"
-          className="bg-light text-light form-control"
-          data-id="signMessageTextarea"
-          style={{ width: '100%' }}
-          rows={4}
-          cols={50}
-          onInput={handleMessageInput}
-          defaultValue={messageRef.current}
-        ></textarea>
-        <div className='mt-2'>
-          <span>otherwise</span><button className='ml-2 modal-ok btn btn-sm border-primary' data-id="sign-eip-712" onClick={() => {
-            props.modal(
-              'Message signing with EIP-712',
-              <div>
-                <div>{intl.formatMessage({ id: 'udapp.EIP712-2' }, {
-                  a: (chunks) => (
-                    <a href='https://eips.ethereum.org/EIPS/eip-712' target="_blank" rel="noreferrer">
-                      {chunks}
-                    </a>
-                  )
-                })}</div>
-                <div>{intl.formatMessage({ id: 'udapp.EIP712-3' })}</div></div>,
-              intl.formatMessage({ id: 'udapp.EIP712-create-template' }),
-              () => { props.addFile('EIP-712-data.json', JSON.stringify(EIP712_Example, null, '\t')) },
-              intl.formatMessage({ id: 'udapp.EIP712-close' }),
-              () => {})
-          }}>Sign with EIP 712</button>
+        <textarea id="prompt_text" className="bg-light text-light form-control" data-id="signMessageTextarea" style={{ width: '100%' }} rows={4} cols={50} onInput={handleMessageInput} defaultValue={messageRef.current}></textarea>
+        <div className="mt-2">
+          <span>otherwise</span>
+          <button
+            className="ml-2 modal-ok btn btn-sm border-primary"
+            data-id="sign-eip-712"
+            onClick={() => {
+              props.modal(
+                'Message signing with EIP-712',
+                <div>
+                  <div>
+                    {intl.formatMessage(
+                      { id: 'udapp.EIP712-2' },
+                      {
+                        a: (chunks) => (
+                          <a href="https://eips.ethereum.org/EIPS/eip-712" target="_blank" rel="noreferrer">
+                            {chunks}
+                          </a>
+                        ),
+                      }
+                    )}
+                  </div>
+                  <div>{intl.formatMessage({ id: 'udapp.EIP712-3' })}</div>
+                </div>,
+                intl.formatMessage({ id: 'udapp.EIP712-create-template' }),
+                () => {
+                  props.addFile('EIP-712-data.json', JSON.stringify(EIP712_Example, null, '\t'))
+                },
+                intl.formatMessage({ id: 'udapp.EIP712-close' }),
+                () => { }
+              )
+            }}
+          >
+            Sign with EIP 712
+          </button>
         </div>
       </div>
     )
@@ -229,7 +237,7 @@ export function AccountUI(props: AccountProps) {
         <CustomTooltip placement={'top'} tooltipClasses="text-nowrap" tooltipId="remixSignMsgTooltip" tooltipText={<FormattedMessage id="udapp.signMsgUsingAccount" />}>
           <i id="remixRunSignMsg" data-id="settingsRemixRunSignMsg" className="ml-2 fas fa-edit udapp_icon" aria-hidden="true" onClick={signMessage}></i>
         </CustomTooltip>
-        <span >
+        <span>
           <CopyToClipboard className="fas fa-copy ml-2 p-0" tip={intl.formatMessage({ id: 'udapp.copyAccount' })} content={selectedAccount} direction="top" />
         </span>
         {props.accounts.isRequesting && <i className="fa fa-spinner fa-pulse ml-2" aria-hidden="true"></i>}
@@ -259,12 +267,12 @@ export function AccountUI(props: AccountProps) {
 const EIP712_Example = {
   domain: {
     chainId: 1,
-    name: "Example App",
-    verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
-    version: "1",
+    name: 'Example App',
+    verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+    version: '1',
   },
   message: {
-    prompt: "Welcome! In order to authenticate to this website, sign this request and your public address will be sent to the server in a verifiable way.",
+    prompt: 'Welcome! In order to authenticate to this website, sign this request and your public address will be sent to the server in a verifiable way.',
     createdAt: 1718570375196,
   },
   primaryType: 'AuthRequest',

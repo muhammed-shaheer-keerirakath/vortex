@@ -1,6 +1,6 @@
-import { Web3, FMT_BYTES, FMT_NUMBER, LegacySendAsyncProvider, LegacyRequestProvider } from 'web3'
-import { fromWei, toBigInt } from 'web3-utils'
-import { privateToAddress, hashPersonalMessage, isHexString, bytesToHex } from '@ethereumjs/util'
+import { Web3, FMT_BYTES, FMT_NUMBER, LegacySendAsyncProvider, LegacyRequestProvider } from '@theqrl/web3'
+import { fromWei, toBigInt } from '@theqrl/web3-utils'
+import { privateToAddress, hashPersonalMessage, isHexString, bytesToHex } from '@theqrl/zondjs-util'
 import { extend, JSONRPCRequestPayload, JSONRPCResponseCallback } from '@remix-project/remix-simulator'
 import { ExecutionContext } from '../execution-context'
 
@@ -12,23 +12,24 @@ export class VMProvider {
     sendAsync: (query: JSONRPCRequestPayload, callback: JSONRPCResponseCallback) => void
     request: (query: JSONRPCRequestPayload) => Promise<any>
   }
-  newAccountCallback: {[stamp: number]: (error: Error, address: string) => void}
-  constructor (executionContext: ExecutionContext) {
+  newAccountCallback: { [stamp: number]: (error: Error, address: string) => void }
+  constructor(executionContext: ExecutionContext) {
     this.executionContext = executionContext
     this.worker = null
     this.provider = null
     this.newAccountCallback = {}
   }
 
-  getAccounts (cb) {
-    this.web3.eth.getAccounts()
-      .then(accounts => cb(null, accounts))
-      .catch(err => {
+  getAccounts(cb) {
+    this.web3.zond
+      .getAccounts()
+      .then((accounts) => cb(null, accounts))
+      .catch((err) => {
         cb('No accounts?')
       })
   }
 
-  async resetEnvironment (stringifiedState?: string) {
+  async resetEnvironment(stringifiedState?: string) {
     if (this.worker) this.worker.terminate()
     this.worker = new Worker(new URL('./worker-vm', import.meta.url))
     const provider = this.executionContext.getProviderObject()
@@ -72,9 +73,9 @@ export class VMProvider {
                   stamps[stamp] = { resolve, reject }
                   this.worker.postMessage({ cmd: 'request', query, stamp })
                 })
-              }
+              },
             }
-            this.web3 = new Web3(this.provider as (LegacySendAsyncProvider | LegacyRequestProvider))
+            this.web3 = new Web3(this.provider as LegacySendAsyncProvider | LegacyRequestProvider)
             this.web3.setConfig({ defaultTransactionType: '0x0' })
             extend(this.web3)
             this.executionContext.setWeb3(this.executionContext.getProvider(), this.web3)
@@ -101,7 +102,7 @@ export class VMProvider {
             nodeUrl: provider?.options['nodeUrl'],
             blockNumber,
             stateDb,
-            blocks: blockchainState.blocks
+            blocks: blockchainState.blocks,
           })
         } catch (e) {
           console.error(e)
@@ -111,7 +112,7 @@ export class VMProvider {
           cmd: 'init',
           fork: this.executionContext.getCurrentFork(),
           nodeUrl: provider?.options['nodeUrl'],
-          blockNumber: provider?.options['blockNumber']
+          blockNumber: provider?.options['blockNumber'],
         })
       }
     })
@@ -119,34 +120,38 @@ export class VMProvider {
 
   // TODO: is still here because of the plugin API
   // can be removed later when we update the API
-  createVMAccount (newAccount) {
+  createVMAccount(newAccount) {
     const { privateKey, balance } = newAccount
     this.worker.postMessage({ cmd: 'addAccount', privateKey: privateKey, balance })
     const privKey = Buffer.from(privateKey, 'hex')
     return bytesToHex(privateToAddress(privKey))
   }
 
-  newAccount (_passwordPromptCb, cb) {
+  newAccount(_passwordPromptCb, cb) {
     const stamp = Date.now()
     this.newAccountCallback[stamp] = cb
     this.worker.postMessage({ cmd: 'newAccount', stamp })
   }
 
-  async getBalanceInEther (address) {
-    const balance = await this.web3.eth.getBalance(address, undefined, { number: FMT_NUMBER.HEX, bytes: FMT_BYTES.HEX })
+  async getBalanceInZnd(address) {
+    const balance = await this.web3.zond.getBalance(address, undefined, { number: FMT_NUMBER.HEX, bytes: FMT_BYTES.HEX })
     const balInString = toBigInt(balance).toString(10)
     return balInString === '0' ? balInString : fromWei(balInString, 'ether')
   }
 
-  getGasPrice (cb) {
-    this.web3.eth.getGasPrice().then((result => cb(null, result))).catch((error) => cb(error))
+  getGasPrice(cb) {
+    this.web3.zond
+      .getGasPrice()
+      .then((result) => cb(null, result))
+      .catch((error) => cb(error))
   }
 
-  signMessage (message, account, _passphrase, cb) {
+  signMessage(message, account, _passphrase, cb) {
     const messageHash = hashPersonalMessage(Buffer.from(message))
     message = isHexString(message) ? message : Web3.utils.utf8ToHex(message)
-    this.web3.eth.sign(message, account)
-      .then(signedData => cb(null, bytesToHex(messageHash), signedData))
-      .catch(error => cb(error))
+    this.web3.zond
+      .sign(message, account)
+      .then((signedData) => cb(null, bytesToHex(messageHash), signedData))
+      .catch((error) => cb(error))
   }
 }

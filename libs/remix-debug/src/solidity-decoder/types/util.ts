@@ -1,5 +1,5 @@
 'use strict'
-import { unpadHex } from '@ethereumjs/util'
+import { unpadHex } from '@theqrl/zondjs-util'
 import BN from 'bn.js'
 
 export function decodeIntFromHex (value, byteLength, signed) {

@@ -46,7 +46,6 @@ const RemixApp = (props: IRemixAppUi) => {
 
   const [appState, appStateDispatch] = useReducer(appReducer, {
     ...appInitialState,
-    showPopupPanel: !window.localStorage.getItem('did_show_popup_panel') && !isElectron()
   })
 
   useEffect(() => {

@@ -10,7 +10,6 @@ import { InternalCallTree } from '../../../src/solidity-decoder/internalCallTree
 import * as vmCall from '../../vmCall'
 import { StorageResolver } from '../../../src/storage/storageResolver'
 import { StorageViewer } from '../../../src/storage/storageViewer'
-import { Address, bytesToHex } from '@ethereumjs/util'
 
 module.exports = async function testMappingStorage (st, cb) {
   const mappingStorage = require('../contracts/mappingStorage')
@@ -28,10 +27,10 @@ module.exports = async function testMappingStorage (st, cb) {
       console.log(error)
       st.end(error)
     } else {
-      web3.eth.getTransactionReceipt(hash)
+      web3.zond.getTransactionReceipt(hash)
         .then(tx => {
           // const storage = await this.vm.stateManager.dumpStorage(data.to)
-          // web3.eth.getCode(tx.contractAddress).then((code) => console.log('code:---', code))
+          // web3.zond.getCode(tx.contractAddress).then((code) => console.log('code:---', code))
           // (vmCall as any).web3().debug.traceTransaction(hash).then((code) => console.log('trace:', code))
           testMapping(st, privateKey, tx.contractAddress, output, compilationResults, web3, cb)
         }
@@ -51,7 +50,7 @@ function testMapping (st, privateKey, contractAddress, output, compilationResult
         console.log(error)
         st.end(error)
       } else {
-        web3.eth.getTransaction(hash)
+        web3.zond.getTransaction(hash)
           .then(tx => {
             const traceManager = new TraceManager({ web3 })
             const codeManager = new CodeManager(traceManager)

@@ -63,7 +63,7 @@ export function EnvironmentUI(props: EnvironmentProps) {
                 No provider pinned
               </span>
             </Dropdown.Item>}
-            { (props.providers.providerList.filter((provider) => { return provider.isInjected })).map(({ name, displayName }) => (
+            {(props.providers.providerList.filter((provider) => { return provider.isInjected })).map(({ name, displayName }) => (
               <Dropdown.Item
                 key={name}
                 onClick={async () => {
@@ -76,8 +76,8 @@ export function EnvironmentUI(props: EnvironmentProps) {
                 </span>
               </Dropdown.Item>
             ))}
-            { props.providers.providerList.filter((provider) => { return provider.isInjected }).length !== 0 && <Dropdown.Divider className='border-secondary'></Dropdown.Divider> }
-            { (props.providers.providerList.filter((provider) => { return provider.isVM })).map(({ displayName, name }) => (
+            {props.providers.providerList.filter((provider) => { return provider.isInjected }).length !== 0 && <Dropdown.Divider className='border-secondary'></Dropdown.Divider>}
+            {(props.providers.providerList.filter((provider) => { return provider.isVM })).map(({ displayName, name }) => (
               <Dropdown.Item
                 key={name}
                 onClick={() => {
@@ -90,8 +90,8 @@ export function EnvironmentUI(props: EnvironmentProps) {
                 </span>
               </Dropdown.Item>
             ))}
-            { props.providers.providerList.filter((provider) => { return provider.isVM }).length !== 0 && <Dropdown.Divider className='border-secondary'></Dropdown.Divider> }
-            { (props.providers.providerList.filter((provider) => { return !(provider.isVM || provider.isInjected) })).map(({ displayName, name }) => (
+            {props.providers.providerList.filter((provider) => { return provider.isVM }).length !== 0 && <Dropdown.Divider className='border-secondary'></Dropdown.Divider>}
+            {(props.providers.providerList.filter((provider) => { return !(provider.isVM || provider.isInjected) })).map(({ displayName, name }) => (
               <Dropdown.Item
                 key={name}
                 onClick={() => {

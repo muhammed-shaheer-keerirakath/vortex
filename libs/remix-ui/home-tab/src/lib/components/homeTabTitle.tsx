@@ -1,58 +1,56 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import React, { useEffect, useState, useRef, useContext } from 'react'
-import { FormattedMessage, useIntl } from 'react-intl'
 import { CustomTooltip } from '@remix-ui/helper'
+import React, { useEffect, useRef, useState } from 'react'
 import { Placement } from 'react-bootstrap/esm/Overlay'
+import { FormattedMessage, useIntl } from 'react-intl'
+import { LanguageOptions } from './homeTablangOptions'
 const _paq = (window._paq = window._paq || []) // eslint-disable-line
 
 type HometabIconSection = {
   textToolip: JSX.Element
   urlLink: string
-  iconClass: 'fa-youtube'|'fa-x-twitter'|'fa-linkedin'|'fa-medium'|'fa-discord'
+  iconClass: 'fa-youtube' | 'fa-x-twitter' | 'fa-linkedin' | 'fa-discord'
   placement: Placement
   matomoTrackingEntry: string[]
 }
 
 const iconButtons: HometabIconSection[] = [
   {
-    textToolip: <FormattedMessage id="home.remixYoutubePlaylist" />,
+    textToolip: <FormattedMessage id="QRL YouTube Page" />,
     matomoTrackingEntry: ['trackEvent', 'hometab', 'socialMedia', 'youtube'],
-    urlLink: 'https://www.youtube.com/channel/UCjTUPyFEr2xDGN6Cg8nKDaA',
+    urlLink: 'https://www.youtube.com/c/QRLedger',
     iconClass: 'fa-youtube',
     placement: 'top'
   },
   {
-    textToolip: <FormattedMessage id="home.remixTwitterProfile" />,
+    textToolip: <FormattedMessage id="QRL X Page" />,
     matomoTrackingEntry: ['trackEvent', 'hometab', 'socialMedia', 'twitter'],
-    urlLink: 'https://x.com/EthereumRemix',
+    urlLink: 'https://twitter.com/qrledger',
     iconClass: 'fa-x-twitter',
     placement: 'top'
   },
   {
-    textToolip: <FormattedMessage id="home.remixLinkedinProfile" />,
+    textToolip: <FormattedMessage id="QRL LinkedIn Profile" />,
     matomoTrackingEntry: ['trackEvent', 'hometab', 'socialmedia', 'linkedin'],
-    urlLink: 'https://www.linkedin.com/company/ethereum-remix/',
+    urlLink: 'https://www.linkedin.com/company/the-quantum-resistant-ledger/',
     iconClass: 'fa-linkedin',
     placement: 'top'
   },
   {
-    textToolip: <FormattedMessage id="home.remixMediumPosts" />,
-    matomoTrackingEntry: ['trackEvent', 'hometab', 'socialmedia', 'medium'],
-    urlLink: 'https://medium.com/remix-ide',
-    iconClass: 'fa-medium',
-    placement: 'top'
-  },
-  {
-    textToolip: <FormattedMessage id="home.joinUsOnDiscord" />,
+    textToolip: <FormattedMessage id="Join us on Discord" />,
     matomoTrackingEntry: ['trackEvent', 'hometab', 'socialmedia', 'discord'],
-    urlLink: 'https://discord.com/invite/nfv6ZYjAeP',
+    urlLink: 'https://theqrl.org/discord',
     iconClass: 'fa-discord',
     placement: 'top'
   }
 ]
 
-function HomeTabTitle() {
+type HomeTabTitleProps = {
+  plugin: any
+}
+
+function HomeTabTitle({ plugin }: HomeTabTitleProps) {
   useEffect(() => {
     document.addEventListener('keyup', (e) => handleSearchKeyDown(e))
     return () => {
@@ -62,7 +60,7 @@ function HomeTabTitle() {
   const [state, setState] = useState<{
     searchDisable: boolean
   }>({
-    searchDisable: true
+    searchDisable: true,
   })
 
   const searchInputRef = useRef(null)
@@ -82,7 +80,7 @@ function HomeTabTitle() {
       setState((prevState) => {
         return {
           ...prevState,
-          searchDisable: searchInputRef.current.value === ''
+          searchDisable: searchInputRef.current.value === '',
         }
       })
     }
@@ -98,73 +96,50 @@ function HomeTabTitle() {
 
   return (
     <div className="px-2 pb-2 pt-2 d-flex flex-column border-bottom" id="hTTitleSection">
-      <div className="d-flex py-2 justify-content-between">
-        <div className="d-flex justify-content-start">
-          <span className="h-80 text-uppercase" style={{ fontSize: 'xx-large', fontFamily: 'Noah, sans-serif' }}>
-            Remix
-          </span>
-          <div className="ml-2 d-flex">
-            <div onClick={() => playRemi()}>
-              <img className="" src="assets/img/guitarRemiCroped.webp" style={{ height: '3rem' }} alt=""></img>
+      <div className="d-flex pb-2 justify-content-between align-items-end" style={{ height: '116px' }}>
+        <div className='d-flex flex-column justify-content-start'>
+          <div className="d-flex justify-content-start">
+            <span className="h-80 text-uppercase" style={{ fontSize: 'xx-large', fontFamily: 'Noah, sans-serif' }}>
+              Vortex
+            </span>
+            <div className="ml-2 d-flex" style={{ cursor: 'pointer' }}>
+              <div onClick={() => playRemi()}>
+                <img src="assets/qrl/images/tree.svg" style={{ height: '4rem', position: "relative", left: '-32px', top: '-16px' }} alt=""></img>
+              </div>
+              <audio id="remiAudio" muted={false} src="assets/audio/remiGuitar-single-power-chord-A-minor.mp3" ref={remiAudioEl}></audio>
             </div>
-            <audio id="remiAudio" muted={false} src="assets/audio/remiGuitar-single-power-chord-A-minor.mp3" ref={remiAudioEl}></audio>
           </div>
+          <b className="pb-1 text-dark" style={{ fontStyle: 'italic' }}>
+            <FormattedMessage id="home.nativeIDE" />
+          </b>
         </div>
-        <span className="d-flex flex-nowrap align-self-end">
-          {iconButtons.map((button, index) => (
-            <CustomTooltip
-              key={index}
-              placement={button.placement}
-              tooltipId="overlay-tooltip"
-              tooltipClasses="text-nowrap"
-              tooltipText={button.textToolip}
-              tooltipTextClasses="border bg-light text-dark p-1 pr-3"
-            >
-              <button
+        <div className='d-flex flex-column justify-content-end'>
+          {/* <LanguageOptions plugin={plugin} /> */}
+          <span className="d-flex mt-2 flex-nowrap align-self-end">
+            {iconButtons.map((button, index) => (
+              <CustomTooltip
                 key={index}
-                onClick={() => {
-                  openLink(button.urlLink)
-                  _paq.push(button.matomoTrackingEntry)
-                }}
-                className={`border-0 h-100 px-1 btn fab ${button.iconClass}`}
-              ></button>
-            </CustomTooltip>
-          ))}
-        </span>
-      </div>
-      <b className="py-1 text-dark" style={{ fontStyle: 'italic' }}>
-        <FormattedMessage id="home.nativeIDE" />
-      </b>
-      <div className="pb-1" id="hTGeneralLinks">
-        <a className="remixui_home_text" onClick={() => _paq.push(['trackEvent', 'hometab', 'header', 'webSite'])} target="__blank" href="https://remix-project.org">
-          <FormattedMessage id="home.website" />
-        </a>
-        {/* <a
-          className="pl-2 remixui_home_text"
-          onClick={() => _paq.push(['trackEvent', 'hometab', 'header', 'documentation'])}
-          target="__blank"
-          href="https://remix-ide.readthedocs.io/en/latest"
-        >
-          <FormattedMessage id="home.documentation" />
-        </a> */}
-        <a
-          className="pl-2 remixui_home_text"
-          onClick={() => _paq.push(['trackEvent', 'hometab', 'header', 'remixDesktop'])}
-          target="__blank"
-          href="https://github.com/remix-project-org/remix-desktop-insiders"
-        >
-          <FormattedMessage id="home.remixDesktop" />
-        </a>
+                placement={button.placement}
+                tooltipId="overlay-tooltip"
+                tooltipClasses="text-nowrap"
+                tooltipText={button.textToolip}
+                tooltipTextClasses="border bg-light text-dark p-1 pr-3"
+              >
+                <button
+                  key={index}
+                  onClick={() => {
+                    openLink(button.urlLink)
+                    _paq.push(button.matomoTrackingEntry)
+                  }}
+                  className={`border-0 h-100 px-1 btn fab ${button.iconClass}`}
+                ></button>
+              </CustomTooltip>
+            ))}
+          </span>
+        </div>
       </div>
       <div className="d-flex pb-1 align-items-center">
-        <input
-          ref={searchInputRef}
-          type="text"
-          className="border form-control border-right-0"
-          id="homeTabSearchInput"
-          placeholder={intl.formatMessage({ id: 'home.searchDocumentation' })}
-          data-id="terminalInputSearchHome"
-        />
+        <input ref={searchInputRef} type="text" className="border form-control border-right-0" id="homeTabSearchInput" placeholder={intl.formatMessage({ id: 'home.searchDocumentation' })} data-id="terminalInputSearchHome" />
         <button
           className="form-control border d-flex align-items-center p-2 justify-content-center fas fa-search bg-light"
           onClick={(e) => {

@@ -26,21 +26,22 @@ import { WalkthroughService } from './walkthroughService'
 
 import { OffsetToLineColumnConverter, CompilerMetadata, CompilerArtefacts, FetchAndCompile, CompilerImports, GistHandler } from '@remix-project/core-plugin'
 
-import {Registry} from '@remix-project/remix-lib'
-import {ConfigPlugin} from './app/plugins/config'
-import {StoragePlugin} from './app/plugins/storage'
-import {Layout} from './app/panels/layout'
-import {NotificationPlugin} from './app/plugins/notification'
-import {Blockchain} from './blockchain/blockchain'
-import {MergeVMProvider, LondonVMProvider, BerlinVMProvider, ShanghaiVMProvider, CancunVMProvider} from './app/providers/vm-provider'
-import {MainnetForkVMProvider} from './app/providers/mainnet-vm-fork-provider'
-import {SepoliaForkVMProvider} from './app/providers/sepolia-vm-fork-provider'
-import {GoerliForkVMProvider} from './app/providers/goerli-vm-fork-provider'
-import {CustomForkVMProvider} from './app/providers/custom-vm-fork-provider'
-import {HardhatProvider} from './app/providers/hardhat-provider'
-import {GanacheProvider} from './app/providers/ganache-provider'
-import {FoundryProvider} from './app/providers/foundry-provider'
-import {ExternalHttpProvider} from './app/providers/external-http-provider'
+import { Registry } from '@remix-project/remix-lib'
+import { ConfigPlugin } from './app/plugins/config'
+import { StoragePlugin } from './app/plugins/storage'
+import { Layout } from './app/panels/layout'
+import { NotificationPlugin } from './app/plugins/notification'
+import { Blockchain } from './blockchain/blockchain'
+import { ZondVMProvider } from './app/providers/vm-provider'
+// import { MergeVMProvider, LondonVMProvider, BerlinVMProvider, ShanghaiVMProvider, CancunVMProvider } from './app/providers/vm-provider'
+// import { MainnetForkVMProvider } from './app/providers/mainnet-vm-fork-provider'
+// import { SepoliaForkVMProvider } from './app/providers/sepolia-vm-fork-provider'
+// import { GoerliForkVMProvider } from './app/providers/goerli-vm-fork-provider'
+// import { CustomForkVMProvider } from './app/providers/custom-vm-fork-provider'
+// import { HardhatProvider } from './app/providers/hardhat-provider'
+// import { GanacheProvider } from './app/providers/ganache-provider'
+// import { FoundryProvider } from './app/providers/foundry-provider'
+import { ExternalHttpProvider } from './app/providers/external-http-provider'
 import { EnvironmentExplorer } from './app/providers/environment-explorer'
 import { FileDecorator } from './app/plugins/file-decorator'
 import { CodeFormat } from './app/plugins/code-format'
@@ -58,7 +59,7 @@ import { xtermPlugin } from './app/plugins/electron/xtermPlugin'
 import { ripgrepPlugin } from './app/plugins/electron/ripgrepPlugin'
 import { compilerLoaderPlugin, compilerLoaderPluginDesktop } from './app/plugins/electron/compilerLoaderPlugin'
 import { appUpdaterPlugin } from './app/plugins/electron/appUpdaterPlugin'
-import { remixAIDesktopPlugin } from './app/plugins/electron/remixAIDesktopPlugin' 
+import { remixAIDesktopPlugin } from './app/plugins/electron/remixAIDesktopPlugin'
 import { RemixAIPlugin } from './app/plugins/remixAIPlugin'
 import { SlitherHandleDesktop } from './app/plugins/electron/slitherPlugin'
 import { SlitherHandle } from './app/files/slither-handle'
@@ -66,7 +67,7 @@ import { FoundryHandle } from './app/files/foundry-handle'
 import { FoundryHandleDesktop } from './app/plugins/electron/foundryPlugin'
 import { HardhatHandle } from './app/files/hardhat-handle'
 import { HardhatHandleDesktop } from './app/plugins/electron/hardhatPlugin'
-
+import { circomPlugin } from './app/plugins/electron/circomElectronPlugin'
 import { GitPlugin } from './app/plugins/git'
 import { Matomo } from './app/plugins/matomo'
 
@@ -193,11 +194,11 @@ class AppComponent {
     const e2eforceMatomoToShow = window.localStorage.getItem('showMatomo') && window.localStorage.getItem('showMatomo') === 'true'
     const contextShouldShowMatomo = matomoDomains[window.location.hostname] || e2eforceMatomoToShow || electronTracking
     const shouldRenewConsent = this.matomoCurrentSetting === false && (!lastMatomoCheck || new Date(Number(lastMatomoCheck)) < sixMonthsAgo) // it is set to false for more than 6 months.
-    this.showMatomo = contextShouldShowMatomo && (!this.matomoConfAlreadySet || shouldRenewConsent)        
+    this.showMatomo = contextShouldShowMatomo && (!this.matomoConfAlreadySet || shouldRenewConsent)
 
     if (this.showMatomo && shouldRenewConsent) {
       _paq.push(['trackEvent', 'Matomo', 'refreshMatomoPermissions']);
-    }    
+    }
 
     this.walkthroughService = new WalkthroughService(appManager)
 
@@ -280,7 +281,7 @@ class AppComponent {
     const contentImport = new CompilerImports()
 
     const blockchain = new Blockchain(Registry.getInstance().get('config').api)
-
+    
     // ----------------- compilation metadata generation service ---------
     const compilerMetadataGenerator = new CompilerMetadata()
     // ----------------- compilation result service (can keep track of compilation results) ----------------------------
@@ -296,18 +297,19 @@ class AppComponent {
     const networkModule = new NetworkModule(blockchain)
     // ----------------- represent the current selected web3 provider ----
     const web3Provider = new Web3ProviderModule(blockchain)
-    const vmProviderCustomFork = new CustomForkVMProvider(blockchain)
-    const vmProviderMainnetFork = new MainnetForkVMProvider(blockchain)
-    const vmProviderSepoliaFork = new SepoliaForkVMProvider(blockchain)
-    const vmProviderGoerliFork = new GoerliForkVMProvider(blockchain)
-    const vmProviderShanghai = new ShanghaiVMProvider(blockchain)
-    const vmProviderCancun = new CancunVMProvider(blockchain)
-    const vmProviderMerge = new MergeVMProvider(blockchain)
-    const vmProviderBerlin = new BerlinVMProvider(blockchain)
-    const vmProviderLondon = new LondonVMProvider(blockchain)
-    const hardhatProvider = new HardhatProvider(blockchain)
-    const ganacheProvider = new GanacheProvider(blockchain)
-    const foundryProvider = new FoundryProvider(blockchain)
+    const vmProviderZond = new ZondVMProvider(blockchain);
+    // const vmProviderCustomFork = new CustomForkVMProvider(blockchain)
+    // const vmProviderMainnetFork = new MainnetForkVMProvider(blockchain)
+    // const vmProviderSepoliaFork = new SepoliaForkVMProvider(blockchain)
+    // const vmProviderGoerliFork = new GoerliForkVMProvider(blockchain)
+    // const vmProviderShanghai = new ShanghaiVMProvider(blockchain)
+    // const vmProviderCancun = new CancunVMProvider(blockchain)
+    // const vmProviderMerge = new MergeVMProvider(blockchain)
+    // const vmProviderBerlin = new BerlinVMProvider(blockchain)
+    // const vmProviderLondon = new LondonVMProvider(blockchain)
+    // const hardhatProvider = new HardhatProvider(blockchain)
+    // const ganacheProvider = new GanacheProvider(blockchain)
+    // const foundryProvider = new FoundryProvider(blockchain)
     const externalHttpProvider = new ExternalHttpProvider(blockchain)
 
     const environmentExplorer = new EnvironmentExplorer()
@@ -374,20 +376,21 @@ class AppComponent {
       fetchAndCompile,
       dGitProvider,
       storagePlugin,
-      vmProviderShanghai,
-      vmProviderCancun,
-      vmProviderMerge,
-      vmProviderBerlin,
-      vmProviderLondon,
-      vmProviderSepoliaFork,
-      vmProviderGoerliFork,
-      vmProviderMainnetFork,
-      vmProviderCustomFork,
-      hardhatProvider,
-      ganacheProvider,
-      foundryProvider,
+      vmProviderZond,
+      // vmProviderShanghai,
+      // vmProviderCancun,
+      // vmProviderMerge,
+      // vmProviderBerlin,
+      // vmProviderLondon,
+      // vmProviderSepoliaFork,
+      // vmProviderGoerliFork,
+      // vmProviderMainnetFork,
+      // vmProviderCustomFork,
+      // hardhatProvider,
+      // ganacheProvider,
+      // foundryProvider,
       externalHttpProvider,
-      environmentExplorer,  
+      environmentExplorer,
       this.walkthroughService,
       search,
       solidityumlgen,
@@ -419,6 +422,8 @@ class AppComponent {
       this.engine.register([xterm])
       const ripgrep = new ripgrepPlugin()
       this.engine.register([ripgrep])
+      const circom = new circomPlugin()
+      this.engine.register([circom])
       const appUpdater = new appUpdaterPlugin()
       this.engine.register([appUpdater])
       const remixAIDesktop = new remixAIDesktopPlugin()
@@ -565,7 +570,7 @@ class AppComponent {
     await this.appManager.activatePlugin(['solidity-script', 'remix-templates'])
 
     if (isElectron()) {
-      await this.appManager.activatePlugin(['isogit', 'electronconfig', 'electronTemplates', 'xterm', 'ripgrep', 'appUpdater', 'slither', 'foundry', 'hardhat']) // 'remixAID'
+      await this.appManager.activatePlugin(['isogit', 'electronconfig', 'electronTemplates', 'xterm', 'ripgrep', 'appUpdater', 'slither', 'foundry', 'hardhat', 'circom']) // 'remixAID'
     }
 
     this.appManager.on(

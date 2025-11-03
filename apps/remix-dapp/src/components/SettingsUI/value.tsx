@@ -98,8 +98,8 @@ export function ValueUI() {
           <option data-unit="finney" value="finney">
             Finney
           </option>
-          <option data-unit="ether" value="ether">
-            Ether
+          <option data-unit="znd" value="znd">
+            ZND
           </option>
         </select>
       </div>

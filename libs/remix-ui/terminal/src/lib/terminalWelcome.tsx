@@ -1,12 +1,11 @@
-import React, {useEffect} from 'react' // eslint-disable-line
+import React, { useEffect } from 'react' // eslint-disable-line
 import { FormattedMessage } from 'react-intl'
 
 const TerminalWelcomeMessage = ({ packageJson, storage }) => {
   return (
     <div className="remix_ui_terminal_block px-4 " data-id="block_null">
       <div className="remix_ui_terminal_welcome">
-        {' '}
-        <FormattedMessage id="terminal.welcomeText1" /> Remix {packageJson}{' '}
+        <FormattedMessage id="terminal.welcomeText1" /> Vortex IDE {packageJson}{' '}
       </div>
       <br />
       <div className="">
@@ -30,7 +29,8 @@ const TerminalWelcomeMessage = ({ packageJson, storage }) => {
           <br />
           <i>
             {' '}
-            - <FormattedMessage id="terminal.welcomeText7" />{' '}
+            {/* - <FormattedMessage id="terminal.welcomeText7" />{' '} */}
+            - Select a Javascript file in the file explorer and then run `vortex.execute()` or `vortex.exeCurrent()`  in the command line interface
           </i>
           <br />
           <i>
@@ -45,17 +45,12 @@ const TerminalWelcomeMessage = ({ packageJson, storage }) => {
       </div>
       <ul className="ml-0 mr-4">
         <li key="web3-152">
-          <a target="_blank" href="https://web3js.readthedocs.io/en/1.0/">
+          <a target="_blank" href="https://github.com/theQRL/web3.js">
             web3.js
           </a>
         </li>
-        <li key="ethers-console">
-          <a target="_blank" href="https://docs.ethers.io">
-            ethers.js
-          </a>{' '}
-        </li>
         <li key="sol-gpt">
-          sol-gpt <i>&lt;your Solidity question here&gt;</i> {' '}
+          sol-gpt <i>&lt;your Solidity question here&gt;</i>{' '}
         </li>
       </ul>
       <div>

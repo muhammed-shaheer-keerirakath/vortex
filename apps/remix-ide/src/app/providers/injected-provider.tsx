@@ -5,7 +5,7 @@ import { JsonDataRequest, RejectRequest, SuccessRequest } from '../providers/abs
 import { IProvider } from './abstract-provider'
 
 export abstract class InjectedProvider extends Plugin implements IProvider {
-  options: {[id: string]: any} = {}
+  options: { [id: string]: any } = {}
   listenerAccountsChanged: (accounts: Array<string>) => void
   listenerChainChanged: (chainId: number) => void
 
@@ -42,10 +42,14 @@ export abstract class InjectedProvider extends Plugin implements IProvider {
     }
   }
 
-  askPermission(throwIfNoInjectedProvider) {
+  async askPermission(throwIfNoInjectedProvider) {
     const web3Provider = this.getInjectedProvider()
     if (typeof web3Provider !== 'undefined' && typeof web3Provider.request === 'function') {
-      web3Provider.request({ method: 'eth_requestAccounts' })
+      try {
+        await web3Provider.request({ method: 'zond_requestAccounts' })
+      } catch (error) {
+        throw new Error(this.notFound())
+      }
     } else if (throwIfNoInjectedProvider) {
       throw new Error(this.notFound())
     }
@@ -61,7 +65,12 @@ export abstract class InjectedProvider extends Plugin implements IProvider {
       this.call('notification', 'toast', this.notFound())
       throw new Error(this.notFound())
     } else {
-      this.askPermission(true)
+      try {
+        await this.askPermission(true)
+      } catch (error) {
+        this.call('notification', 'toast', 'Please make sure your Injected Provider is connected to Vortex IDE.')
+        throw new Error(this.notFound())
+      }
     }
     return {}
   }
@@ -77,7 +86,7 @@ export abstract class InjectedProvider extends Plugin implements IProvider {
     // This will be displayed on UI tooltip as 'cannot get account list: Environment Updated !!'
     const web3Provider = this.getInjectedProvider()
     if (!web3Provider) {
-      this.call('notification', 'toast', 'No injected provider (e.g Metamask) has been found.')
+      this.call('notification', 'toast', 'No injected provider (e.g Zond Web3 Wallet) has been found.')
       return resolve({
         jsonrpc: '2.0',
         error: { message: 'no injected provider found', code: -32603 },

@@ -4,7 +4,7 @@ import {TreeView, TreeViewItem} from '@remix-ui/tree-view' // eslint-disable-lin
 import {DropdownPanelProps, ExtractData, ExtractFunc} from '../../types' // eslint-disable-line
 import {CopyToClipboard} from '@remix-ui/clipboard' // eslint-disable-line
 import { initialState, reducer } from '../../reducers/calldata'
-import { isBigInt } from 'web3-validator'
+import { isBigInt } from '@theqrl/web3-validator'
 import './styles/dropdown-panel.css'
 
 export const DropdownPanel = (props: DropdownPanelProps) => {

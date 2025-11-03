@@ -14,6 +14,8 @@ export function RemixUiLocaleModule({ localeModule }: RemixUiLocaleModuleProps) 
     localeModule.switchLocale()
   }, [localeCode, localeModule])
 
+  return null;
+
   return (
     <div className="border-top mb-4">
       <div className="card-body pt-3 pb-2">

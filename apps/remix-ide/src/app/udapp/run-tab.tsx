@@ -141,41 +141,46 @@ export class RunTab extends ViewPlugin {
     const udapp = this // eslint-disable-line
 
     const descriptions = {
-      'vm-cancun': 'Deploy to the in-browser virtual machine running the Cancun fork.',
-      'vm-shanghai': 'Deploy to the in-browser virtual machine running the Shanghai fork.',
-      'vm-paris': 'Deploy to the in-browser virtual machine running the Paris fork.',
-      'vm-london': 'Deploy to the in-browser virtual machine running the London fork.',
-      'vm-berlin': 'Deploy to the in-browser virtual machine running the Berlin fork.',
-      'vm-mainnet-fork': 'Deploy to a fork of the Ethereum mainnet in the in-browser virtual machine.',
-      'vm-sepolia-fork': 'Deploy to a fork of the Sepolia testnet in the in-browser virtual machine.',
-      'vm-custom-fork': 'Deploy to a fork of a custom network in the in-browser virtual machine.',
-      'walletconnect': 'Deploy using WalletConnect.',
+      // 'vm-cancun': 'Deploy to the in-browser virtual machine running the Cancun fork.',
+      // 'vm-shanghai': 'Deploy to the in-browser virtual machine running the Shanghai fork.',
+      // 'vm-paris': 'Deploy to the in-browser virtual machine running the Paris fork.',
+      // 'vm-london': 'Deploy to the in-browser virtual machine running the London fork.',
+      // 'vm-berlin': 'Deploy to the in-browser virtual machine running the Berlin fork.',
+      // 'vm-mainnet-fork': 'Deploy to a fork of the Ethereum mainnet in the in-browser virtual machine.',
+      // 'vm-sepolia-fork': 'Deploy to a fork of the Sepolia testnet in the in-browser virtual machine.',
+      // 'vm-custom-fork': 'Deploy to a fork of a custom network in the in-browser virtual machine.',
+      'vm-zond': 'Deploy to the in-browser Zond virtual machine.',
+      // 'walletconnect': 'Deploy using WalletConnect.',
       'basic-http-provider': 'Deploy to a Custom local network.',
-      'hardhat-provider': 'Deploy to the local Hardhat dev chain.',
-      'ganache-provider': 'Deploy to the local Ganache dev chain.',
-      'foundry-provider': 'Deploy to the local Foundry dev chain.',
+      // 'hardhat-provider': 'Deploy to the local Hardhat dev chain.',
+      // 'ganache-provider': 'Deploy to the local Ganache dev chain.',
+      // 'foundry-provider': 'Deploy to the local Foundry dev chain.',
+      'injected-ZondWeb3Wallet': 'Deploy through the Zond Web3 Wallet.',
       'injected-MetaMask': 'Deploy through the Metamask browser extension.',
-      'injected-Brave Wallet': 'Deploy through the Brave Wallet extension.',
-      'injected-Brave': 'Deploy through the Brave browser extension.',
-      'injected-metamask-optimism': 'Deploy to Optimism through the Metamask browser extension.',
-      'injected-metamask-gnosis': 'Deploy to Gnosis through the Metamask browser extension.',
-      'injected-metamask-arbitrum': 'Deploy to Arbitrum through the Metamask browser extension.',
-      'injected-metamask-sepolia': 'Deploy to the Sepolia testnet through the Metamask browser extension.',
-      'injected-metamask-ephemery': 'Deploy to the Ephemery testnet through the Metamask browser extension.'
+      // 'injected-Brave Wallet': 'Deploy through the Brave Wallet extension.',
+      // 'injected-Brave': 'Deploy through the Brave browser extension.',
+      // 'injected-metamask-optimism': 'Deploy to Optimism through the Metamask browser extension.',
+      // 'injected-metamask-gnosis': 'Deploy to Gnosis through the Metamask browser extension.',
+      // 'injected-metamask-arbitrum': 'Deploy to Arbitrum through the Metamask browser extension.',
+      // 'injected-metamask-sepolia': 'Deploy to the Sepolia testnet through the Metamask browser extension.',
+      // 'injected-metamask-ephemery': 'Deploy to the Ephemery testnet through the Metamask browser extension.'
     }
 
     const logos = {
-      'injected-metamask-optimism': ['assets/img/optimism-ethereum-op-logo.png', 'assets/img/metamask.png'],
-      'injected-metamask-arbitrum': ['assets/img/arbitrum-arb-logo.png', 'assets/img/metamask.png'],
-      'injected-metamask-gnosis': ['assets/img/gnosis_chain.png', 'assets/img/metamask.png'],
-      'injected-metamask-sepolia': ['assets/img/metamask.png'],
-      'injected-metamask-ephemery': ['assets/img/metamask.png'],
+      'vm-zond': ['assets/img/qrl-zond-vm.png'],
+      'injected-ZondWeb3Wallet': ['assets/img/qrl-zond.png'],
+      'basic-http-provider': ['assets/img/http.png'],
+      // 'injected-metamask-optimism': ['assets/img/optimism-ethereum-op-logo.png', 'assets/img/metamask.png'],
+      // 'injected-metamask-arbitrum': ['assets/img/arbitrum-arb-logo.png', 'assets/img/metamask.png'],
+      // 'injected-metamask-gnosis': ['assets/img/gnosis_chain.png', 'assets/img/metamask.png'],
+      // 'injected-metamask-sepolia': ['assets/img/metamask.png'],
+      // 'injected-metamask-ephemery': ['assets/img/metamask.png'],
       'injected-MetaMask': ['assets/img/metamask.png'],
-      'injected-Brave Wallet': ['assets/img/brave.png'],
-      'injected-Trust Wallet': ['assets/img/trust-wallet.png'],
-      'hardhat-provider': ['assets/img/hardhat.png'],
-      'walletconnect': ['assets/img/Walletconnect-logo.png'],
-      'foundry-provider': ['assets/img/foundry.png']
+      // 'injected-Brave Wallet': ['assets/img/brave.png'],
+      // 'injected-Trust Wallet': ['assets/img/trust-wallet.png'],
+      // 'hardhat-provider': ['assets/img/hardhat.png'],
+      // 'walletconnect': ['assets/img/Walletconnect-logo.png'],
+      // 'foundry-provider': ['assets/img/foundry.png']
     }
 
     const addProvider = async (position, name, displayName, isInjected, isVM, fork = '', dataId = '', title = '', forkedVM = false) => {
@@ -203,11 +208,13 @@ export class RunTab extends ViewPlugin {
       })
     }
 
+    /*
     const addCustomInjectedProvider = async (position, event, name, displayName, networkId, urls, nativeCurrency?) => {
       // name = `${name} through ${event.detail.info.name}`
       await this.engine.register([new InjectedCustomProvider(event.detail.provider, name, displayName, networkId, urls, nativeCurrency)])
       await addProvider(position, name, displayName + ' - ' + event.detail.info.name, true, false)
     }
+      */
     const registerInjectedProvider = async (event) => {
       const name = 'injected-' + event.detail.info.name
       const displayName = 'Injected Provider - ' + event.detail.info.name
@@ -215,6 +222,7 @@ export class RunTab extends ViewPlugin {
       await addProvider(0, name, displayName, true, false)
 
       if (event.detail.info.name === 'MetaMask') {
+        /*
         await addCustomInjectedProvider(7, event, 'injected-metamask-optimism', 'L2 - Optimism', '0xa', ['https://mainnet.optimism.io'])
         await addCustomInjectedProvider(8, event, 'injected-metamask-arbitrum', 'L2 - Arbitrum', '0xa4b1', ['https://arb1.arbitrum.io/rpc'])
         await addCustomInjectedProvider(5, event, 'injected-metamask-sepolia', 'Sepolia Testnet', '0xaa36a7', [],
@@ -235,7 +243,6 @@ export class RunTab extends ViewPlugin {
             "symbol": "XDAI",
             "decimals": 18
           })
-        /*
         await addCustomInjectedProvider(9, event, 'SKALE Chaos Testnet', '0x50877ed6', ['https://staging-v3.skalenodes.com/v1/staging-fast-active-bellatrix'],
           {
             "name": "sFUEL",
@@ -247,24 +254,26 @@ export class RunTab extends ViewPlugin {
     }
 
     // VM
-    const titleVM = 'Execution environment is local to Remix.  Data is only saved to browser memory and will vanish upon reload.'
-    await addProvider(1, 'vm-cancun', 'Remix VM (Cancun)', false, true, 'cancun', 'settingsVMCancunMode', titleVM)
-    await addProvider(50, 'vm-shanghai', 'Remix VM (Shanghai)', false, true, 'shanghai', 'settingsVMShanghaiMode', titleVM)
-    await addProvider(51, 'vm-paris', 'Remix VM (Paris)', false, true, 'paris', 'settingsVMParisMode', titleVM)
-    await addProvider(52, 'vm-london', 'Remix VM (London)', false, true, 'london', 'settingsVMLondonMode', titleVM)
-    await addProvider(53, 'vm-berlin', 'Remix VM (Berlin)', false, true, 'berlin', 'settingsVMBerlinMode', titleVM)
-    await addProvider(2, 'vm-mainnet-fork', 'Remix VM - Mainnet fork', false, true, 'cancun', 'settingsVMMainnetMode', titleVM, true)
-    await addProvider(3, 'vm-sepolia-fork', 'Remix VM - Sepolia fork', false, true, 'cancun', 'settingsVMSepoliaMode', titleVM, true)
-    await addProvider(4, 'vm-custom-fork', 'Remix VM - Custom fork', false, true, '', 'settingsVMCustomMode', titleVM, true)
+    const titleVM = 'Execution environment is local to Vortex IDE.  Data is only saved to browser memory and will vanish upon reload.'
+    await addProvider(1, 'vm-zond', 'Zond VM', false, true, undefined, 'settingsVMZond', titleVM)
+    // await addProvider(2, 'vm-cancun', 'Remix VM (Temp)', false, true, 'cancun', 'settingsVMCancunMode', titleVM)
+    // await addProvider(50, 'vm-shanghai', 'Remix VM (Shanghai)', false, true, 'shanghai', 'settingsVMShanghaiMode', titleVM)
+    // await addProvider(51, 'vm-paris', 'Remix VM (Paris)', false, true, 'paris', 'settingsVMParisMode', titleVM)
+    // await addProvider(52, 'vm-london', 'Remix VM (London)', false, true, 'london', 'settingsVMLondonMode', titleVM)
+    // await addProvider(53, 'vm-berlin', 'Remix VM (Berlin)', false, true, 'berlin', 'settingsVMBerlinMode', titleVM)
+    // await addProvider(2, 'vm-mainnet-fork', 'Remix VM - Mainnet fork', false, true, 'cancun', 'settingsVMMainnetMode', titleVM, true)
+    // await addProvider(3, 'vm-sepolia-fork', 'Remix VM - Sepolia fork', false, true, 'cancun', 'settingsVMSepoliaMode', titleVM, true)
+    // await addProvider(4, 'vm-custom-fork', 'Remix VM - Custom fork', false, true, '', 'settingsVMCustomMode', titleVM, true)
 
     // wallet connect
-    await addProvider(6, 'walletconnect', 'WalletConnect', false, false)
+    // await addProvider(6, 'walletconnect', 'WalletConnect', false, false)
 
     // external provider
+    // await addProvider(1, 'zond-testnet', 'Zond Testnet', false, false)
     await addProvider(10, 'basic-http-provider', 'Custom - External Http Provider', false, false)
-    await addProvider(20, 'hardhat-provider', 'Dev - Hardhat Provider', false, false)
-    await addProvider(21, 'ganache-provider', 'Dev - Ganache Provider', false, false)
-    await addProvider(22, 'foundry-provider', 'Dev - Foundry Provider', false, false)
+    // await addProvider(20, 'hardhat-provider', 'Dev - Hardhat Provider', false, false)
+    // await addProvider(21, 'ganache-provider', 'Dev - Ganache Provider', false, false)
+    // await addProvider(22, 'foundry-provider', 'Dev - Foundry Provider', false, false)
 
     // register injected providers
 
@@ -300,16 +309,16 @@ class Provider {
     this.udapp = udapp
     this.name = name
   }
-  sendAsync (payload) {
+  sendAsync(payload) {
     return this.udapp.call(this.name, 'sendAsync', payload)
   }
-  request (payload): Promise<any> {
+  request(payload): Promise<any> {
     return new Promise((resolve, reject) => {
       this.udapp.call(this.name, 'sendAsync', payload).then((response) => {
         if (response.error) {
           reject(response.error.message)
         } else {
-          resolve(response.result? response.result : response)
+          resolve(response.result ? response.result : response)
         }
       }).catch((err) => {
         if (typeof err === 'string') {

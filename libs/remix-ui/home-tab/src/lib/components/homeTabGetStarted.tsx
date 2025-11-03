@@ -103,13 +103,13 @@ function HomeTabGetStarted({ plugin }: HomeTabGetStartedProps) {
       e.stopPropagation()
       let nextSlide = 0
       if (e.wheelDelta < 0) {
-        nextSlide = carouselRef.current.state.currentSlide + 1
-        if (Math.abs(carouselRef.current.state.transform) >= carouselRef.current.containerRef.current.scrollWidth - carouselRef.current.state.containerWidth) return
+        nextSlide = carouselRef?.current?.state?.currentSlide + 1
+        if (Math.abs(carouselRef?.current?.state?.transform) >= carouselRef?.current?.containerRef?.current?.scrollWidth - carouselRef?.current?.state?.containerWidth) return
         carouselRef.current.goToSlide(nextSlide)
       } else {
-        nextSlide = carouselRef.current.state.currentSlide - 1
+        nextSlide = carouselRef?.current?.state?.currentSlide - 1
         if (nextSlide < 0) nextSlide = 0
-        carouselRef.current.goToSlide(nextSlide)
+        carouselRef?.current?.goToSlide(nextSlide)
       }
     }
   }

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { CopyToClipboard } from '@remix-ui/clipboard'
-import { fromWei, toBigInt, toWei } from 'web3-utils'
+import { fromWei, toBigInt, toWei } from '@theqrl/web3-utils'
 import { MainnetProps } from '../types'
 
 export function MainnetPrompt(props: MainnetProps) {

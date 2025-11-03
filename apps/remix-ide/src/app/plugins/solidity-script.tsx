@@ -2,7 +2,7 @@ import React from 'react' // eslint-disable-line
 import { format } from 'util'
 import { Plugin } from '@remixproject/engine'
 import { compile } from '@remix-project/remix-solidity'
-import { Transaction } from 'web3-types'
+import { Transaction } from '@theqrl/web3-types'
 const _paq = (window._paq = window._paq || []) //eslint-disable-line
 
 const profile = {
@@ -76,7 +76,7 @@ export class SolidityScript extends Plugin {
     }
     let receipt
     try {
-      receipt = await web3.eth.sendTransaction(tx, null, { checkRevertBeforeSending: false, ignoreGasPricing: true })
+      receipt = await web3.zond.sendTransaction(tx, null, { checkRevertBeforeSending: false, ignoreGasPricing: true })
     } catch (e) {
       this.call('terminal', 'logHtml', e.message)
       return
@@ -90,7 +90,7 @@ export class SolidityScript extends Plugin {
     let receiptCall
 
     try {
-      receiptCall = await web3.eth.sendTransaction(tx, null, { checkRevertBeforeSending: false, ignoreGasPricing: true })
+      receiptCall = await web3.zond.sendTransaction(tx, null, { checkRevertBeforeSending: false, ignoreGasPricing: true })
     } catch (e) {
       this.call('terminal', 'logHtml', e.message)
       return

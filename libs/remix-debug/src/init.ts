@@ -1,6 +1,6 @@
 'use strict'
-import { Web3, Web3PluginBase } from 'web3'
-import { toNumber } from 'web3-utils'
+import { Web3, Web3PluginBase } from '@theqrl/web3'
+import { toNumber } from '@theqrl/web3-utils'
 
 export function extendWeb3 (web3) {
   if (!web3.debug){

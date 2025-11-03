@@ -12,7 +12,7 @@ export function ValueUI(props: ValueProps) {
     if (props.sendValue !== inputValue.current.value) {
       inputValue.current.value = props.sendValue
     }
-  },[props.sendValue])
+  }, [props.sendValue])
 
   const validateValue = (e) => {
     const value = e.target.value
@@ -84,7 +84,7 @@ export function ValueUI(props: ValueProps) {
               Finney
             </option>
             <option data-unit="ether" value="ether">
-              Ether
+              ZND
             </option>
           </select>
         </div>
